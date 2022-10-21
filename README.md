@@ -1,1 +1,1 @@
-A modern statistics package based on JAX, inspired by MASS
+A modern statistics package based on JAX, inspired by R, tidymodels, stats

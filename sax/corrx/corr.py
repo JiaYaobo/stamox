@@ -12,7 +12,7 @@ from equinox import filter_jit
 from ..base import Model
 
 
-class Corr(eqx.Module):
+class Corr(Model):
 
     def __init__(self) -> None:
         super().__init__()
