@@ -1,1 +1,1 @@
-A modern statistics package based on JAX, inspired by R, tidymodels, stats
+A modern statistics package based on JAX, inspired by sklearn, statsmodels and tidymodels
