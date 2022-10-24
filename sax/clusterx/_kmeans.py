@@ -1,4 +1,5 @@
 import functools as ft
+import math
 
 import jax
 from jax import jit, lax
@@ -9,17 +10,27 @@ from ..base import Model
 from ..math._euclid import _euclidean_distances
 
 
+class KMeans(Model):
+    def __init__(self):
+        super().__init__()
+
+    def __call__(self, x, n_clusters, x_squared_norms=None, key=None):
+        return kmeans_plusplus(x=x,
+                               n_clusters=n_clusters,
+                               x_squared_norms=x_squared_norms,
+                               key=key)
+
+
 @ft.partial(jax.jit, static_argnums=[1, 2])
 def _kmeans_plusplus(x, n_clusters, x_squared_norms=None, *, key=None):
-
     x = jnp.asarray(x)
 
     n_samples, n_features = x.shape
 
     centers = jnp.zeros((n_clusters, n_features))
 
-    center_id = jrand.randint(key, (1, ), minval=0, maxval=n_samples)[0]
-    indices = jnp.full((n_clusters, ), -1, dtype=jnp.int32)
+    center_id = jrand.randint(key, (1,), minval=0, maxval=n_samples)[0]
+    indices = jnp.full((n_clusters,), -1, dtype=jnp.int32)
 
     centers = centers.at[0].set(x[center_id])
     indices = indices.at[0].set(center_id)
@@ -34,7 +45,7 @@ def _kmeans_plusplus(x, n_clusters, x_squared_norms=None, *, key=None):
     def _step(carry, inp=None):
         (i, _centers, _indices, _current_pot, _closest_dist_sq) = carry
 
-        rand_vals = jrand.uniform(key=key, shape=(n_clusters + 2, )) * _current_pot
+        rand_vals = jrand.uniform(key=key, shape=(int(math.log(n_clusters)) + 2,)) * _current_pot
 
         candidate_ids = jnp.searchsorted(jnp.cumsum(_closest_dist_sq), rand_vals)
 
@@ -67,17 +78,8 @@ def _kmeans_plusplus(x, n_clusters, x_squared_norms=None, *, key=None):
     return centers, indices
 
 
+def kmeans_plusplus(x, n_clusters, x_squared_norms=None, key=None):
+    if key is None:
+        key = jrand.PRNGKey(0)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return _kmeans_plusplus(x, n_clusters=n_clusters, x_squared_norms=x_squared_norms, key=key)
