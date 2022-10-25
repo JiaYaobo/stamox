@@ -10,6 +10,7 @@ from ..base import Model
 from ..math._euclid import _euclidean_distances
 
 
+
 class KMeans(Model):
     def __init__(self):
         super().__init__()

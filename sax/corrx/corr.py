@@ -1,13 +1,15 @@
+import functools as ft
+
 import jax
 import jax.numpy as jnp
 import jax.scipy as jsp
 import jax.tree_util as jtu
+from jax import jit
 
 import numpy as np
 
 import equinox as eqx
 from equinox import filter_jit
-
 
 from ..base import Model
 
@@ -17,13 +19,12 @@ class Corr(Model):
     def __init__(self) -> None:
         super().__init__()
 
-    
     def __call__(self, x1, x2, tolerance=1e-8):
         _corr(x1, x2, tolerance=tolerance)
 
 
-@filter_jit(kwargs=dict(tolerence=False))
-def _corr(x1, x2, tolerence=1e-8):
+@ft.partial(jit, static_argnames='tolerance')
+def _corr(x1, x2, tolerance=1e-8):
     nobs, k_yvar = x1.shape
     nobs, k_xvar = x2.shape
 
@@ -35,13 +36,13 @@ def _corr(x1, x2, tolerence=1e-8):
     x = x - x.mean()
     y = y - y.mean()
 
-    ux, sx, vx = jsp.linalg.svd(x, 0)
+    ux, sx, vx = jsp.linalg.svd(x)
     # vx_ds = vx.T divided by sx
     vx_ds = vx.T
-    uy, sy, vy = jsp.linalg.svd(y, 0)
+    uy, sy, vy = jsp.linalg.svd(y)
     # vy_ds = vy.T divided by sy
     vy_ds = vy.T
-    u, s, v = jsp.linalg.svd(ux.T.dot(uy), 0)
+    u, s, v = jsp.linalg.svd(ux.T.dot(uy))
 
     # Correct any roundoff
     corr = jnp.array([jnp.maximum(0, jnp.minimum(s[i], 1)) for i in range(len(s))])
@@ -49,5 +50,4 @@ def _corr(x1, x2, tolerence=1e-8):
     x_coef = vx_ds.dot(u[:, :k])
     y_coef = vy_ds.dot(v.T[:, :k])
 
-    return (corr, x_coef, y_coef)
-
+    return corr, x_coef, y_coef

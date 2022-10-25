@@ -4,6 +4,7 @@ import jax
 import jax.numpy as jnp
 from jax import jit
 
+
 @ft.partial(jit, static_argnums=[1])
 def _row_norms(x, squared=False):
     norms = jnp.einsum('ij, ij->i', x, x)
