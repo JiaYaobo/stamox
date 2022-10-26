@@ -45,7 +45,6 @@ def _corr(x1, x2, tolerance=1e-8):
     u, s, v = jsp.linalg.svd(ux.T.dot(uy))
 
     # Correct any roundoff
-
     corr = vmap(lambda c: jnp.maximum(0, jnp.minimum(c, 1)), in_axes=0)(s)
 
     x_coef = vx_ds.dot(u[:, :k])

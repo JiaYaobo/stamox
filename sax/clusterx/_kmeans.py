@@ -14,10 +14,9 @@ class KMeans(Model):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, x, n_clusters, x_squared_norms=None, key=None):
+    def __call__(self, x, n_clusters, key=None):
         return kmeans_plusplus(x=x,
                                n_clusters=n_clusters,
-                               x_squared_norms=x_squared_norms,
                                key=key)
 
 
