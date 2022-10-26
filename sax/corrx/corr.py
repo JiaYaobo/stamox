@@ -4,7 +4,7 @@ import jax
 import jax.numpy as jnp
 import jax.scipy as jsp
 import jax.tree_util as jtu
-from jax import jit
+from jax import jit, vmap
 
 import numpy as np
 
@@ -45,7 +45,8 @@ def _corr(x1, x2, tolerance=1e-8):
     u, s, v = jsp.linalg.svd(ux.T.dot(uy))
 
     # Correct any roundoff
-    corr = jnp.array([jnp.maximum(0, jnp.minimum(s[i], 1)) for i in range(len(s))])
+
+    corr = vmap(lambda c: jnp.maximum(0, jnp.minimum(c, 1)), in_axes=0)(s)
 
     x_coef = vx_ds.dot(u[:, :k])
     y_coef = vy_ds.dot(v.T[:, :k])
