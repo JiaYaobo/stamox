@@ -4,31 +4,22 @@ import jax
 import jax.numpy as jnp
 from jax import jit, lax, vmap
 
-from numpyro.distributions import StudentT
+from sax.distrix import pt, qt
 
-@ft.partial(jit, static_names=('alternative', 'mu', 'conf_level'))
-def _t_test_single(x, alternativae="two.sided", mu=0, conf_level=0.95):
+@ft.partial(jit, static_argnames=('alternative', 'mu', 'conf_level',))
+def _t_test_single(x, alternative="two.sided", mu=0, conf_level=0.95):
     nx = x.shape[0]
-    mx = jnp.mean(x, axis=-1)
-    vx = jnp.var(x, axis=-1)
+    mx = jnp.mean(x, axis=-1, keepdims=True)
+    vx = jnp.var(x, axis=-1, keepdims=True)
 
     df = nx - 1
     stderr = jnp.sqrt(vx/nx)
-
     t_stat = (mx - mu) / stderr
-
-    t_dist = StudentT(df=df)
-
-    pval = 2 * t_dist.cdf(-jnp.abs(t_stat))
-
-    alpha = 1. - conf_level
-
-    conf_int  = t_dist.icdf(1 - alpha / 2)
-
+    pval = 2 * pt(-jnp.abs(t_stat), df)
+    alpha = jnp.array([1. - conf_level], dtype=x.dtype)
+    conf_int  = qt(1 - alpha / 2, df)
     conf_int = jnp.array([-conf_int, conf_int]) + t_stat
-
     conf_int = conf_int * stderr + mu
-
 
     return t_stat, pval, conf_int
 
