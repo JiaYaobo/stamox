@@ -9,13 +9,13 @@ from tensorflow_probability.substrates.jax.math import special as tfp_special
 
 
 def pt(x, df, loc=0., scale=1.):
+    x = jnp.asarray(x)
     p = vmap(_pt, in_axes=(0, None, None, None))(x, df, loc, scale)
     return p
 
 
 @ft.partial(jit, static_argnames=("loc", "scale",))
 def _pt(x, df, loc=0., scale=1.):
-
     scaled = (x - loc) / scale
     scaled_squared = scaled * scaled
     beta_value = df / (df + scaled_squared)
@@ -30,6 +30,7 @@ def _pt(x, df, loc=0., scale=1.):
 
 
 def qt(q, df, loc=0., scale=1.):
+    q = jnp.asarray(q)
     q = vmap(_qt, in_axes=(0, None, None, None))(q, df, loc, scale)
     return q
 
