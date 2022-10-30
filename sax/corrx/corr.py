@@ -1,15 +1,11 @@
 import functools as ft
 
-import jax
 import jax.numpy as jnp
 import jax.scipy as jsp
 import jax.tree_util as jtu
 from jax import jit, vmap
 
 import numpy as np
-
-import equinox as eqx
-from equinox import filter_jit
 
 from ..base import Model
 
@@ -23,7 +19,7 @@ class Corr(Model):
         _corr(x1, x2, tolerance=tolerance)
 
 
-@ft.partial(jit, static_argnames='tolerance')
+@ft.partial(jit, static_argnames=('tolerance', ))
 def _corr(x1, x2, tolerance=1e-8):
     nobs, k_yvar = x1.shape
     nobs, k_xvar = x2.shape

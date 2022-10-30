@@ -44,7 +44,7 @@ class PCA(Model):
 def _pca(x, n_components):
     n_samples, n_features = x.shape
 
-    mean = jnp.mean(x, axis=0)
+    mean = jnp.mean(x, axis=0, keepdims=True)
 
     # Center data
     x_centered = x - mean

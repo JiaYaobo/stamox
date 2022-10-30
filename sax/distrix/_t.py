@@ -1,16 +1,17 @@
 import functools as ft
 
 import jax.numpy as jnp
+import jax.random as jrand
 from jax import jit, vmap
 from jax.scipy.special import betainc
 
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
 
-
 def pt(x, df, loc=0., scale=1.):
     p = vmap(_pt, in_axes=(0, None, None, None))(x, df, loc, scale)
     return p
+
 
 @ft.partial(jit, static_argnames=("loc", "scale",))
 def _pt(x, df, loc=0., scale=1.):
@@ -27,9 +28,11 @@ def _pt(x, df, loc=0., scale=1.):
         - jnp.sign(scaled) * betainc(0.5 * df, 0.5, beta_value)
     )
 
+
 def qt(q, df, loc=0., scale=1.):
     q = vmap(_qt, in_axes=(0, None, None, None))(q, df, loc, scale)
     return q
+
 
 @ft.partial(jit, static_argnames=("loc", "scale",))
 def _qt(q, df, loc=0., scale=1.):
@@ -39,3 +42,9 @@ def _qt(q, df, loc=0., scale=1.):
     return scaled * scale + loc
 
 
+def rt(key, df, sample_shape=(), loc=0., scale=1.):
+    return _rt(key, df, sample_shape) * scale + loc
+
+
+def _rt(key, df, sample_shape=()):
+    jrand.t(key, df, sample_shape)

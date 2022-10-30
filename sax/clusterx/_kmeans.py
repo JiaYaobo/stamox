@@ -20,7 +20,7 @@ class KMeans(Model):
                                key=key)
 
 
-@ft.partial(jit, static_argnums=[1, 2])
+@ft.partial(jit, static_argnames=('n_clusters',))
 def _kmeans_plusplus(x, n_clusters, *, key=None):
     """Computational component for initialization of num_clusters by
     k-means++. Prior validation of data is assumed.
