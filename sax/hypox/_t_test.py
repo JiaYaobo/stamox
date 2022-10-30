@@ -6,8 +6,11 @@ from jax import jit, lax, vmap
 
 from sax.distrix import pt, qt
 
+def t_test(x,  mu=0, alternative="two.sided", conf_level=0.95):
+    return _t_test_single(x, mu, alternative, conf_level)
+
 @ft.partial(jit, static_argnames=('alternative', 'mu', 'conf_level',))
-def _t_test_single(x, alternative="two.sided", mu=0, conf_level=0.95):
+def _t_test_single(x, mu=0, alternative="two.sided", conf_level=0.95):
     nx = x.shape[0]
     mx = jnp.mean(x, axis=-1, keepdims=True)
     vx = jnp.var(x, axis=-1, keepdims=True)
