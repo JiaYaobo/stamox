@@ -1,1 +1,1 @@
-from sax.base.model import Model
+from sax.base.model import Model, NonParamModel, ParamModel, SemiParamModel
