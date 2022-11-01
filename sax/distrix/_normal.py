@@ -30,9 +30,9 @@ def _qnorm(q, mean=0., sigma=1.):
     return x * sigma + mean
 
 
-def rnorm(key, sample_shape=(), mean=0., sigma=1.):
+def rnorm(key, mean=0., sigma=1., sample_shape=()):
     return _rnorm(key, sample_shape) * sigma + mean
 
 
 def _rnorm(key, sample_shape=()):
-    jrand.normal(key, sample_shape)
+    return jrand.normal(key, sample_shape)

@@ -43,9 +43,9 @@ def _qt(q, df, loc=0., scale=1.):
     return scaled * scale + loc
 
 
-def rt(key, df, sample_shape=(), loc=0., scale=1.):
+def rt(key, df, loc=0., scale=1., sample_shape=()):
     return _rt(key, df, sample_shape) * scale + loc
 
 
 def _rt(key, df, sample_shape=()):
-    jrand.t(key, df, sample_shape)
+    return jrand.t(key, df, sample_shape)
