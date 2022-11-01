@@ -13,7 +13,7 @@ DESCRIPTION = 'High Performance Statistics Library'
 LONG_DESCRIPTION = (HERE / "README.md").read_text()
 LONG_DESC_TYPE = "text/markdown"
 
-INSTALL_REQUIRES = ['numpy', 'jax>=0.3.23', 'jaxlib>=0.3.22']
+INSTALL_REQUIRES = ['numpy', 'jax>=0.3.23', 'jaxlib>=0.3.15', 'equinox>=0.8.0', 'chex>=0.1.5', 'pandas>=1.5.0']
 TESTS_REQUIRES = ['pytest']
 
 setup(

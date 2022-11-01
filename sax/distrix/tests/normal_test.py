@@ -1,8 +1,7 @@
 import jax.random as jrand
 import jax.numpy as jnp
-import numpy as np
 
-from sax.distrix import pnorm, qnorm, rnorm
+from sax.distrix import pnorm, qnorm, rnorm, dnorm
 
 
 def test_rnorm():
@@ -24,4 +23,9 @@ def test_qnorm():
     x = qnorm(q)
     return x
 
-print(test_qnorm())
+def test_dnorm():
+    x = 0.
+    grads = dnorm(x)
+    return grads
+
+print(test_dnorm())
