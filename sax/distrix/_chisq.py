@@ -1,7 +1,12 @@
-import functools as ft
-
-import jax.numpy as jnp
-import jax.random as jrand
-from jax import vmap, jit
-
 from sax.distrix import pgamma, qgamma, rgamma
+
+
+def pchisq(x, df=2.):
+    return pgamma(x, shape= df / 2, rate = 1 / 2)
+
+def qchisq(q, df):
+    return qgamma(q, shape = df / 2, rate = 1 / 2)
+
+
+def rchisq(key, df=2. , sample_shape=()):
+    return rgamma(key, shape=df / 2, rate = 1/ 2, sample_shape=sample_shape)
