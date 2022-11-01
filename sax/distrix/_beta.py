@@ -2,10 +2,18 @@ import functools as ft
 
 import jax.numpy as jnp
 import jax.random as jrand
-from jax import vmap, jit
+from jax import vmap, jit, grad
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
+
+def dbeta(x, a, b):
+    x = jnp.asarray(x)
+    if x.ndim == 0:
+        x = jnp.expand_dims(x, axis=0)
+    _dnorm = grad(_pbeta)
+    grads = vmap(_dnorm, in_axes=(0, None, None))(x, a, b)
+    return grads
 
 def pbeta(x, a, b):
     x = jnp.asarray(x)
