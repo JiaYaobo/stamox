@@ -1,3 +1,10 @@
+"""
+In statistics, Bartlett's test, named after Maurice Stevenson Bartlett, is used to test homoscedasticity, 
+that is, if multiple samples are from populations with equal variances.Some statistical tests, 
+such as the analysis of variance, assume that variances are equal across groups or samples, 
+which can be verified with Bartlett's test.
+"""
+
 import functools as ft
 
 import jax.numpy as jnp
