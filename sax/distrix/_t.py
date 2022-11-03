@@ -2,10 +2,18 @@ import functools as ft
 
 import jax.numpy as jnp
 import jax.random as jrand
-from jax import jit, vmap
+from jax import jit, vmap, grad
 from jax.scipy.special import betainc
 
 from tensorflow_probability.substrates.jax.math import special as tfp_special
+
+def dt(x, loc=0., scale=1.):
+    x = jnp.asarray(x)
+    if x.ndim == 0:
+        x = jnp.expand_dims(x, axis=0)
+    _dt = grad(_pt)
+    grads = vmap(_dt, in_axes=(0, None, None))(x, loc, scale)
+    return grads
 
 
 def pt(x, df, loc=0., scale=1.):

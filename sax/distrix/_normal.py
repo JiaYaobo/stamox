@@ -29,7 +29,9 @@ def _pnorm(x, mean=0., sigma=1.):
 
 
 def qnorm(q, mean=0., sigma=1.):
-    q = jnp.asarray(q)
+    q= jnp.asarray(q)
+    if q.ndim == 1:
+        q = jnp.expand_dims(q, axis=0)
     q = vmap(_qnorm, in_axes=(0, None, None))(q, mean, sigma)
     return q
 

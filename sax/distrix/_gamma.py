@@ -2,10 +2,17 @@ import functools as ft
 
 import jax.numpy as jnp
 import jax.random as jrand
-from jax import vmap, jit
+from jax import vmap, jit, grad
 from jax.scipy.special import gammainc
 import  tensorflow_probability.substrates.jax.math as tfp_math
 
+def dgamma(x, shape, rate):
+    x = jnp.asarray(x)
+    if x.ndim == 0:
+        x = jnp.expand_dims(x, axis=0)
+    _dgamma = grad(_pgamma)
+    grads = vmap(_dgamma, in_axes=(0, None, None))(x, shape, rate)
+    return grads
 
 def pgamma(x, shape=1., rate=1.):
     x = jnp.asarray(x)
