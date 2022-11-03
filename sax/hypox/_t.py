@@ -27,8 +27,6 @@ def _t_test_single(x, mu=0, alternative="two.sided", conf_level=0.95):
     return t_stat, pval, conf_int
 
 
-
-
 def _t_test_pair(x, y, alternativate="two.sided", mu=0, conf_level=0.95):
     pass
 
