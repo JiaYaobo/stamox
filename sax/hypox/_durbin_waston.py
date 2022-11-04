@@ -3,11 +3,15 @@ import functools as ft
 import jax.numpy as jnp
 from jax import vmap, jit
 
+from sax.util import zero_dim_to_1_dim_array
+
 
 def durbin_waston(resids, axis=0):
     resids = jnp.asarray(resids)
     axis = jnp.asarray(axis)
+    resids = zero_dim_to_1_dim_array(resids)
     dws = vmap(_durbin_watson, in_axes=(0, None))(resids, axis)
+    return dws
 
 @ft.partial(jit, static_argnames=('axis', ))
 def _durbin_watson(resids, axis=0):

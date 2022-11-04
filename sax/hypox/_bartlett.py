@@ -10,12 +10,12 @@ import functools as ft
 import jax.numpy as jnp
 from jax import jit, vmap
 
-def bartlett(samples):
+def bartlett(*samples):
+    samples = jnp.vstack(samples)
     return _bartlett(samples)
 
 @jit
 def _bartlett(samples):
-    samples = jnp.array(samples)
     k = samples.shape[0]
     Ni = vmap(jnp.size, in_axes=(0,))(samples)
     ssq = vmap(ft.partial(jnp.var, ddof=1), in_axes=(0,))(samples)
