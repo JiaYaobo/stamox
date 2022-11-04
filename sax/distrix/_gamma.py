@@ -4,7 +4,8 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import vmap, jit, grad
 from jax.scipy.special import gammainc
-import  tensorflow_probability.substrates.jax.math as tfp_math
+import tensorflow_probability.substrates.jax.math as tfp_math
+
 
 def dgamma(x, shape, rate):
     x = jnp.asarray(x)
@@ -14,21 +15,25 @@ def dgamma(x, shape, rate):
     grads = vmap(_dgamma, in_axes=(0, None, None))(x, shape, rate)
     return grads
 
+
 def pgamma(x, shape=1., rate=1.):
     x = jnp.asarray(x)
     p = vmap(_pgamma, in_axes=(0, None, None))(x, shape, rate)
     return p
+
 
 def qgamma(q, shape=1., rate=1.):
     q = jnp.asarray(q)
     x = vmap(_qgamma, in_axes=(0, None, None))(q, shape, rate)
     return x
 
-@ft.partial(jit, static_argnames=('shape','rate', ))
-def _qgamma(q, shape=1., rate=1.): 
+
+@ft.partial(jit, static_argnames=('shape', 'rate', ))
+def _qgamma(q, shape=1., rate=1.):
     return tfp_math.igammaincinv(shape / rate, q) / rate
 
-@ft.partial(jit, static_argnames=('shape','rate', ))
+
+@ft.partial(jit, static_argnames=('shape', 'rate', ))
 def _pgamma(x, shape=1., rate=1.):
     return gammainc(shape / rate, x) * rate
 

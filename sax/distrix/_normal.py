@@ -14,6 +14,7 @@ def dnorm(x, mean=0., sigma=1.):
     grads = vmap(_dnorm, in_axes=(0, None, None))(x, mean, sigma)
     return grads
 
+
 def pnorm(x, mean=0., sigma=1.):
     x = jnp.asarray(x)
     if x.ndim == 0:
@@ -29,7 +30,7 @@ def _pnorm(x, mean=0., sigma=1.):
 
 
 def qnorm(q, mean=0., sigma=1.):
-    q= jnp.asarray(q)
+    q = jnp.asarray(q)
     if q.ndim == 1:
         q = jnp.expand_dims(q, axis=0)
     q = vmap(_qnorm, in_axes=(0, None, None))(q, mean, sigma)
