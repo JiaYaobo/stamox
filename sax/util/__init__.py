@@ -1,2 +1,2 @@
-from shape_utils import scalar_to_1dim_array
+from shape_utils import zero_dim_to_1_dim_array
 

@@ -8,12 +8,12 @@ from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
 
-def dt(x, loc=0., scale=1.):
+def dt(x, df, loc=0., scale=1.):
     x = jnp.asarray(x)
     if x.ndim == 0:
         x = jnp.expand_dims(x, axis=0)
     _dt = grad(_pt)
-    grads = vmap(_dt, in_axes=(0, None, None))(x, loc, scale)
+    grads = vmap(_dt, in_axes=(0, None, None, None))(x, df, loc, scale)
     return grads
 
 
