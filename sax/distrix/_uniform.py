@@ -5,6 +5,9 @@ import jax.random as jrand
 from jax import jit, vmap
 
 
+def dunif(x, mini=0., maxi=1.):
+    return 1/(maxi - mini)
+
 def punif(x, mini=0., maxi=1.):
     x = jnp.asarray(x)
     p = vmap(_punif, in_axes=(0, None, None))(x, mini, maxi)
