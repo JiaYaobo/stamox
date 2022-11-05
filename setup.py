@@ -5,7 +5,7 @@ HERE = pathlib.Path(__file__).parent
 
 VERSION = '0.0.1'
 PACKAGE_NAME = 'stamox'
-AUTHOR = 'The Stamox Authors'
+AUTHOR = 'Jia Yaobo'
 URL = 'https://github.com/jiayaobo/sax'
 
 LICENSE = 'MIT'
