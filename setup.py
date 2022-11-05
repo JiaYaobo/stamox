@@ -4,8 +4,8 @@ from setuptools import setup, find_packages
 HERE = pathlib.Path(__file__).parent
 
 VERSION = '0.0.1'
-PACKAGE_NAME = 'sax'
-AUTHOR = 'The Finax Authors'
+PACKAGE_NAME = 'stamox'
+AUTHOR = 'The stamox Authors'
 URL = 'https://github.com/jiayaobo/sax'
 
 LICENSE = 'MIT'

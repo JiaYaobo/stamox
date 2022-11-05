@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import jit, vmap, grad
 
-from sax.math.special import fdtri, fdtr
+from stamox.math.special import fdtri, fdtr
 
 
 def dF(x, dfn, dfd):

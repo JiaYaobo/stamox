@@ -1,7 +1,7 @@
 import jax.random as jrand
 import jax.numpy as jnp
 
-from sax.distrix import pnorm, qnorm, rnorm, dnorm
+from stamox.distrix import pnorm, qnorm, rnorm, dnorm
 
 
 def test_rnorm():

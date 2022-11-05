@@ -2,7 +2,7 @@ import jax.random as jrand
 import jax.numpy as jnp
 import numpy as np
 
-from sax.distrix import pt, qt, rt
+from stamox.distrix import pt, qt, rt
 
 
 def test_rt():

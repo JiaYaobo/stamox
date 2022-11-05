@@ -3,7 +3,7 @@ import chex
 import pandas as pd
 import numpy as np
 
-from sax.corrx.corr import Corr
+from stamox.corrx.corr import Corr
 
 data_fit = pd.DataFrame([[191, 36, 50,  5, 162,  60],
                          [189, 37, 52,  2, 110,  60],

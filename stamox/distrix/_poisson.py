@@ -6,7 +6,7 @@ from jax import jit, vmap
 from jax.scipy.special import gammainc
 
 
-from sax.util import zero_dim_to_1_dim_array
+from stamox.util import zero_dim_to_1_dim_array
 from numpyro.distributions import Poisson
 
 

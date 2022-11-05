@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import vmap, jit, grad
 
-from sax.util import zero_dim_to_1_dim_array
+from stamox.util import zero_dim_to_1_dim_array
 
 
 def dexp(x, rate):

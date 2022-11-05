@@ -3,7 +3,7 @@ import functools as ft
 import jax.numpy as jnp
 from jax import vmap, jit
 
-from sax.util import zero_dim_to_1_dim_array
+from stamox.util import zero_dim_to_1_dim_array
 
 
 def durbin_waston(resids, axis=0):
