@@ -1,4 +1,4 @@
-"""Finax: Quantative Finance Library"""
+"""Stamox: Stats Models in JAX Library"""
 
 import sys
 
