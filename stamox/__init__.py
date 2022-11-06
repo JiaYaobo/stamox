@@ -23,7 +23,7 @@ def _ensure_jax_install():
         print("\n\nFailed to import JAX. Please note that JAX is not "
             "installed by default when you install JAX Quant Finance library. "
             "This is so that users can decide whether to install the GPU/TPU-enabled "
-            "JAX package. To use JAX Quant Finance library, please install "
+            "JAX package. To use STAMOX library, please install "
             "the most recent version of JAX, by following instructions at "
             "https://github.com/google/jax#installation.\n\n")
         raise
@@ -49,5 +49,6 @@ from stamox import util
 _allowed_symbols = [
     "distrix",
     "hypox",
-    "util"
+    "util",
+    "math"
 ]
