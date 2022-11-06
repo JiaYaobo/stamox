@@ -22,7 +22,6 @@ def _friedman(samples):
     k_treatments, n_blocks = samples.shape
     ranks = vmap(lambda x: jnp.argsort(-x) + 1, in_axes=(1, ))(samples)
     avg_ranks = jnp.mean(ranks, axis=0)
-    tmp = (jnp.arange(1, k_treatments + 1) + 1) / 2
     Q = 12.0 * n_blocks / (k_treatments * (k_treatments + 1) ) * jnp.sum(avg_ranks**2, axis=0) - 3*n_blocks*(k_treatments+1)
     return Q 
 
