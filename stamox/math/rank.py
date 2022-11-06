@@ -1,10 +1,9 @@
 import functools as ft
+import warnings
 
 import jax.numpy as jnp
 from jax import jit
 from scipy.stats import rankdata as rank_scipy
-
-import warnings
 
 
 @ft.partial(jit, static_argnames=('size', ))

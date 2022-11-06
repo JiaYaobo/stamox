@@ -4,7 +4,7 @@ A modern statistics package based on JAX, inspired by sklearn, statsmodels and t
 
 ==============================================================
 
-I'd like to build a pure functional stats tools, cuz we can't do anything until we create an object in this oop world
+I'd like to build a pure functional stats tools, cuz we can't do anything until we create a complex object in this oop world
 
 ==============================================================
 
