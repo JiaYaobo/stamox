@@ -1,5 +1,6 @@
 import functools as ft
 
+import numpy as np
 import jax.numpy as jnp
 from jax import jit, vmap
 
@@ -17,8 +18,11 @@ _a_1 = 0.70710678  # sqrt(2)
 
 def shapiro_wilk(x):
     x = jnp.ravel(x)
+    # since numpy sort algorithms is much faster than jax.numpy, we use numpy to do sort things
+    # on gpu jnp.sort will be fatser though
+    x = np.sort(x)
     n = x.size
-    x = x - jnp.median(x)
+    x = x - np.median(x)
     w = _shapiro_wilk(x, n)
     return w
 
