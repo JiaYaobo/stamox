@@ -4,12 +4,17 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import jit, vmap
 
+from stamox.util import zero_dim_to_1_dim_array
+
 
 def dunif(x, mini=0., maxi=1.):
-    return 1/(maxi - mini)
+    x = jnp.asarray(x)
+    x = zero_dim_to_1_dim_array(x)
+    return 1/(maxi - mini) * jnp.ones_like(x)
 
 def punif(x, mini=0., maxi=1.):
     x = jnp.asarray(x)
+    x = zero_dim_to_1_dim_array(x)
     p = vmap(_punif, in_axes=(0, None, None))(x, mini, maxi)
     return p
 
@@ -22,6 +27,7 @@ def _punif(x, mini=0., maxi=1.):
 
 def qunif(q,  mini=0., maxi=1.):
     q = jnp.asarray(q)
+    q = zero_dim_to_1_dim_array(q)
     q = vmap(_qunif, in_axes=(0, None, None))(q, mini, maxi)
     return q
 

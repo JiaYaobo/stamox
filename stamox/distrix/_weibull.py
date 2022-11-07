@@ -4,11 +4,12 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import vmap, jit, grad
 
+from stamox.util import zero_dim_to_1_dim_array
+
 
 def dweibull(x, concentration=0., scale=1.):
     x = jnp.asarray(x)
-    if x.ndim == 0:
-        x = jnp.expand_dims(x, axis=0)
+    x = zero_dim_to_1_dim_array(x)
     _dweibull = grad(_pweibull)
     grads = vmap(_dweibull, in_axes=(0, None, None))(x, concentration, scale)
     return grads
@@ -16,6 +17,7 @@ def dweibull(x, concentration=0., scale=1.):
 
 def pweibull(x,  concentration=0., scale=1.):
     x = jnp.asarray(x)
+    x = zero_dim_to_1_dim_array(x)
     p = vmap(_pweibull, in_axes=(0, None, None, None))(x, concentration, scale)
     return p
 
@@ -27,6 +29,7 @@ def _pweibull(x, concentration=0., scale=1.):
 
 def qweibull(q, concentration=0., scale=1.):
     q = jnp.asarray(q)
+    q = zero_dim_to_1_dim_array(q)
     q = vmap(_qweibull, in_axes=(0, None, None))(q, concentration, scale)
     return q
 

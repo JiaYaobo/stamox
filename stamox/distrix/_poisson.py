@@ -7,10 +7,10 @@ from jax.scipy.special import gammainc
 
 
 from stamox.util import zero_dim_to_1_dim_array
-from numpyro.distributions import Poisson
 
 
 def ppoisson(x, rate):
+    x = jnp.asarray(x)
     x = zero_dim_to_1_dim_array(x)
     p = vmap(_ppoisson, in_axes=(0, None))(x, rate)
     return p

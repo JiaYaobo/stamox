@@ -5,10 +5,11 @@ import jax.random as jrand
 from jax import jit, vmap, grad
 
 
+from stamox.util import zero_dim_to_1_dim_array
+
 def dcauchy(x, loc=0., scale=1.):
     x = jnp.asarray(x)
-    if x.ndim == 0:
-        x = jnp.expand_dims(x, axis=0)
+    x = zero_dim_to_1_dim_array(x)
     _dcauchy = grad(_pcauchy)
     grads = vmap(_dcauchy, in_axes=(0, None, None))(x, loc, scale)
     return grads
@@ -16,6 +17,7 @@ def dcauchy(x, loc=0., scale=1.):
 
 def pcauchy(x,  loc=0., scale=1.):
     x = jnp.asarray(x)
+    x = zero_dim_to_1_dim_array(x)
     p = vmap(_pcauchy, in_axes=(0, None, None, None))(x, loc, scale)
     return p
 
@@ -28,6 +30,7 @@ def _pcauchy(x, loc=0., scale=1.):
 
 def qcauchy(q, loc=0., scale=1.):
     q = jnp.asarray(q)
+    q = zero_dim_to_1_dim_array(q)
     q = vmap(_qcauchy, in_axes=(0, None, None))(q, loc, scale)
     return q
 

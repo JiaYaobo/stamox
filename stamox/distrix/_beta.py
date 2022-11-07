@@ -6,22 +6,25 @@ from jax import vmap, jit, grad
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
+from stamox.util import zero_dim_to_1_dim_array
+
 
 def dbeta(x, a, b):
     x = jnp.asarray(x)
-    if x.ndim == 0:
-        x = jnp.expand_dims(x, axis=0)
+    x = zero_dim_to_1_dim_array(x)
     _dnorm = grad(_pbeta)
     grads = vmap(_dnorm, in_axes=(0, None, None))(x, a, b)
     return grads
 
 def pbeta(x, a, b):
     x = jnp.asarray(x)
+    x = zero_dim_to_1_dim_array(x)
     p = vmap(_pbeta, in_axes=(0, None, None))(x, a, b)
     return p
 
 def qbeta(q, a, b):
     q = jnp.asarray(q)
+    q = zero_dim_to_1_dim_array(q)
     x = vmap(_qbeta, in_axes=(0, None, None))(q, a, b)
     return x
 

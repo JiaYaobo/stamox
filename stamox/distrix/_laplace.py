@@ -4,11 +4,12 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import vmap, jit, grad
 
+from stamox.util import zero_dim_to_1_dim_array
+
 
 def dlaplace(x, loc=0., scale=1.):
     x = jnp.asarray(x)
-    if x.ndim == 0:
-        x = jnp.expand_dims(x, axis=0)
+    x = zero_dim_to_1_dim_array(x)
     _dlaplace = grad(_plaplace)
     grads = vmap(_dlaplace, in_axes=(0, None, None))(x, loc, scale)
     return grads
@@ -16,6 +17,7 @@ def dlaplace(x, loc=0., scale=1.):
 
 def plaplace(x,  loc=0., scale=1.):
     x = jnp.asarray(x)
+    x = zero_dim_to_1_dim_array(x)
     p = vmap(_plaplace, in_axes=(0, None, None, None))(x, loc, scale)
     return p
 
@@ -28,6 +30,7 @@ def _plaplace(x, loc=0., scale=1.):
 
 def qlaplace(q, loc=0., scale=1.):
     q = jnp.asarray(q)
+    q = zero_dim_to_1_dim_array(q)
     q = vmap(_qlaplace, in_axes=(0, None, None))(q, loc, scale)
     return q
 
