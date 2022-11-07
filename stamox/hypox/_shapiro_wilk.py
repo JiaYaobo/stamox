@@ -3,17 +3,16 @@ import functools as ft
 import jax.numpy as jnp
 from jax import jit, vmap
 
-
 from stamox.distrix import qnorm
 
 _g = [-2.273, .459]
-_c1 = [0.,.221157,-.147981,-2.07119, 4.434685, -2.706056]
-_c2 = [0.,.042981,-.293762,-1.752461,5.682633, -3.582633]
-_c3 = [.544,-.39978,.025054,-6.714e-4]
-_c4 = [1.3822,-.77857,.062767,-.0020322]
-_c5 = [-1.5861,-.31082,-.083751,.0038915]
-_c6 = [-.4803,-.082676,.0030302]
-_a_1 = 0.70710678 # sqrt(2)
+_c1 = [0., .221157, -.147981, -2.07119, 4.434685, -2.706056]
+_c2 = [0., .042981, -.293762, -1.752461, 5.682633, -3.582633]
+_c3 = [.544, -.39978, .025054, -6.714e-4]
+_c4 = [1.3822, -.77857, .062767, -.0020322]
+_c5 = [-1.5861, -.31082, -.083751, .0038915]
+_c6 = [-.4803, -.082676, .0030302]
+_a_1 = 0.70710678  # sqrt(2)
 
 
 def _shapiro_wilk(x, n):
@@ -36,29 +35,31 @@ def _shapiro_wilk(x, n):
     if n > 5:
         i1 = 3
         a2 = -a[1] / ssumm2 + poly(_c2, 6, rsn)
-        fac = jnp.sqrt((summ2 - 2. * (a[0] * a[0]) - 2. * (a[1] * a[1])) \
-                /(1. - 2. * (a1 * a1) - 2. * (a2 * a2)))
+        fac = jnp.sqrt((summ2 - 2. * (a[0] * a[0]) - 2. * (a[1] * a[1]))
+                       / (1. - 2. * (a1 * a1) - 2. * (a2 * a2)))
     else:
         i1 = 2
-        fac = jnp.sqrt((summ2 - 2. * (a[0] * a[0])) \
-                / (1. - 2. * (a1 * a1)))
-    Range = x[n - 1] - x[0] 
-    sx = jnp.sum(x, axis=0) / Range
+        fac = jnp.sqrt((summ2 - 2. * (a[0] * a[0]))
+                       / (1. - 2. * (a1 * a1)))
+
+    range_x = x[n - 1] - x[0]
+    sx = jnp.sum(x, axis=0) / range_x
 
     forward = jnp.arange(n)
     reverse = jnp.arange(n - 1, 0, -1)
-    sa = jnp.sum(vmap(lambda i, j: jnp.sign(i - j) * a[jnp.minimum(i, j)])(forward, reverse), axis=0)
+    sa = jnp.sum(vmap(lambda i, j: jnp.sign(i - j) *
+                 a[jnp.minimum(i, j)])(forward, reverse), axis=0)
     sa /= n
     sx /= n
 
     def _tmp(i, j, xi):
         asa = jnp.sign(i - j) * a[jnp.minimum(i, j)] - sa
-        xsx = xi / Range - sx
+        xsx = xi / range_x - sx
         ssa = asa * asa
         ssx = xsx * xsx
         sax = asa * xsx
         return (ssa, ssx, sax)
-    
+
     (ssa, ssx, sax) = vmap(_tmp, in_axes=(0, 0, 0))(forward, reverse, x)
     ssa = jnp.sum(ssa, axis=0)
     ssx = jnp.sum(ssx, axis=0)
@@ -75,5 +76,6 @@ def _shapiro_wilk(x, n):
 def poly(x, coef, norder):
     coef = jnp.asarray(coef)
     iss = jnp.arange(norder)
-    value = vmap(lambda c, i, x: x ** i * c, in_axes=(0, 0, None))(coef, iss, x)
+    value = vmap(lambda c, i, x: x ** i * c,
+                 in_axes=(0, 0, None))(coef, iss, x)
     return jnp.sum(value, axis=0)
