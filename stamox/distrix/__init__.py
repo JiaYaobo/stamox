@@ -13,4 +13,5 @@ from stamox.distrix._weibull import pweibull, qweibull, dweibull, rweibull
 from stamox.distrix._poisson import ppoisson, rpoisson
 from stamox.distrix._bernoulli import rbernoulli
 from stamox.distrix._binomial import rbinomial
+from stamox.distrix._triangular import ptriangular
 

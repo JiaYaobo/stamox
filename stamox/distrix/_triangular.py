@@ -6,9 +6,9 @@ from jax import jit, vmap, grad, lax
 
 from stamox.util import zero_dim_to_1_dim_array
 
+
 def squared_difference(x, y):
     return jnp.square(x - y)
-
 
 
 def ptriangular(x, low, high, peak):
