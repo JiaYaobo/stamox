@@ -43,5 +43,4 @@ def runif(key, mini=0., maxi=1., sample_shape=()):
 
 
 def _runif(key, mini, maxi, sample_shape=()):
-
     return jrand.uniform(key, sample_shape, minval=mini, maxval=maxi)

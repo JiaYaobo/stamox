@@ -1,7 +1,7 @@
 import functools as ft
 
 import jax.numpy as jnp
-from jax import jit, vmap, scipy
+from jax import jit
 from stamox.distrix import pbeta
 
 
