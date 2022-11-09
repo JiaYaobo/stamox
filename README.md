@@ -10,4 +10,4 @@ is sort of annoying
 ==============================================================
 
 If u're interested in statistics and functional programming or jax, 
-we can build stamox together
+we can build stamox together !!!

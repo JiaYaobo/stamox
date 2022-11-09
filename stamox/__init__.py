@@ -10,36 +10,36 @@ def _check_py_version():
 
 
 # make sure jax is installed
-def _ensure_jax_install():
-    """Attempt to import JAX, and make sure its version is sufficient.
-    Raises:
-        ImportError: if either JAX is not importable or its version is
-        inadequate.
-    """
-    try:
-        import jax
-    except ImportError:
-        # Print more informative error message, then reraise.
-        print("\n\nFailed to import JAX. Please note that JAX is not "
-            "installed by default when you install JAX Quant Finance library. "
-            "This is so that users can decide whether to install the GPU/TPU-enabled "
-            "JAX package. To use STAMOX library, please install "
-            "the most recent version of JAX, by following instructions at "
-            "https://github.com/google/jax#installation.\n\n")
-        raise
+# def _ensure_jax_install():
+#     """Attempt to import JAX, and make sure its version is sufficient.
+#     Raises:
+#         ImportError: if either JAX is not importable or its version is
+#         inadequate.
+#     """
+#     try:
+#         import jax
+#     except ImportError:
+#         # Print more informative error message, then reraise.
+#         print("\n\nFailed to import JAX. Please note that JAX is not "
+#             "installed by default when you install JAX Quant Finance library. "
+#             "This is so that users can decide whether to install the GPU/TPU-enabled "
+#             "JAX package. To use STAMOX library, please install "
+#             "the most recent version of JAX, by following instructions at "
+#             "https://github.com/google/jax#installation.\n\n")
+#         raise
 
-    import distutils.version
+#     import distutils.version
 
-    if (distutils.version.LooseVersion(jax.__version__) <
-        distutils.version.LooseVersion(_REQUIRED_JAX_VERSION)):
-        raise ImportError(
-            "This version of JAX Quant Finance requires JAX "
-            "version >= {required}; Detected an installation of version {present}. "
-            "Please upgrade JAX to proceed.".format(
-                required=_REQUIRED_JAX_VERSION, present=jax.__version__))
+#     if (distutils.version.LooseVersion(jax.__version__) <
+#         distutils.version.LooseVersion(_REQUIRED_JAX_VERSION)):
+#         raise ImportError(
+#             "This version of STAMOX requires JAX "
+#             "version >= {required}; Detected an installation of version {present}. "
+#             "Please upgrade JAX to proceed.".format(
+#                 required=_REQUIRED_JAX_VERSION, present=jax.__version__))
 
 _check_py_version()
-_ensure_jax_install()
+# _ensure_jax_install()
 
 from stamox import distrix
 from stamox import hypox

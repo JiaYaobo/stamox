@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '0.0.1'
+VERSION = '0.0.4'
 PACKAGE_NAME = 'stamox'
 AUTHOR = 'Jia Yaobo'
 URL = 'https://github.com/jiayaobo/sax'
@@ -13,7 +13,7 @@ DESCRIPTION = 'High Performance Statistics Library'
 LONG_DESCRIPTION = (HERE / "README.md").read_text()
 LONG_DESC_TYPE = "text/markdown"
 
-INSTALL_REQUIRES = ['numpy>=1.23', 'pandas>=1.5.0', 'jax>=0.3.23', 'jaxlib>=0.3.15', 'equinox>=0.8.0', 'chex>=0.1.5', 'pandas>=1.5.0', 'tensorflow-probability>=0.18.0', 'numpyro>=0.10.1']
+INSTALL_REQUIRES = ['numpy>=1.23', 'pandas>=1.5.0', 'jax>=0.3.23', 'equinox>=0.8.0', 'chex>=0.1.5', 'pandas>=1.5.0', 'tensorflow-probability>=0.18.0', 'numpyro>=0.10.1']
 TESTS_REQUIRES = ['pytest']
 
 setup(
