@@ -1,4 +1,4 @@
-"""Test for normal distribution"""
+"""Test for student t distribution"""
 
 import jax.random as jrand
 import jax.numpy as jnp
@@ -13,7 +13,6 @@ from absl.testing import parameterized
 from jax._src import test_util as jtest
 
 
-
 class TTest(jtest.JaxTestCase):
 
     def test_rt(self):
@@ -26,11 +25,11 @@ class TTest(jtest.JaxTestCase):
         self.assertAllClose(avg, 0., atol=1e-2)
         self.assertAllClose(var, float(df / (df - 2)), atol=1e-2)
 
-
     def test_pt(self):
         x = np.array([1., 1.645, 1.96, 2.65, 3.74])
         p = pt(x, 6)
-        true_p = np.array([0.8220412, 0.9244638, 0.9511524, 0.9809857, 0.9951888])
+        true_p = np.array(
+            [0.8220412, 0.9244638, 0.9511524, 0.9809857, 0.9951888])
         self.assertArraysAllClose(p, true_p)
 
     def test_qt(self):

@@ -27,7 +27,6 @@ class NormalTest(jtest.JaxTestCase):
         self.assertAllClose(avg, mean, atol=1e-2)
         self.assertAllClose(var, sigma**2, atol=1e-2)
 
-
     def test_pnorm(self):
         x = np.array([-1.96, -1.645, -1., 0, 1., 1.645, 1.96])
         p = pnorm(x)

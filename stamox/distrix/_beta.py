@@ -40,6 +40,6 @@ def _pbeta(x, a, b):
 def rbeta(key, a, b, sample_shape=()):
     return _rbeta(key, a, b, sample_shape)
 
-
+@ft.partial(jit, static_argnames=('a', 'b', 'sample_shape', ))
 def _rbeta(key, a, b, sample_shape=()):
     return jrand.beta(key, a, b, sample_shape)
