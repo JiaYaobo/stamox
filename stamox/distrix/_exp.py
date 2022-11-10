@@ -14,17 +14,20 @@ def dexp(x, rate):
     grads = vmap(_dexp, in_axes=(0, None))(x, rate)
     return grads
 
+
 def pexp(x, rate):
     x = jnp.asarray(x)
     x = zero_dim_to_1_dim_array(x)
     p = vmap(_pexp, in_axes=(0, None))(x, rate)
     return p
 
+
 def qexp(q, rate):
     q = jnp.asarray(q)
-    q= zero_dim_to_1_dim_array(q)
+    q = zero_dim_to_1_dim_array(q)
     x = vmap(_qexp, in_axes=(0, None))(q, rate)
     return x
+
 
 @ft.partial(jit, static_argnames=('rate', ))
 def _pexp(x, rate):
@@ -35,13 +38,11 @@ def _pexp(x, rate):
 def _qexp(q, rate):
     return -jnp.log1p(-q) / rate
 
+
 def rexp(key, rate, sample_shape=()):
     return _rexp(key, sample_shape=sample_shape) / rate
 
+
+@ft.partial(jit, static_arganmes=('sample_shape', ))
 def _rexp(key, sample_shape=()):
     return jrand.exponential(key, shape=sample_shape)
-
-
-    
-
-

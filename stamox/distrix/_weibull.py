@@ -43,6 +43,6 @@ def _qweibull(q, concentration=0., scale=1.):
 def rweibull(key, concentration=0., scale=1., sample_shape=()):
     return _rweibull(key, concentration, scale, sample_shape)
 
-
+@ft.partial(jit, static_argnames=('concentration', 'scale', 'sample_shape'))
 def _rweibull(key, concentration, scale, sample_shape=()):
     return jrand.weibull_min(key, scale, concentration, sample_shape)

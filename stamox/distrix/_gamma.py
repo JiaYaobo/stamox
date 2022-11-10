@@ -37,12 +37,13 @@ def _qgamma(q, shape=1., rate=1.):
 
 @ft.partial(jit, static_argnames=('shape', 'rate', ))
 def _pgamma(x, shape=1., rate=1.):
-    return gammainc(shape, x * rate) 
+    return gammainc(shape, x * rate)
 
 
 def rgamma(key, shape=1., rate=1., sample_shape=()):
     return _rgamma(key, shape, sample_shape) / rate
 
 
+@ft.partial(jit, static_argnames=('shape', 'sample_shape', ))
 def _rgamma(key, shape, sample_shape=()):
     return jrand.gamma(key, shape, sample_shape)

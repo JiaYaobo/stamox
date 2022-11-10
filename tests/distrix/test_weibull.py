@@ -31,11 +31,13 @@ class WeiBullTest(jtest.JaxTestCase):
         a = 1.
         b = 1.
         p = pweibull(x, a, b)
-        true_p = np.array([0.09516258,0.18126925,0.25918178 ,0.32967995 ,0.39346934])
+        true_p = np.array(
+            [0.09516258, 0.18126925, 0.25918178, 0.32967995, 0.39346934])
         self.assertArraysAllClose(p, true_p)
 
     def test_qweibull(self):
-        q = np.array([0.09516258,0.18126925,0.25918178 ,0.32967995 ,0.39346934])
+        q = np.array(
+            [0.09516258, 0.18126925, 0.25918178, 0.32967995, 0.39346934])
         x = qweibull(q, 1., 1.)
         true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
@@ -44,7 +46,7 @@ class WeiBullTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         grads = dweibull(x, 1., 1.)
         true_grads = np.array(
-            [0.9048374 ,0.8187308 ,0.7408182 ,0.6703200 ,0.6065307])
+            [0.9048374, 0.8187308, 0.7408182, 0.6703200, 0.6065307])
         self.assertArraysAllClose(grads, true_grads)
 
 

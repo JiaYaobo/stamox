@@ -6,6 +6,7 @@ from jax import jit, vmap, grad
 
 from stamox.math.special import fdtri, fdtr
 from stamox.util import zero_dim_to_1_dim_array
+from ._chisq import rchisq
 
 
 def dF(x, dfn, dfd):
@@ -38,3 +39,9 @@ def _pf(x, dfn, dfd):
 @ft.partial(jit, static_argnames=('dfn', 'dfd', ))
 def _qf(q, dfn, dfd):
     return fdtri(dfn, dfd, q)
+
+
+
+def rF(key, dfn, dfd, sample_shape=()):
+    k1, k2 = jrand.split(key)
+    return (rchisq(k1, dfn, sample_shape=sample_shape)/dfn)/(rchisq(k2, dfd, sample_shape=sample_shape)/dfd)

@@ -7,6 +7,7 @@ from jax import jit, vmap, grad
 
 from stamox.util import zero_dim_to_1_dim_array
 
+
 def dcauchy(x, loc=0., scale=1.):
     x = jnp.asarray(x)
     x = zero_dim_to_1_dim_array(x)
