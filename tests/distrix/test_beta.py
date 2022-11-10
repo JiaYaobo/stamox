@@ -13,7 +13,7 @@ from absl.testing import parameterized
 from jax._src import test_util as jtest
 
 
-class TTest(jtest.JaxTestCase):
+class BetaTest(jtest.JaxTestCase):
 
     def test_rbeta(self):
         key = jrand.PRNGKey(19751002)

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '0.0.4'
+VERSION = '0.0.5'
 PACKAGE_NAME = 'stamox'
 AUTHOR = 'Jia Yaobo'
 URL = 'https://github.com/jiayaobo/sax'

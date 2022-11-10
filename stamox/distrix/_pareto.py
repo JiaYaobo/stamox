@@ -5,6 +5,7 @@ import jax.random as jrand
 from jax import vmap, jit, grad
 
 from stamox.util import zero_dim_to_1_dim_array
+from ._exp import rexp
 
 def dpareto(x, scale, alpha):
     x = jnp.asarray(x)
@@ -14,7 +15,8 @@ def dpareto(x, scale, alpha):
     return grads
 
 def rpareto(key, scale, alpha, sample_shape=()):
-    return _rpareto(key, scale, alpha, sample_shape)
+    y = rexp(key, alpha, sample_shape)
+    return jnp.exp(y) * scale
 
 def _rpareto(key, scale, alpha, sample_shape=()):
     return jrand.exponential(key, shape=sample_shape) / alpha * scale

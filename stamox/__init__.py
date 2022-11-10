@@ -41,10 +41,6 @@ def _check_py_version():
 _check_py_version()
 # _ensure_jax_install()
 
-from stamox import distrix
-from stamox import hypox
-from stamox import util
-
 
 _allowed_symbols = [
     "distrix",
