@@ -18,7 +18,7 @@ def dweibull(x, concentration=0., scale=1.):
 def pweibull(x,  concentration=0., scale=1.):
     x = jnp.asarray(x)
     x = zero_dim_to_1_dim_array(x)
-    p = vmap(_pweibull, in_axes=(0, None, None, None))(x, concentration, scale)
+    p = vmap(_pweibull, in_axes=(0, None, None))(x, concentration, scale)
     return p
 
 

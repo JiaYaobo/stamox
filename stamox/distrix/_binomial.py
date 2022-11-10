@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import vmap, jit, grad
 
-from stamox.distrix import rbernoulli
+from ._bernoulli import rbernoulli
 
 
 def rbinomial(key, p, n, sample_shape=()):

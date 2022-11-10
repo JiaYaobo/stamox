@@ -1,4 +1,4 @@
-from stamox.distrix import pgamma, qgamma, rgamma, dgamma
+from ._gamma import pgamma, qgamma, rgamma, dgamma
 
 
 def dchisq(x, df=2.):

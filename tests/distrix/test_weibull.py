@@ -18,33 +18,33 @@ class WeiBullTest(jtest.JaxTestCase):
     def test_rweibull(self):
         key = jrand.PRNGKey(19751002)
         sample_shape = (1000000, )
-        a = 2.
-        b = 2.
+        a = 1.
+        b = 1.
         ts = rweibull(key, a, b, sample_shape)
         avg = ts.mean()
         var = ts.var(ddof=1)
-        self.assertAllClose(avg, a / (a + b), atol=1e-2)
-        self.assertAllClose(var, a*b / (((a+b)**2)*(a+b+1)), atol=1e-2)
+        self.assertAllClose(avg, 1., atol=1e-2)
+        self.assertAllClose(var, 1., atol=1e-2)
 
     def test_pweibull(self):
-        x = np.array([0., 1., 0.2, 0.3, 0.4, 0.5])
-        a = 2.
-        b = 2.
+        x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+        a = 1.
+        b = 1.
         p = pweibull(x, a, b)
-        true_p = np.array([0.000, 1.000, 0.104, 0.216, 0.352, 0.500])
+        true_p = np.array([0.09516258,0.18126925,0.25918178 ,0.32967995 ,0.39346934])
         self.assertArraysAllClose(p, true_p)
 
     def test_qweibull(self):
-        q = np.array([0.000, 1.000, 0.104, 0.216, 0.352, 0.500])
-        x = qweibull(q, 2, 2)
-        true_x = np.array([0., 1., 0.2, 0.3, 0.4, 0.5])
+        q = np.array([0.09516258,0.18126925,0.25918178 ,0.32967995 ,0.39346934])
+        x = qweibull(q, 1., 1.)
+        true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
 
     def test_dweibull(self):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
-        grads = dweibull(x, 2, 2)
+        grads = dweibull(x, 1., 1.)
         true_grads = np.array(
-            [0.54, 0.96, 1.26, 1.44, 1.50])
+            [0.9048374 ,0.8187308 ,0.7408182 ,0.6703200 ,0.6065307])
         self.assertArraysAllClose(grads, true_grads)
 
 
