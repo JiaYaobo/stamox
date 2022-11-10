@@ -5,6 +5,12 @@ __pycache__/
 *$py.class
 examples/
 
+# R extensions
+*.R
+*.r
+*.Rd
+*.Rmd
+*.rmd
 # C extensions
 *.so
 

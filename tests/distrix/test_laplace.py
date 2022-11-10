@@ -18,10 +18,12 @@ class LaplaceTest(jtest.JaxTestCase):
 
     def test_rlaplace(self):
         key = jrand.PRNGKey(19751002)
-        sample_shape = (1000000, )
+        sample_shape = (100000000, )
         laplaces = rlaplace(key, sample_shape=sample_shape)
-        median = jnp.median(laplaces)
-        self.assertAllClose(median, 0., atol=1e-2)
+        mean = laplaces.mean()
+        var = laplaces.var(ddof=1)
+        self.assertAllClose(mean, 0., atol=1e-2, rtol=1e-4)
+        self.assertAllClose(var, 2 * 1.**2, atol=1e-2, rtol=1e-4)
 
     def test_plaplace(self):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
