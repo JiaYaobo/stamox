@@ -23,7 +23,6 @@ class FTest(jtest.JaxTestCase):
         dfd = 5.
         Fs = rF(key, dfn, dfd, sample_shape)
         avg = Fs.mean()
-        var = Fs.var(ddof=1)
         self.assertAllClose(avg, dfd / (dfd - 2), atol=1e-2)
 
     def test_pF(self):
