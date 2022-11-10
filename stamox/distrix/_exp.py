@@ -43,6 +43,6 @@ def rexp(key, rate, sample_shape=()):
     return _rexp(key, sample_shape=sample_shape) / rate
 
 
-@ft.partial(jit, static_arganmes=('sample_shape', ))
+@ft.partial(jit, static_argnames=('sample_shape', ))
 def _rexp(key, sample_shape=()):
     return jrand.exponential(key, shape=sample_shape)

@@ -18,7 +18,7 @@ def dlaplace(x, loc=0., scale=1.):
 def plaplace(x,  loc=0., scale=1.):
     x = jnp.asarray(x)
     x = zero_dim_to_1_dim_array(x)
-    p = vmap(_plaplace, in_axes=(0, None, None, None))(x, loc, scale)
+    p = vmap(_plaplace, in_axes=(0, None, None))(x, loc, scale)
     return p
 
 
