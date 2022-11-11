@@ -6,6 +6,12 @@ from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
 
+def  fdtrc(a, b, x):
+    w = b / (b + a * x)
+    return betainc(0.5 * b, 0.5 * a, w)
+
+
+
 def fdtr(a, b, x):
     w = a * x
     w = w / (b + w)
