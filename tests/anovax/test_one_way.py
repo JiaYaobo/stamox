@@ -10,6 +10,7 @@ from jax._src import test_util as jtest
 
 from stamox.anovax import one_way
 
+
 class OneWayAOVTest(jtest.JaxTestCase):
 
     def test_one_way_1darray(self):
@@ -27,34 +28,34 @@ class OneWayAOVTest(jtest.JaxTestCase):
         F, p = one_way(tillamook, newport, petersburg, magadan, tvarminne)
         self.assertAllClose(F[0], np.array(7.121019471642447))
         self.assertAllClose(p[0], np.array(0.0002812242314534544))
-    
 
     def test_one_way_ndarray(self):
-        a=  np.array([[9.87, 9.03, 6.81],
-                   [7.18, 8.35, 7.00],
-                   [8.39, 7.58, 7.68],
-                   [7.45, 6.33, 9.35],
-                   [6.41, 7.10, 9.33],
-                   [8.00, 8.24, 8.44]])
-                   
+        a = np.array([[9.87, 9.03, 6.81],
+                      [7.18, 8.35, 7.00],
+                      [8.39, 7.58, 7.68],
+                      [7.45, 6.33, 9.35],
+                      [6.41, 7.10, 9.33],
+                      [8.00, 8.24, 8.44]])
+
         b = np.array([[6.35, 7.30, 7.16],
-                   [6.65, 6.68, 7.63],
-                   [5.72, 7.73, 6.72],
-                   [7.01, 9.19, 7.41],
-                   [7.75, 7.87, 8.30],
-                   [6.90, 7.97, 6.97]])
-                   
+                      [6.65, 6.68, 7.63],
+                      [5.72, 7.73, 6.72],
+                      [7.01, 9.19, 7.41],
+                      [7.75, 7.87, 8.30],
+                      [6.90, 7.97, 6.97]])
+
         c = np.array([[3.31, 8.77, 1.01],
-                   [8.25, 3.24, 3.62],
-                   [6.32, 8.81, 5.19],
-                   [7.48, 8.83, 8.91],
-                   [8.59, 6.01, 6.07],
-                   [3.07, 9.72, 7.48]])
+                      [8.25, 3.24, 3.62],
+                      [6.32, 8.81, 5.19],
+                      [7.48, 8.83, 8.91],
+                      [8.59, 6.01, 6.07],
+                      [3.07, 9.72, 7.48]])
 
         F, p = one_way(a, b, c)
-        self.assertAllClose(F[0], np.array([1.75676344, 0.03701228, 3.76439349]))
-        self.assertAllClose(p[0], np.array([0.20630784, 0.96375203, 0.04733157]))
-
+        self.assertAllClose(F[0], np.array(
+            [1.75676344, 0.03701228, 3.76439349]))
+        self.assertAllClose(p[0], np.array(
+            [0.20630784, 0.96375203, 0.04733157]))
 
 
 if __name__ == '__main__':
