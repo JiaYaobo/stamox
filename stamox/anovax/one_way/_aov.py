@@ -12,6 +12,7 @@ def _square_of_sums(a, axis=0):
     s = jnp.sum(a, axis, keepdims=True)
     return s * s
 
+
 @ft.partial(jit, static_argnames=('axis'))
 def _sum_of_squares(a, axis=0):
     return jnp.sum(a * a, axis=axis, keepdims=True)
