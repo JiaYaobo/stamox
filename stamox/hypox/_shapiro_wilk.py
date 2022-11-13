@@ -93,6 +93,9 @@ def _shapiro_wilk(x, n):
     w1 = (ssassx - sax) * (ssassx + sax) / (ssa * ssx)
     w = 1. - w1
 
+    # cal pw
+    
+
     return w
 
 

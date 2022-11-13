@@ -1,15 +1,16 @@
+
+import numpy as np
+
 import jax
 import jax.numpy as jnp
-import jax.random as jr
+import jax.random as jrand
 import random
-import equinox as eqx
+from scipy.stats import bootstrap
+from sklearn.utils import resample
 
 from jaxtyping import Array
 
 
 
-def _boot_splits(data: Array, times=25, strata=None, breaks=4, pool=0.1):
-    n = data.shape[0]
-
-    if strata == None:
-        pass
+def boot_sample(x): 
+    pass

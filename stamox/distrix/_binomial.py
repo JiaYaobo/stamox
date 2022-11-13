@@ -29,8 +29,8 @@ def _dbinomial(k, n, p):
     pp = jnp.power(p, k) * jnp.power(1-p, n-k) * comb
     return pp
 
-# We need to implement pbinomial using lax.scan or other loop scheme, since
-# vmap needs concrete shape, so jnp.arange can't be contained in mapper
+# We need to implement pbinomial using lax.scan or other loop scheme to make it possible map on k, since
+# vmap needs concrete shape, so jnp.arange can't be contained in mapper which is annoying :<
 
 
 def rbinomial(key, p, n, sample_shape=()):
