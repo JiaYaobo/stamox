@@ -11,7 +11,7 @@ def sample(key, x, n, replace=True):
         raise NotImplementedError("Not Implemented with replace = False")
     size = x.size
     ns =  _sample(key, n, size, replace)
-    return x[ns,]
+    return x[ns,...]
 
 
 @jtu.Partial(jit, static_argnames=('n', 'replace', ))
