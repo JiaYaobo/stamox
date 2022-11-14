@@ -5,6 +5,7 @@ import jax.random as jrand
 from jax import vmap, jit, grad
 
 
+
 def rbernoulli(key, p, sample_shape=()):
     return _rbernoulli(key, p, sample_shape)
 
