@@ -5,7 +5,15 @@ import jax.numpy as jnp
 from jax import jit
 
 
-@ft.partial(jit, static_argnums=[2])
+
+
+@jit
+def _mahalanobis_distance(x, Sinv, y=None, axis=0):
+    mu_x = jnp.mean(x, axis=0)
+    return jnp.sqrt((x - mu_x) @ Sinv @ (x - mu_x))
+
+
+@ft.partial(jit, static_argnames=('p'))
 def minkowski_distance_p(x, y, p=2):
     """Compute the pth power of the L**p distance between two arrays.
     For efficiency, this function computes the L**p distance but does
