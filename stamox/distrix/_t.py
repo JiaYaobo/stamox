@@ -6,7 +6,7 @@ from jax import jit, vmap, grad
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
-from stamox.util import zero_dim_to_1_dim_array
+from ..util import zero_dim_to_1_dim_array
 
 
 def dt(x, df, loc=0., scale=1.):

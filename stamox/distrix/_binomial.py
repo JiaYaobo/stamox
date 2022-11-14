@@ -50,7 +50,9 @@ def _cumm_dbinomial(k ,n ,p):
 def pbinomial(k ,n ,p):
     k = jnp.asarray(k ,jnp.int32)
     pp = vmap(_cumm_dbinomial, in_axes=(0, None, None))(k, n, p)
-    return jnp.squeeze(pp, axis=1)
+    pp = lax.clamp(0., pp, 1.)
+    pp = jnp.squeeze(pp, axis=1)
+    return pp
 
 
 def rbinomial(key, p, n, sample_shape=()):

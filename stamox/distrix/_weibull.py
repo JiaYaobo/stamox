@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import vmap, jit, grad
 
-from stamox.util import zero_dim_to_1_dim_array
+from ..util import zero_dim_to_1_dim_array
 
 
 def dweibull(x, concentration=0., scale=1.):

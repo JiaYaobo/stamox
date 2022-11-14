@@ -5,7 +5,7 @@ import jax.random as jrand
 from jax import jit, vmap, grad
 from jax.scipy.special import ndtr, ndtri
 
-from stamox.util import zero_dim_to_1_dim_array
+from ..util import zero_dim_to_1_dim_array
 
 
 def dnorm(x, mean=0., sigma=1.):

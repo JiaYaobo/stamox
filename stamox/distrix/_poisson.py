@@ -6,7 +6,7 @@ from jax import jit, vmap
 from jax.scipy.special import gammainc
 
 
-from stamox.util import zero_dim_to_1_dim_array
+from ..util import zero_dim_to_1_dim_array
 
 
 def ppoisson(x, rate):

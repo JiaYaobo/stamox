@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import jit, vmap
 
-from stamox.util import zero_dim_to_1_dim_array
+from ..util import zero_dim_to_1_dim_array
 
 
 def dunif(x, mini=0., maxi=1.):
