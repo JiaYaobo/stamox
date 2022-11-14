@@ -15,4 +15,5 @@ from stamox.distrix._bernoulli import rbernoulli
 from stamox.distrix._binomial import rbinomial, dbinomial, pbinomial
 from stamox.distrix._triangular import ptriangular
 from stamox.distrix._geom import dgeom, pgeom
+from stamox.distrix._runs import druns
 
