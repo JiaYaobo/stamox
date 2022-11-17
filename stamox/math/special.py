@@ -11,7 +11,6 @@ def  fdtrc(a, b, x):
     return betainc(0.5 * b, 0.5 * a, w)
 
 
-
 def fdtr(a, b, x):
     w = a * x
     w = w / (b + w)

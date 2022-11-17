@@ -1,11 +1,10 @@
 # High Performance Stats Models in JAX
 
-A modern statistics package based on JAX, inspired by sklearn, statsmodels and tidymodels
+A modern statistics package based on JAX, inspired by sklearn, statsmodels and tidymodels etc.
 
 ==============================================================
 
-I'd like to build a pure functional stats tools, cuz we can't do anything until we create a complex object in this oop world, which
-is sort of annoying
+I'd like to build a pure functional stats tools, class should act like function, function is everything, data feeds the function, and data comes from function. 
 
 ==============================================================
 
