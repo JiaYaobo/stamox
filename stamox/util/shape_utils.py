@@ -1,9 +1,6 @@
 import jax.numpy as jnp
 
 def zero_dim_to_1_dim_array(x, dtype=None):
-    if x.ndim == 0:
-        return jnp.expand_dims(x, 0)
-    else:
-        return x
+    return jnp.atleast_1d(x)
 
 

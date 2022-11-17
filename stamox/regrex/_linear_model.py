@@ -34,3 +34,10 @@ class OLS(RegressionModel):
 def _lm_linalg(X, y):
     w_linalg = jnp.dot(jnp.dot(jnp.linalg.inv(jnp.dot*X.T, X), X.T), y)
     return w_linalg
+
+def _fit_ridge():
+    pass
+
+
+def _fit_lasso():
+    pass
