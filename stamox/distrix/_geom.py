@@ -29,7 +29,6 @@ def pgeom(k ,p):
     return pp
 
 
-
 def dgeom(k, p):
     k = jnp.asarray(k, dtype=jnp.int32)
     k = zero_dim_to_1_dim_array(k)
