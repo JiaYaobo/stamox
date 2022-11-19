@@ -44,7 +44,7 @@ def minkowski_distance_p(x, y, p=2):
         return jnp.sum(jnp.abs(y - x)**p, axis=-1)
 
 
-@ft.partial(jit, static_argnums=[2])
+@ft.partial(jit, static_argnames=('p', ))
 def minkowski_distance(x, y, p=2):
     """Compute the L**p distance between two arrays.
     Parameters

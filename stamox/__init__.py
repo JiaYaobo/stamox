@@ -45,6 +45,7 @@ from stamox import distrix
 from stamox import hypox
 from stamox import util
 from stamox import math
+from stamox import regrex
 
 _allowed_symbols = [
     "distrix",
