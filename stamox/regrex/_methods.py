@@ -18,5 +18,3 @@ def _lm_qr(X, y):
     params = jnp.linalg.solve(R, jnp.dot(Q.T, y))
     return params
 
-
-
