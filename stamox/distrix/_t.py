@@ -6,12 +6,12 @@ from jax import jit, vmap, grad
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
-from ..util import zero_dim_to_1_dim_array
+from ..util import atleast_1d
 
 
 def dt(x, df, loc=0., scale=1.):
     x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
+    x = atleast_1d(x)
     _dt = grad(_pt)
     grads = vmap(_dt, in_axes=(0, None, None, None))(x, df, loc, scale)
     return grads
@@ -19,7 +19,7 @@ def dt(x, df, loc=0., scale=1.):
 
 def pt(x, df, loc=0., scale=1.):
     x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
+    x = atleast_1d(x)
     p = vmap(_pt, in_axes=(0, None, None, None))(x, df, loc, scale)
     return p
 
@@ -41,7 +41,7 @@ def _pt(x, df, loc=0., scale=1.):
 
 def qt(q, df, loc=0., scale=1.):
     q = jnp.asarray(q)
-    q = zero_dim_to_1_dim_array(q)
+    q = atleast_1d(q)
     q = vmap(_qt, in_axes=(0, None, None, None))(q, df, loc, scale)
     return q
 

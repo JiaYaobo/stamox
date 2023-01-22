@@ -6,12 +6,12 @@ from jax import jit, vmap
 from jax.scipy.special import gammainc
 
 
-from ..util import zero_dim_to_1_dim_array
+from ..util import atleast_1d
 
 
 def ppoisson(x, rate):
     x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
+    x = atleast_1d(x)
     p = vmap(_ppoisson, in_axes=(0, None))(x, rate)
     return p
 
