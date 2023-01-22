@@ -45,11 +45,12 @@ from stamox import distrix
 from stamox import hypox
 from stamox import util
 from stamox import math
-from stamox import regrex
+from stamox import maps
 
-_allowed_symbols = [
+__all__ = [
     "distrix",
     "hypox",
     "util",
-    "math"
+    "math",
+    "maps"
 ]

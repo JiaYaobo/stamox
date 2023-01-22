@@ -8,7 +8,6 @@ import numpy as np
 from stamox.distrix import pt, rt, qt, dt
 
 from absl.testing import absltest
-from absl.testing import parameterized
 
 from jax._src import test_util as jtest
 

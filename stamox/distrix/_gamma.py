@@ -6,36 +6,31 @@ from jax import vmap, jit, grad
 from jax.scipy.special import gammainc
 import tensorflow_probability.substrates.jax.math as tfp_math
 
-# from numpyro.distributions import Gamma
+from ..maps import auto_map
 
 
 def dgamma(x, shape, rate):
-    x = jnp.asarray(x)
-    if x.ndim == 0:
-        x = jnp.expand_dims(x, axis=0)
     _dgamma = grad(_pgamma)
-    grads = vmap(_dgamma, in_axes=(0, None, None))(x, shape, rate)
+    grads = auto_map(_dgamma, x, shape, rate)
     return grads
 
 
 def pgamma(x, shape=1., rate=1.):
-    x = jnp.asarray(x)
-    p = vmap(_pgamma, in_axes=(0, None, None))(x, shape, rate)
+    p = auto_map(_pgamma, x, shape, rate)
     return p
 
 
 def qgamma(q, shape=1., rate=1.):
-    q = jnp.asarray(q)
-    x = vmap(_qgamma, in_axes=(0, None, None))(q, shape, rate)
+    x = auto_map(_qgamma, q, shape, rate)
     return x
 
 
-@ft.partial(jit, static_argnames=('shape', 'rate', ))
+@jit
 def _qgamma(q, shape=1., rate=1.):
     return tfp_math.igammainv(shape, q) / rate
 
 
-@ft.partial(jit, static_argnames=('shape', 'rate', ))
+@jit
 def _pgamma(x, shape=1., rate=1.):
     return gammainc(shape, x * rate)
 

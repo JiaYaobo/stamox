@@ -1,30 +1,25 @@
-import functools as ft
-
 import jax.numpy as jnp
 import jax.random as jrand
-from jax import jit, vmap, grad
+from jax import jit, grad
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
-from ..util import atleast_1d
+
+from ..maps import auto_map
 
 
 def dt(x, df, loc=0., scale=1.):
-    x = jnp.asarray(x)
-    x = atleast_1d(x)
     _dt = grad(_pt)
-    grads = vmap(_dt, in_axes=(0, None, None, None))(x, df, loc, scale)
+    grads = auto_map(_dt, x, df, loc, scale)
     return grads
 
 
 def pt(x, df, loc=0., scale=1.):
-    x = jnp.asarray(x)
-    x = atleast_1d(x)
-    p = vmap(_pt, in_axes=(0, None, None, None))(x, df, loc, scale)
+    p = auto_map(_pt, x, df, loc, scale)
     return p
 
 
-@ft.partial(jit, static_argnames=("loc", "scale",))
+@jit
 def _pt(x, df, loc=0., scale=1.):
     scaled = (x - loc) / scale
     scaled_squared = scaled * scaled
@@ -40,13 +35,11 @@ def _pt(x, df, loc=0., scale=1.):
 
 
 def qt(q, df, loc=0., scale=1.):
-    q = jnp.asarray(q)
-    q = atleast_1d(q)
-    q = vmap(_qt, in_axes=(0, None, None, None))(q, df, loc, scale)
+    q = auto_map(_qt, q, df, loc, scale)
     return q
 
 
-@ft.partial(jit, static_argnames=("loc", "scale",))
+@jit
 def _qt(q, df, loc=0., scale=1.):
     beta_value = tfp_special.betaincinv(0.5 * df, 0.5, 1 - jnp.abs(1 - 2 * q))
     scaled_squared = df * (1 / beta_value - 1)

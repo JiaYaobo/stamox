@@ -4,6 +4,7 @@ import jax.tree_util as jtu
 from jax import vmap, jit, lax
 
 from ..util import zero_dim_to_1_dim_array
+from ..maps import auto_map
 
 @jtu.Partial(jit, static_argnames=('p', ))
 def _cumm_dgeom(k ,p):

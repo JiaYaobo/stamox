@@ -4,7 +4,6 @@ import jax.random as jrand
 import jax.numpy as jnp
 
 import numpy as np
-import numpy.testing as npt
 
 from stamox.distrix import pnorm, qnorm, rnorm, dnorm
 
