@@ -5,6 +5,7 @@ import jax.random as jrand
 from jax import jit, vmap
 
 from ..util import zero_dim_to_1_dim_array
+from ..maps import auto_map
 
 
 def dunif(x, mini=0., maxi=1.):
@@ -13,26 +14,22 @@ def dunif(x, mini=0., maxi=1.):
     return 1/(maxi - mini) * jnp.ones_like(x)
 
 def punif(x, mini=0., maxi=1.):
-    x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
-    p = vmap(_punif, in_axes=(0, None, None))(x, mini, maxi)
+    p = auto_map(_punif, x, mini, maxi)
     return p
 
 
-@ft.partial(jit, static_argnames=("mini", "maxi",))
+@jit
 def _punif(x, mini=0., maxi=1.):
     p = (x - mini) / (maxi - mini)
     return p
 
 
 def qunif(q,  mini=0., maxi=1.):
-    q = jnp.asarray(q)
-    q = zero_dim_to_1_dim_array(q)
-    q = vmap(_qunif, in_axes=(0, None, None))(q, mini, maxi)
-    return q
+    x = auto_map(_qunif, q, mini, maxi)
+    return x
 
 
-@ft.partial(jit, static_argnames=("mini", "maxi",))
+@jit
 def _qunif(q, mini=0., maxi=1.):
     x = q * (maxi - mini) + mini
     return x

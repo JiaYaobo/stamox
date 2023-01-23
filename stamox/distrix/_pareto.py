@@ -4,15 +4,14 @@ import jax.numpy as jnp
 import jax.random as jrand
 from jax import vmap, jit, grad
 
-from stamox.util import zero_dim_to_1_dim_array
+from ..util import zero_dim_to_1_dim_array
+from ..maps import auto_map
 from ._exp import rexp
 
 
 def dpareto(x, scale, alpha):
-    x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
     _dpareto = grad(_ppareto)
-    grads = vmap(_dpareto, in_axes=(0, None, None))(x, scale, alpha)
+    grads = auto_map(_dpareto, x, scale, alpha)
     return grads
 
 
@@ -22,24 +21,20 @@ def rpareto(key, scale, alpha, sample_shape=()):
 
 
 def ppareto(x, scale, alpha):
-    x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
-    p = vmap(_ppareto, in_axes=(0, None, None))(x, scale, alpha)
+    p = auto_map(_ppareto, x, scale, alpha)
     return p
 
 
 def qpareto(q, scale, alpha):
-    q = jnp.asarray(q)
-    q = zero_dim_to_1_dim_array(q)
-    x = vmap(_qpareto, in_axes=(0, None, None))(q, scale, alpha)
+    x = auto_map(_qpareto, q, scale, alpha)
     return x
 
 
-@ft.partial(jit, static_argnames=('scale', 'alpha', ))
+@jit
 def _ppareto(x, scale, alpha):
     return 1 - jnp.power(scale / x, alpha)
 
 
-@ft.partial(jit, static_argnames=('scale', 'alpha', ))
+@jit
 def _qpareto(q, scale, alpha):
     return scale / jnp.power(1 - q, 1 / alpha)

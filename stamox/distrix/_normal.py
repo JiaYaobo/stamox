@@ -1,6 +1,5 @@
-import jax.numpy as jnp
 import jax.random as jrand
-from jax import jit, vmap, grad
+from jax import jit,  grad
 from jax.scipy.special import ndtr, ndtri
 
 from ..maps import auto_map

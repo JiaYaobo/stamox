@@ -10,7 +10,6 @@ def align_inputs(*inputs):
     args = []
     arg_sizes = []
 
-
     if n == 1:
         arg = atleast_1d(inputs[0])
         return arg, [arg.size]
@@ -36,13 +35,12 @@ def align_inputs(*inputs):
 def auto_map(func, *inputs):
 
     n = len(inputs)
-        
-    args, arg_sizes = align_inputs(*inputs)
 
+    args, arg_sizes = align_inputs(*inputs)
 
     if n == 1:
         return vmap(func, in_axes=0)(args)
-        
+
     in_axes = []
     for arg_size in arg_sizes:
         if arg_size > 1:

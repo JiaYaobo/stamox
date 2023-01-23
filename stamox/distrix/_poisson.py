@@ -7,18 +7,17 @@ from jax.scipy.special import gammainc
 
 
 from ..util import atleast_1d
+from ..maps import auto_map
 
 
 def ppoisson(x, rate):
-    x = jnp.asarray(x)
-    x = atleast_1d(x)
-    p = vmap(_ppoisson, in_axes=(0, None))(x, rate)
+    p = auto_map(_ppoisson, x, rate)
     return p
 
 
-@ft.partial(jit, static_argnames=('rate', ))
+@jit
 def _ppoisson(x, rate):
-    k = jnp.floor(x) + 1
+    k = jnp.floor(x) + 1.
     return gammainc(k, rate)
 
 

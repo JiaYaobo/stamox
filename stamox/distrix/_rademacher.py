@@ -3,12 +3,11 @@ import jax.tree_util as jtu
 from jax import vmap, jit, lax
 
 from ..util import zero_dim_to_1_dim_array
+from ..maps import auto_map
 
 
 def drademacher(k):
-    k = jnp.asarray(k)
-    k = zero_dim_to_1_dim_array(k)
-    dens = vmap(_drademacher)(k)
+    dens = auto_map(_drademacher, k)
     return dens
 
 
@@ -20,12 +19,11 @@ def _drademacher(k):
 
 
 def prademacher(k):
-    k = jnp.asarray(k)
-    k = zero_dim_to_1_dim_array(k)
-    p = vmap(_prademacher)(k)
+    p = auto_map(_prademacher, k)
     return p
 
 
+@jit
 def _prademacher(k):
     cond0 = k < -1.
     cond1 = jnp.logical_and(k >= -1., k < 1.)
