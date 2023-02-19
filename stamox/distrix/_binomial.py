@@ -28,8 +28,9 @@ def _dbinomial(k, n, p):
     pp = jnp.power(p, k) * jnp.power(1-p, n-k) * comb
     return pp
 
-# We need to implement pbinomial using lax.scan or other loop scheme to make it possible map on k, since
-# vmap needs concrete shape, so jnp.arange can't be contained in mapper which is annoying :<
+# We need to implement pbinomial using lax.scan or other loop scheme to 
+# make it possible map on k,
+#  since vmap needs concrete shape, so jnp.arange can't be contained in mapper which is annoying :<
 @ft.partial(jit, static_argnames=('n', 'p', ))
 def _cumm_dbinomial(k ,n ,p):
     def cond(carry):

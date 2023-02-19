@@ -1,7 +1,4 @@
-import functools as ft
-
 import jax.numpy as jnp
-from jax import lax
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 

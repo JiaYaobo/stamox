@@ -1,7 +1,6 @@
 """Test for normal distribution"""
 
 import jax.random as jrand
-import jax.numpy as jnp
 
 import numpy as np
 

@@ -1,8 +1,6 @@
-import functools as ft
-
 import jax.numpy as jnp
 import jax.random as jrand
-from jax import jit, vmap
+from jax import jit
 
 from ..util import zero_dim_to_1_dim_array
 from ..maps import auto_map

@@ -4,6 +4,7 @@ from jax import vmap, jit, lax
 
 from ..util import zero_dim_to_1_dim_array
 from ..maps import auto_map
+from ._normal import qnorm
 
 @jtu.Partial(jit, static_argnames=('p', ))
 def _cumm_dgeom(k ,p):
@@ -39,5 +40,24 @@ def dgeom(k, p):
 @jit
 def _dgeom(k, p):
     return jnp.power(1-p, k - 1) * p
+
+
+def qgeom(q, p):
+    x = auto_map(_qgeom, q, p)
+    return x
+
+@jit
+def _qgeom(q, p):
+    """Compute the alpha-quantile of a geometric distribution 
+    using Cornish-Fisher Expansion."""
+    q = qnorm(q) # the alpha-quantile of the standard normal distribution
+    mu = 1 / p # the mean of the geometric distribution
+    var = (1 - p) / p**2 # the variance of the geometric distribution
+    skew = (2 - p) / jnp.sqrt(1 - p) # the skewness of the geometric distribution
+    kurt = 6 + (p**2 - 6 * p + 6) / (1 - p)
+    z = q + (q**2 - 1) / 6 * skew + (q**3 - 3 * q) / 24 \
+        * kurt - (q**3 - q) / 36 * skew**2
+    x = mu + z * jnp.sqrt(var)
+    return x
 
 
