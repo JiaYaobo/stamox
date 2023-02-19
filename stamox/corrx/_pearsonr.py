@@ -28,9 +28,9 @@ def _pearsonr(x, y, alternative='two-sided'):
     ab = n / 2 - 1
 
     if alternative == 'two-sided':
-        prob = 2*pbeta(0.5*(1 - jnp.abs(r)), ab, ab)
+        prob = 2 * pbeta(0.5 * (1 - jnp.abs(r)), ab, ab)
     elif alternative == 'less':
-        prob = 1 - pbeta(0.5*(1 - jnp.abs(r)), ab, ab)
+        prob = 1 - pbeta(0.5 * (1 - jnp.abs(r)), ab, ab)
     else:
         prob = pbeta(0.5*(1 - jnp.abs(r)), ab, ab)
 

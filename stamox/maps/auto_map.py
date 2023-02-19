@@ -4,6 +4,7 @@ from ..util import atleast_1d
 
 
 def align_inputs(*inputs):
+
     max_size = 1
     n = len(inputs)
 
@@ -22,7 +23,7 @@ def align_inputs(*inputs):
             max_size = arg.size
 
     for i in range(n):
-        if args[i].size == 1 or args[i].ndim == max_size:
+        if args[i].size == 1 or args[i].size == max_size:
             continue
         else:
             args[i] = jnp.tile(

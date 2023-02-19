@@ -33,7 +33,7 @@ def _qf(q, dfn, dfd):
     return fdtri(dfn, dfd, q)
 
 
-
 def rF(key, dfn, dfd, sample_shape=()):
     k1, k2 = jrand.split(key)
-    return (rchisq(k1, dfn, sample_shape=sample_shape)/dfn)/(rchisq(k2, dfd, sample_shape=sample_shape)/dfd)
+    return (rchisq(k1, dfn, sample_shape=sample_shape)/dfn) / \
+        (rchisq(k2, dfd, sample_shape=sample_shape)/dfd)

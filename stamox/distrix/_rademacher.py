@@ -1,8 +1,6 @@
 import jax.numpy as jnp
-import jax.tree_util as jtu
-from jax import vmap, jit, lax
+from jax import jit, lax
 
-from ..util import zero_dim_to_1_dim_array
 from ..maps import auto_map
 
 

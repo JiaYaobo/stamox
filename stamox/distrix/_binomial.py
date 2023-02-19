@@ -2,7 +2,6 @@ import functools as ft
 
 import jax.numpy as jnp
 import jax.random as jrand
-import jax.tree_util as jtu
 from jax import vmap, jit, lax
 from jax.scipy.special import gammaln
 
@@ -62,3 +61,4 @@ def rbinomial(key, p, n, sample_shape=()):
 def _rbinomial(key, p, n, sample_shape=()):
     keys = jrand.split(key, n)
     rbins = vmap(rbernoulli, in_axes=(0, None, None))(keys, p, sample_shape)
+    return rbins

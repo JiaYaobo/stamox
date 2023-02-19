@@ -1,19 +1,14 @@
-import functools as ft
-
 import jax.numpy as jnp
 import jax.random as jrand
-from jax import jit, vmap
+from jax import jit
 from jax.scipy.special import gammainc
 
-
-from ..util import atleast_1d
 from ..maps import auto_map
 
 
 def ppoisson(x, rate):
     p = auto_map(_ppoisson, x, rate)
     return p
-
 
 @jit
 def _ppoisson(x, rate):

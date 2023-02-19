@@ -1,42 +1,35 @@
 import functools as ft
 
-import jax.numpy as jnp
 import jax.random as jrand
-from jax import vmap, jit, grad
+from jax import jit, grad
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
-from ..util import atleast_1d
+from ..maps import auto_map
 
 
 def dbeta(x, a, b):
-    x = jnp.asarray(x)
-    x = atleast_1d(x)
     _dnorm = grad(_pbeta)
-    grads = vmap(_dnorm, in_axes=(0, None, None))(x, a, b)
+    grads = auto_map(_dnorm, x, a, b)
     return grads
 
 
 def pbeta(x, a, b):
-    x = jnp.asarray(x)
-    x = atleast_1d(x)
-    p = vmap(_pbeta, in_axes=(0, None, None))(x, a, b)
+    p = auto_map(_pbeta, x, a, b)
     return p
 
 
 def qbeta(q, a, b):
-    q = jnp.asarray(q)
-    q = atleast_1d(q)
-    x = vmap(_qbeta, in_axes=(0, None, None))(q, a, b)
+    x = auto_map(_qbeta, q, a, b)
     return x
 
 
-@ft.partial(jit, static_argnames=('a', 'b', ))
+@jit
 def _qbeta(q, a, b):
     return tfp_special.betaincinv(a, b, q)
 
 
-@ft.partial(jit, static_argnames=('a', 'b', ))
+@jit
 def _pbeta(x, a, b):
     return betainc(a, b, x)
 
