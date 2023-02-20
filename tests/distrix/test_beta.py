@@ -36,7 +36,7 @@ class BetaTest(jtest.JaxTestCase):
 
     def test_qbeta(self):
         q = np.array([0.000, 1.000, 0.104, 0.216, 0.352, 0.500])
-        x = qbeta(q, 2, 2)
+        x = qbeta(q, 2., 2.)
         true_x = np.array([0., 1., 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
 

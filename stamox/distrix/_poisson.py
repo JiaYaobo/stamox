@@ -1,10 +1,11 @@
 import jax.numpy as jnp
 import jax.random as jrand
 from jax import jit
-from jax.scipy.special import gammainc
+from jax.scipy.special import gammainc, gammaln
 
 from ..maps import auto_map
 from ._normal import qnorm
+
 
 def ppoisson(x, rate):
     p = auto_map(_ppoisson, x, rate)
@@ -13,7 +14,20 @@ def ppoisson(x, rate):
 @jit
 def _ppoisson(x, rate):
     k = jnp.floor(x) + 1.
-    return gammainc(k, rate)
+    return 1 - gammainc(k, rate)
+
+
+
+def dpoisson(x, rate):
+    d = auto_map(_dpoisson, x, rate)
+    return d
+
+@jit
+def _dpoisson(x, rate):
+    e = jnp.exp(-rate)
+    numerator = rate ** x
+    denominator = jnp.exp(gammaln(x + 1))
+    return (numerator / denominator) * e
 
 
 def rpoisson(key, rate, sample_shape=()):
@@ -41,15 +55,15 @@ def _qpoisson(q, rate):
     kurtosis = 1 / rate
     
     # Compute the third and fourth standardized moments
-    standardized_third_moment = skewness**3
+    standardized_third_moment = skewness ** 3
     standardized_fourth_moment = 3 + 1 / rate
     
     # Compute the adjusted z-score using the Cornish-Fisher expansion
     adjusted_z = z + (z**2 - 1) * skewness / 6 + (z**3 - 3*z) \
                 * (kurtosis - standardized_fourth_moment) / 24 \
-                - (2*z**3 - 5*z) * standardized_third_moment**2 / 36
+                - (2*z**3 - 5*z) * standardized_third_moment ** 2 / 36
     
     # Compute the approximate quantile using the adjusted z-score
     quantile = rate + jnp.sqrt(rate) * adjusted_z
 
-    return quantile
+    return jnp.round(quantile)

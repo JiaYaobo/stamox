@@ -2,7 +2,7 @@ import jax.numpy as jnp
 import jax.tree_util as jtu
 from jax import vmap, jit, lax
 
-from ..util import zero_dim_to_1_dim_array
+from ..util import atleast_1d
 from ..maps import auto_map
 from ._normal import qnorm
 
@@ -32,7 +32,7 @@ def pgeom(k ,p):
 
 def dgeom(k, p):
     k = jnp.asarray(k, dtype=jnp.int32)
-    k = zero_dim_to_1_dim_array(k)
+    k = atleast_1d(k)
     pp = auto_map(_dgeom, k, p)
     return pp
 

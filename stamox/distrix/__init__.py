@@ -10,7 +10,7 @@ from stamox.distrix._cauchy import pcauchy, qcauchy, dcauchy, rcauchy
 from stamox.distrix._exp import pexp, qexp, dexp, rexp
 from stamox.distrix._laplace import plaplace, qlaplace, dlaplace, rlaplace
 from stamox.distrix._weibull import pweibull, qweibull, dweibull, rweibull
-from stamox.distrix._poisson import ppoisson, rpoisson, qpoisson
+from stamox.distrix._poisson import ppoisson, rpoisson, qpoisson, dpoisson
 from stamox.distrix._bernoulli import rbernoulli
 from stamox.distrix._binomial import rbinomial, dbinomial, pbinomial
 from stamox.distrix._triangular import ptriangular
@@ -32,7 +32,7 @@ __all__ = [
     "pexp", "qexp", "rexp", "dexp",
     "plaplace", "qlaplace", "dlaplace", "rlaplace",
     "pweibull", "qweibull", "dweibull", "rweibull",
-    "ppoisson", "rpoisson", "qpoisson",
+    "ppoisson", "rpoisson", "qpoisson", "dpoisson",
     "rbernoulli",
     "rbinomial", "dbinomial", "pbinomial",
     "ptriangular",

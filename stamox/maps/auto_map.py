@@ -43,9 +43,15 @@ def auto_map(func, *inputs):
         return vmap(func, in_axes=0)(args)
 
     in_axes = []
+    all_scalar = True
     for arg_size in arg_sizes:
         if arg_size > 1:
+            all_scalar = False
             in_axes.append(0)
         else:
             in_axes.append(None)
+    
+    if all_scalar:
+        return func(*args)
+        
     return vmap(func, in_axes=in_axes)(*args)
