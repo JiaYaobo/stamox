@@ -11,6 +11,7 @@ def dunif(x, mini=0., maxi=1.):
     x = zero_dim_to_1_dim_array(x)
     return 1/(maxi - mini) * jnp.ones_like(x)
 
+
 def punif(x, mini=0., maxi=1.):
     p = auto_map(_punif, x, mini, maxi)
     return p

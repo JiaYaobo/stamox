@@ -10,12 +10,36 @@ from stamox.distrix._cauchy import pcauchy, qcauchy, dcauchy, rcauchy
 from stamox.distrix._exp import pexp, qexp, dexp, rexp
 from stamox.distrix._laplace import plaplace, qlaplace, dlaplace, rlaplace
 from stamox.distrix._weibull import pweibull, qweibull, dweibull, rweibull
-from stamox.distrix._poisson import ppoisson, rpoisson
+from stamox.distrix._poisson import ppoisson, rpoisson, qpoisson
 from stamox.distrix._bernoulli import rbernoulli
 from stamox.distrix._binomial import rbinomial, dbinomial, pbinomial
 from stamox.distrix._triangular import ptriangular
-from stamox.distrix._geom import dgeom, pgeom
+from stamox.distrix._geom import dgeom, pgeom, qgeom
 from stamox.distrix._runs import druns
 from stamox.distrix._rademacher import prademacher, drademacher
+from stamox.distrix._ecdf import ecdf, step_fun
+
+__all__ = [
+    "pt","qt", "rt", "dt",
+    "pnorm", "qnorm", "rnorm", "dnorm",
+    "pbeta", "qbeta", "rbeta", "dbeta",
+    "pgamma", "qgamma", "rgamma", "dgamma",
+    "runif", "punif", "qunif", "dunif",
+    "pchisq", "qchisq", "rchisq", "dchisq",
+    "ppareto", "qpareto", "rpareto", "dpareto",
+    "pF", "qF", "dF", "rF",
+    "pcauchy", "qcauchy", "rcauchy", "dcauchy",
+    "pexp", "qexp", "rexp", "dexp",
+    "plaplace", "qlaplace", "dlaplace", "rlaplace",
+    "pweibull", "qweibull", "dweibull", "rweibull",
+    "ppoisson", "rpoisson", "qpoisson",
+    "rbernoulli",
+    "rbinomial", "dbinomial", "pbinomial",
+    "ptriangular",
+    "dgeom", "pgeom", "qgeom",
+    "druns",
+    "prademacher", "drademacher",
+    "ecdf", "step_fun" 
+]
 
 
