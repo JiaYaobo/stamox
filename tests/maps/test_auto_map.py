@@ -18,7 +18,7 @@ class AutoMapTest(jtest.JaxTestCase):
             return x + 1
         
         b = auto_map(f, a)
-        self.assertAllClose(b, np.array(3.0))
+        self.assertAllClose(b, np.array([3.0]))
 
     def test_single_vector_input(self):
         a = np.array([1, 2, 3])
@@ -36,7 +36,7 @@ class AutoMapTest(jtest.JaxTestCase):
             return x*y*z
 
         d = auto_map(f, a, b, c)
-        self.assertAllClose(d, jnp.array(6.))
+        self.assertAllClose(d, jnp.array([6.]))
 
     def test_scalar_and_vector_inputs(self):
         a = 1.
@@ -102,8 +102,8 @@ class AutoMapTest(jtest.JaxTestCase):
 
         b, b_ = auto_map(f, a)
 
-        self.assertAllClose(b, 3.)
-        self.assertAllClose(b_, 1.)
+        self.assertAllClose(b, jnp.array(3.))
+        self.assertAllClose(b_, jnp.array(1.))
 
     def test_scalar_grad_compatible(self):
 
@@ -114,7 +114,7 @@ class AutoMapTest(jtest.JaxTestCase):
             return x + 1
 
         b = auto_map(f, a)
-        self.assertAllClose(b, np.array(1.0))
+        self.assertAllClose(b, np.array([1.0]))
 
 
 if __name__ == '__main__':

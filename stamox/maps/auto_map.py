@@ -36,7 +36,7 @@ def align_inputs(*inputs):
     return args, arg_sizes
 
 
-def auto_map(func, *inputs, in_axes=None):
+def auto_map(func, *inputs):
 
     n = len(inputs)
 
@@ -52,7 +52,7 @@ def auto_map(func, *inputs, in_axes=None):
             in_axes.append(None)
     
     if all_scalar:
-        return func(*args)
+        return jnp.atleast_1d(func(*args))
 
     if n == 1:
         return vmap(func, in_axes=0)(args)

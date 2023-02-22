@@ -19,7 +19,7 @@ def cube_map(func, *inputs):
 
     
     if all_scalar:
-        return func(*args)
+        return jnp.atleast_1d(func(*args))
 
     else:
         for i in range(n):
