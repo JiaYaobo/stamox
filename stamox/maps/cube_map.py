@@ -4,17 +4,29 @@ from jax import vmap
 def cube_map(func, *inputs):
 
     n = len(inputs)
-    if n == 1:
-        return vmap(func, in_axes=0)(*inputs)
     args = []
+    arg_sizes = []
+    all_scalar = True
+
+
     for inp in inputs:
+        if not jnp.isscalar(inp):
+            all_scalar = False
+        
         inp = jnp.asarray(inp)
         args.append(inp)
+        arg_sizes.append(inp.size)
 
-    for i in range(n):
-        in_axes = [None] * n
-        in_axes[n-i-1] = 0
-        func = vmap(func, in_axes=in_axes)
+    
+    if all_scalar:
+        return func(*args)
+
+    else:
+        for i in range(n):
+            in_axes = [None] * n
+            if arg_sizes[n-i-1] > 1:
+                in_axes[n-i-1] = 0
+                func = vmap(func, in_axes=in_axes)
     
 
     return func(*args)

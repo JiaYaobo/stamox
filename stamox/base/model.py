@@ -1,4 +1,3 @@
-import jax
 import equinox as eqx
 
 
@@ -9,6 +8,7 @@ class Model(eqx.Module):
         
     def __call__(cls, *args, **kwargs):
         return super().__call__(*args, **kwargs)
+
 
 class ParamModel(eqx.Module):
 

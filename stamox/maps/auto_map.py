@@ -12,20 +12,23 @@ def align_inputs(*inputs):
     arg_sizes = []
 
     if n == 1:
+        arg = jnp.asarray(inputs[0]).reshape(-1)
         arg = atleast_1d(inputs[0])
         return arg, [arg.size]
 
     for arg in inputs:
         arg = jnp.asarray(arg)
+
+        if arg.size > 1:
+            arg = arg.reshape(-1)
+
         arg_sizes.append(arg.size)
         args.append(arg)
         if arg.size > max_size:
             max_size = arg.size
 
     for i in range(n):
-        if args[i].size == 1 or args[i].size == max_size:
-            continue
-        else:
+        if not (args[i].size == 1 or args[i].size == max_size):
             args[i] = jnp.tile(
                 args[i], 1+(max_size // args[i].size))[:max_size]
             arg_sizes[i] = max_size
@@ -33,14 +36,11 @@ def align_inputs(*inputs):
     return args, arg_sizes
 
 
-def auto_map(func, *inputs):
+def auto_map(func, *inputs, in_axes=None):
 
     n = len(inputs)
 
     args, arg_sizes = align_inputs(*inputs)
-
-    if n == 1:
-        return vmap(func, in_axes=0)(args)
 
     in_axes = []
     all_scalar = True
@@ -53,5 +53,8 @@ def auto_map(func, *inputs):
     
     if all_scalar:
         return func(*args)
+
+    if n == 1:
+        return vmap(func, in_axes=0)(args)
         
     return vmap(func, in_axes=in_axes)(*args)
