@@ -4,7 +4,6 @@ import equinox as eqx
 from equinox import Module
 
 
-
 class Pipe(eqx.Module):
     funcs: Tuple[Module, ...]
 
@@ -27,12 +26,12 @@ class Pipe(eqx.Module):
             for f in self.funcs:
                 if f.name.lower() == i:
                     _f.append(f)
-            
+
             if len(_f) == 0:
                 raise ValueError(f"No Function Names {i}")
             if len(_f) > 1:
                 return Pipe(_f)
-            else: 
+            else:
                 return _f[0]
         else:
             raise TypeError(f"Indexing with type {type(i)} is not supported")
