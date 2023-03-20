@@ -7,7 +7,7 @@ from jax import jit, vmap
 
 import numpy as np
 
-from ..base import Model
+from ..core import Model
 
 
 class Corr(Model):

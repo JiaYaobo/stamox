@@ -7,7 +7,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 import tensorflow_probability.substrates.jax.distributions as jd
 
-from ..base import Model
+from ..core import Model
 
 
 class KMeans(Model):

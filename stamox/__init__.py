@@ -46,11 +46,13 @@ from stamox import hypox
 from stamox import util
 from stamox import math
 from stamox import maps
+from stamox import core
 
 __all__ = [
     "distrix",
     "hypox",
     "util",
     "math",
-    "maps"
+    "maps",
+    "core"
 ]

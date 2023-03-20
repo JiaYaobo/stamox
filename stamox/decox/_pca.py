@@ -10,7 +10,7 @@ import tensorflow_probability.substrates.jax.distributions as jd
 from jax import lax, jit, vmap
 
 
-from ..base import Model
+from ..core import Model
 
 
 class PCA(Model):
