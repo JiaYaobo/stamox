@@ -13,9 +13,10 @@ def durbin_waston(resids, axis=0):
     dws = vmap(_durbin_watson, in_axes=(0, None))(resids, axis)
     return dws
 
-@ft.partial(jit, static_argnames=('axis', ))
+
+@ft.partial(jit, static_argnames=("axis",))
 def _durbin_watson(resids, axis=0):
-    r"""
+    """
     Calculates the Durbin-Watson statistic.
 
     Parameters
@@ -52,4 +53,3 @@ def _durbin_watson(resids, axis=0):
     diff_resids = jnp.diff(resids, 1, axis=axis)
     dw = jnp.sum(diff_resids**2, axis=axis) / jnp.sum(resids**2, axis=axis)
     return dw
-

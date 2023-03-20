@@ -1,27 +1,43 @@
 import functools as ft
 import math
 
-import jax
 from jax import jit, lax, vmap
 import jax.numpy as jnp
 import jax.random as jrand
+from jaxtyping import Int32, PyTree, ArrayLike
 import tensorflow_probability.substrates.jax.distributions as jd
 
 from ..core import StateFunc
 
 
-class KMeans(Model):
-    def __init__(self):
-        super().__init__()
+class KMeans(StateFunc):
+    n_clusters: Int32
+    max_iters: Int32
+    _params: PyTree
 
-    def __call__(self, x, n_clusters, key=None):
-        return kmeans_plusplus(x=x,
-                               n_clusters=n_clusters,
-                               key=key)
+    def __init__(
+        self, n_clusters: Int32 = 2, max_iters: Int32 = 10, method: str = "kmeans++"
+    ):
+        super().__init__(name="KMeans Cluster")
+        self.n_clusters = n_clusters
+        self.max_iters = max_iters
+        self._params = {
+            "cluster": jnp.array([], dtype=jnp.float32),
+            "centers": jnp.array([], dtype=jnp.float32),
+            "totss": 0.,
+            "withinss": 0.,
+            "betweenss": 0.,
+        }
+
+    def _kmeans_plusplus(self, x):
+        pass
+
+    def __call__(self, x, *, key=None):
+        return kmeans_plusplus(x=x, n_clusters=self.n_clusters, key=key)
 
 
-@ft.partial(jit, static_argnames=('n_clusters',))
-def _kmeans_plusplus(x, n_clusters, *, key=None):
+@ft.partial(jit, static_argnames=("n_clusters",))
+def _kmeans_plusplus(x: ArrayLike, n_clusters: Int32, *, key=None):
     """Computational component for initialization of num_clusters by
     k-means++. Prior validation of data is assumed.
     Parameters
@@ -68,18 +84,20 @@ def _kmeans_plusplus(x, n_clusters, *, key=None):
 
         # use distances as probabilities
         candidate_ids = jd.Categorical(logits=jnp.log(closest_dist_sq)).sample(
-            seed=k0, sample_shape=(int(math.log(n_clusters) + 2), ))
+            seed=k0, sample_shape=(int(math.log(n_clusters) + 2),)
+        )
 
         # chop to n - 1 samples
-        candidate_ids = jnp.clip(
-            candidate_ids, a_max=n_samples - 1)
+        candidate_ids = jnp.clip(candidate_ids, a_max=n_samples - 1)
 
         # Compute distances to center candidates
-        distance_to_candidates = vmap(lambda x, y: euclidean_distance_square(x, y),
-                                      in_axes=(0, None))(x[candidate_ids], x)
+        distance_to_candidates = vmap(
+            lambda x, y: euclidean_distance_square(x, y), in_axes=(0, None)
+        )(x[candidate_ids], x)
         # update closest distances to candidates
         distance_to_candidates = vmap(jnp.minimum, in_axes=(0, None))(
-            distance_to_candidates, closest_dist_sq)
+            distance_to_candidates, closest_dist_sq
+        )
 
         candidates_pot = distance_to_candidates.sum(axis=-1)
 
@@ -94,8 +112,7 @@ def _kmeans_plusplus(x, n_clusters, *, key=None):
         return carry, (x[best_candidate], best_candidate)
 
     init = (initial_pot, initial_closest_dist_sq, k1)
-    _, (centers, indices) = lax.scan(
-        _step, init, xs=None, length=n_clusters - 1)
+    _, (centers, indices) = lax.scan(_step, init, xs=None, length=n_clusters - 1)
 
     centers = jnp.vstack([initial_center, centers])
     indices = jnp.vstack([initial_indice, indices])
@@ -108,4 +125,3 @@ def kmeans_plusplus(x, n_clusters, key=None):
         key = jrand.PRNGKey(0)
 
     return _kmeans_plusplus(x, n_clusters=n_clusters, key=key)
-

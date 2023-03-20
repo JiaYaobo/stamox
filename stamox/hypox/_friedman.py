@@ -12,17 +12,18 @@ def friedman(*samples):
     samples = jnp.vstack(samples)
     _friedman(samples)
 
+
 @jit
 def _friedman(samples):
     """_summary_
-    Supports No tie Only 
+    Supports No tie Only
     Returns:
         _type_: _description_
     """
     k_treatments, n_blocks = samples.shape
-    ranks = vmap(lambda x: jnp.argsort(-x) + 1, in_axes=(1, ))(samples)
+    ranks = vmap(lambda x: jnp.argsort(-x) + 1, in_axes=(1,))(samples)
     avg_ranks = jnp.mean(ranks, axis=0)
-    Q = 12.0 * n_blocks / (k_treatments * (k_treatments + 1) ) * jnp.sum(avg_ranks**2, axis=0) - 3*n_blocks*(k_treatments+1)
-    return Q 
-
-
+    Q = 12.0 * n_blocks / (k_treatments * (k_treatments + 1)) * jnp.sum(
+        avg_ranks**2, axis=0
+    ) - 3 * n_blocks * (k_treatments + 1)
+    return Q

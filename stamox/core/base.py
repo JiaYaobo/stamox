@@ -6,14 +6,23 @@ from jaxtyping import PyTree
 from .pipe import Pipe
 
 
+
 class Functional(eqx.Module):
+    """General Function"""
+
     _fn: Callable
 
     def __init__(self, fn: Optional[Callable | None] = None):
+        """Make a General Function
+
+        Args:
+            fn (Optional[Callable  |  None], optional): Callable object.
+        """
         super().__init__()
         self._fn = fn
-    
+
     def desc(self):
+        """Description for the function"""
         pass
 
     def __call__(self, *args, **kwargs):
@@ -22,10 +31,13 @@ class Functional(eqx.Module):
         return self._fn(*args, **kwargs)
 
     def __rshift__(self, _next) -> Pipe:
+        """Make Pipe"""
         return Pipe([self, _next])
 
 
 class StateFunc(Functional):
+    """Functions with State"""
+
     _name: str
     _params: PyTree
 
@@ -35,6 +47,13 @@ class StateFunc(Functional):
         name: Optional[str | None] = "Anonymous",
         fn: Optional[Callable | None] = None,
     ):
+        """Initialize a Stateful Function
+
+        Args:
+            params (Optional[PyTree  |  None], optional): Function Params. Defaults to None.
+            name (Optional[str  |  None], optional): Function Name. Defaults to "Anonymous".
+            fn (Optional[Callable  |  None], optional): Given Function. Defaults to None.
+        """
         super().__init__(fn=fn)
         self._name = name
         self._params = params
@@ -52,6 +71,8 @@ class StateFunc(Functional):
 
 
 class StatelessFunc(Functional):
+    """Functions without State"""
+
     _name: str
 
     def __init__(
@@ -59,6 +80,12 @@ class StatelessFunc(Functional):
         name: Optional[str | None] = "Anonymous",
         fn: Optional[Callable | None] = None,
     ):
+        """Initialize a Stateless Function
+
+        Args:
+            name (Optional[str  |  None], optional): Function Name. Defaults to "Anonymous".
+            fn (Optional[Callable  |  None], optional): Given Function. Defaults to None.
+        """
         super().__init__(fn=fn)
         self._name = name
 
@@ -70,7 +97,15 @@ class StatelessFunc(Functional):
         return super().__call__(*args, **kwargs)
 
 
-def make_pipable(cls: Callable, params: PyTree = None, name: str = "Anonymous"):
+def make_pipe(cls: Callable, params: PyTree = None, name: str = "Anonymous"):
+    """Make a Function Pipable
+
+    Args:
+        cls (Callable): Function or Callable Class
+        params (PyTree, optional): Params For Function. Defaults to None.
+        name (str, optional): Name of the Function. Defaults to "Anonymous".
+    """
+
     def wrap(cls):
         if params is None:
             return StatelessFunc(name=name, fn=cls)

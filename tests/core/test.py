@@ -2,25 +2,28 @@ import stamox as stx
 import equinox as eqx
 import jax.numpy as jnp
 
-@stx.core.make_pipable
-def f(x, key=None):
-    return x + 1
+import functools as ft
+
+import jax.random as jrandom
 
 
-wei = {'w': jnp.array([5.])}
+def f(x, key):
+    return x + jrandom.normal(key, shape=())
 
-def k(x, key=None):
-    return x * wei['w']
+def g(x, key):
+    return x + jrandom.normal(key, shape=())
 
-k = stx.core.make_pipable(k, params=wei)
+def h(x, key):
+    return x + jrandom.normal(key, shape=())
+
+f = ft.partial(f, key=jrandom.PRNGKey(0))
+g = ft.partial(g, key=jrandom.PRNGKey(0))
+h = ft.partial(h, key=jrandom.PRNGKey(0))
+
+f = stx.core.make_pipe(f, name='f')
+g = stx.core.make_pipe(g, name='g')
+h = stx.core.make_pipe(h, name='h')
 
 
-g = stx.core.StatelessFunc(fn=lambda x, key=None: x * 2)
+pipe = f >> g >> h
 
-
-
-h2 = f >> g >> g >> f >> g >> k >> f
-
-
-print(h2(1))
-print(k(2))

@@ -1,22 +1,47 @@
-from typing import Any, Optional
+from typing import Tuple, Sequence, Union, Any
 
 import equinox as eqx
-import jax
-import jax.random as jrandom
+from equinox import Module
 
 
-class Pipe(eqx.nn.Sequential):
-    def __init__(self, funcs) -> None:
-        super().__init__(funcs)
 
-    def __call__(self, x: Any, *, key: Optional["jax.random.PRNGKey"] = None):
-        if key is None:
-            keys = [None] * len(self.layers)
-        else:
-            keys = jrandom.split(key, len(self.layers))
-        for layer, key in zip(self.layers, keys):
-            x = layer(x, key=key)
+class Pipe(eqx.Module):
+    funcs: Tuple[Module, ...]
+
+    def __init__(self, funcs: Sequence[Module]) -> None:
+        self.funcs = tuple(funcs)
+
+    def __call__(self, x: Any, *args, **kwargs):
+        for fn in self.funcs:
+            x = fn(x, *args, **kwargs)
         return x
 
+    def __getitem__(self, i: Union[int, slice]) -> Module:
+        if isinstance(i, int):
+            return self.funcs[i]
+        elif isinstance(i, slice):
+            return Pipe(self.funcs[i])
+        elif isinstance(i, str):
+            _f = []
+            i = i.lower()
+            for f in self.funcs:
+                if f.name.lower() == i:
+                    _f.append(f)
+            
+            if len(_f) == 0:
+                raise ValueError(f"No Function Names {i}")
+            if len(_f) > 1:
+                return Pipe(_f)
+            else: 
+                return _f[0]
+        else:
+            raise TypeError(f"Indexing with type {type(i)} is not supported")
+
+    def __iter__(self):
+        yield from self.funcs
+
+    def __len__(self):
+        return len(self.funcs)
+
     def __rshift__(self, _next):
-        return Pipe([*self.layers, _next])
+        return Pipe([*self.funcs, _next])
