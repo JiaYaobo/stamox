@@ -1,42 +1,23 @@
-import stamox as stx
-
-from jax import grad, jit
+from stamox.core import make_pipe, make_partial_pipe
+from jax import grad, vmap, pmap
 import jax.random as jrandom
+import jax.numpy as jnp
 
 key = jrandom.PRNGKey(1)
+x = jrandom.normal(key, (100, ))
 
+@make_partial_pipe
+def f(x, exponent):
+    return x ** exponent * jnp.sin(x)
 
-@stx.core.make_partial_pipe
-@grad
-def f(x, key):
-    return 2 * x + jrandom.normal(key, shape=())
-
-@stx.core.make_pipe
-@jit
-@grad
-def g(x):
-    return x + 1.
-
-@stx.core.make_pipe
-@grad
-def h(x):
-    return x ** 2
-
-
-pipe = g >> f(key=key) >> h
-
-print(pipe(1.))
-
-
-# f = ft.partial(f, key=jrandom.PRNGKey(0))
-# g = ft.partial(g, key=jrandom.PRNGKey(0))
-# h = ft.partial(h, key=jrandom.PRNGKey(0))
-
-# f = stx.core.make_pipe(f, name='f')
-# g = stx.core.make_pipe(g, name='g')
-# h = stx.core.make_pipe(h, name='h')
-
-
-
-# pipe = f >> g >> h
+@make_partial_pipe
+def g(x, aux):
+    return x ** 2 + aux
+fp = f(exponent=2.)
+# autograd 
+map_fp = make_pipe(vmap(grad(fp) ,0))
+h1 = f(exponent=3.) >> map_fp >> g(aux=0.5)
+h2 = map_fp >> g(aux=3.) >> g(aux=1.) >> g(aux=4.)
+h = h1 >> h2
+h(x)
 

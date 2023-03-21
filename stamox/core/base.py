@@ -1,4 +1,4 @@
-from typing import Callable, Optional
+from typing import Callable, Optional, Any
 from functools import partial
 
 import equinox as eqx
@@ -25,10 +25,10 @@ class Functional(eqx.Module):
         """Description for the function"""
         pass
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, x: Any, *args, **kwargs):
         if self._fn is None:
             raise ValueError("No Callable Function to Call")
-        return self._fn(*args, **kwargs)
+        return self._fn(x)
 
     def __rshift__(self, _next) -> Pipe:
         """Make Pipe"""
@@ -66,8 +66,8 @@ class StateFunc(Functional):
     def params(self) -> PyTree:
         return self._params
 
-    def __call__(cls, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+    def __call__(cls, x: Any, *args, **kwargs):
+        return super().__call__(x, *args, **kwargs)
 
 
 class StatelessFunc(Functional):
@@ -93,11 +93,13 @@ class StatelessFunc(Functional):
     def name(self):
         return self._name
 
-    def __call__(cls, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+    def __call__(cls, x: Any, *args, **kwargs):
+        return super().__call__(x, *args, **kwargs)
 
 
-def make_pipe(cls: Callable, params: PyTree = None, name: str = "Anonymous"):
+def make_pipe(
+    cls: Callable, params: PyTree = None, name: str = "Anonymous"
+) -> Callable:
     """Make a Function Pipable
 
     Args:
@@ -107,6 +109,7 @@ def make_pipe(cls: Callable, params: PyTree = None, name: str = "Anonymous"):
     """
 
     def wrap(cls):
+
         if params is None:
             return StatelessFunc(name=name, fn=cls)
         else:
@@ -118,13 +121,16 @@ def make_pipe(cls: Callable, params: PyTree = None, name: str = "Anonymous"):
     return wrap(cls)
 
 
-def make_partial_pipe(cls: Callable, params: PyTree = None, name: str = "Anonymous"):
+def make_partial_pipe(
+    cls: Callable, params: PyTree = None, name: str = "Anonymous"
+) -> Callable:
     """Make a Partial Function Pipe
     Args:
         cls (Callable): Function or Callable Class
         params (PyTree, optional): Params For Function. Defaults to None.
         name (str, optional): Name of the Function. Defaults to "Anonymous".
     """
+
     def wrap(cls):
         def partial_fn(**kwargs):
             fn = partial(cls, **kwargs)

@@ -1,13 +1,8 @@
-from math import log, sqrt
 import functools as ft
 
-import jax
 import jax.numpy as jnp
-import jax.random as jrand
 import jax.scipy as jsp
-from pandas import array
-import tensorflow_probability.substrates.jax.distributions as jd
-from jax import lax, jit, vmap
+from jax import jit
 
 
 from ..core import Model
