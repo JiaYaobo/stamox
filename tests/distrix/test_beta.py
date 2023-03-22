@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import pbeta, rbeta, qbeta, dbeta
+from stamox.distribution import pbeta, rbeta, qbeta, dbeta
 
 from absl.testing import absltest
 from absl.testing import parameterized

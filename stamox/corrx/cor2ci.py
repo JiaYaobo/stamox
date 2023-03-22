@@ -1,6 +1,6 @@
 import jax.numpy as jnp
 
-from ..distrix import qnorm
+from ..distribution import qnorm
 
 
 def cor2ci_kendall(cor, n, ci=0.95, correction="fieller"):

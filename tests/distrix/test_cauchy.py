@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import pcauchy, rcauchy, qcauchy, dcauchy
+from stamox.distribution import pcauchy, rcauchy, qcauchy, dcauchy
 
 from absl.testing import absltest
 from absl.testing import parameterized

@@ -1,0 +1,1 @@
+from stamox.sample._sample import sample

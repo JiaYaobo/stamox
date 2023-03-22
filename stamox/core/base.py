@@ -4,15 +4,13 @@ from functools import partial
 import equinox as eqx
 from jaxtyping import PyTree
 
-from .pipe import Pipe
-
 
 class Functional(eqx.Module):
     """General Function"""
 
     _fn: Callable
 
-    def __init__(self, fn: Optional[Callable | None] = None):
+    def __init__(self, fn: Optional[Callable] = None):
         """Make a General Function
 
         Args:
@@ -28,10 +26,12 @@ class Functional(eqx.Module):
     def __call__(self, x: Any, *args, **kwargs):
         if self._fn is None:
             raise ValueError("No Callable Function to Call")
-        return self._fn(x)
+        return self._fn(x, *args, **kwargs)
 
-    def __rshift__(self, _next) -> Pipe:
+    def __rshift__(self, _next):
         """Make Pipe"""
+        from .pipe import Pipe
+
         return Pipe([self, _next])
 
 
@@ -43,9 +43,10 @@ class StateFunc(Functional):
 
     def __init__(
         self,
-        params: Optional[PyTree | None] = None,
-        name: Optional[str | None] = "Anonymous",
-        fn: Optional[Callable | None] = None,
+        *,
+        name: Optional[str] = "Anonymous",
+        fn: Optional[Callable] = None,
+        **params
     ):
         """Initialize a Stateful Function
 
@@ -66,7 +67,7 @@ class StateFunc(Functional):
     def params(self) -> PyTree:
         return self._params
 
-    def __call__(cls, x: Any, *args, **kwargs):
+    def __call__(self, x: Any, *args, **kwargs):
         return super().__call__(x, *args, **kwargs)
 
 
@@ -76,9 +77,7 @@ class StatelessFunc(Functional):
     _name: str
 
     def __init__(
-        self,
-        name: Optional[str | None] = "Anonymous",
-        fn: Optional[Callable | None] = None,
+        self, *, name: Optional[str] = "Anonymous", fn: Optional[Callable] = None
     ):
         """Initialize a Stateless Function
 
@@ -93,12 +92,14 @@ class StatelessFunc(Functional):
     def name(self):
         return self._name
 
-    def __call__(cls, x: Any, *args, **kwargs):
+    def __call__(self, x: Any, *args, **kwargs):
         return super().__call__(x, *args, **kwargs)
 
 
 def make_pipe(
-    cls: Callable, params: PyTree = None, name: str = "Anonymous"
+    cls: Callable,
+    params: PyTree = None,
+    name: str = "Anonymous",
 ) -> Callable:
     """Make a Function Pipable
 
@@ -131,9 +132,11 @@ def make_partial_pipe(
         name (str, optional): Name of the Function. Defaults to "Anonymous".
     """
 
-    def wrap(cls):
-        def partial_fn(**kwargs):
+    def wrap(cls) -> Callable:
+        def partial_fn(x: Any = None, **kwargs):
             fn = partial(cls, **kwargs)
+            if x is not None:
+                return fn(x)
             if params is None:
                 return StatelessFunc(name=name, fn=fn)
             else:

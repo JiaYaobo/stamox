@@ -2,7 +2,7 @@ import functools as ft
 
 import jax.numpy as jnp
 from jax import jit
-from stamox.distrix import pbeta
+from stamox.distribution import pbeta
 
 
 def pearsonr(x, y, alternative='two-sided'):

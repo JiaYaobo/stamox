@@ -4,7 +4,7 @@ import jax.random as jrand
 
 import numpy as np
 
-from stamox.distrix import pnorm, qnorm, rnorm, dnorm
+from stamox.distribution import pnorm, qnorm, rnorm, dnorm
 
 from absl.testing import absltest
 from absl.testing import parameterized

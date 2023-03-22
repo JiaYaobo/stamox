@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import plaplace, rlaplace, qlaplace, dlaplace
+from stamox.distribution import plaplace, rlaplace, qlaplace, dlaplace
 
 from absl.testing import absltest
 from absl.testing import parameterized

@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.tree_util as jtu
 from jax import jit
 
-from stamox.distrix import pF
+from stamox.distribution import pF
 
 
 @ft.partial(jit, static_argnames=("axis"))

@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import pgamma, rgamma, qgamma, dgamma
+from stamox.distribution import pgamma, rgamma, qgamma, dgamma
 
 from absl.testing import absltest
 from absl.testing import parameterized

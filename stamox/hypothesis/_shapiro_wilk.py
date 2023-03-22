@@ -5,7 +5,7 @@ import numpy as np
 import jax.numpy as jnp
 from jax import jit, vmap
 
-from stamox.distrix import qnorm
+from stamox.distribution import qnorm
 
 _g = [-2.273, .459]
 _c1 = [0., .221157, -.147981, -2.07119, 4.434685, -2.706056]

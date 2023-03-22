@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import pchisq, rchisq, qchisq, dchisq
+from stamox.distribution import pchisq, rchisq, qchisq, dchisq
 
 from absl.testing import absltest
 from absl.testing import parameterized

@@ -4,6 +4,7 @@ import sys
 
 _REQUIRED_JAX_VERSION = "0.3.23"  # pylint: disable=g-statement-before-imports
 
+
 def _check_py_version():
     if sys.version_info[0] < 3:
         raise Exception("Please use Python 3. Python 2 is not supported.")
@@ -41,18 +42,12 @@ def _check_py_version():
 _check_py_version()
 # _ensure_jax_install()
 
-from stamox import distrix
-from stamox import hypox
+from stamox import distribution
+from stamox import hypothesis
 from stamox import util
 from stamox import math
 from stamox import maps
 from stamox import core
+from stamox import basic
 
-__all__ = [
-    "distrix",
-    "hypox",
-    "util",
-    "math",
-    "maps",
-    "core"
-]
+__all__ = ["distribution", "hypothesis", "util", "math", "maps", "core", "basic"]

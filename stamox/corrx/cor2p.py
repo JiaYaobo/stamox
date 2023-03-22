@@ -1,7 +1,7 @@
 import jax.numpy as jnp
 from jax import vmap, jit
 
-from ..distrix import pnorm, pt
+from ..distribution import pnorm, pt
 
 
 @jit

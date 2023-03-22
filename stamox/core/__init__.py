@@ -6,6 +6,7 @@ from stamox.core.base import (
     make_pipe,
     make_partial_pipe,
 )
+from stamox.core.jit import pipe_jit, partial_pipe_jit
 
 __all__ = [
     "Pipe",
@@ -14,4 +15,6 @@ __all__ = [
     "StatelessFunc",
     "make_pipe",
     "make_partial_pipe",
+    "pipe_jit",
+    "partial_pipe_jit",
 ]

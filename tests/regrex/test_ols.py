@@ -9,7 +9,7 @@ from absl.testing import parameterized
 
 from jax._src import test_util as jtest
 
-from stamox.regrex import ols
+from stamox.regression import ols
 
 
 class OLSTest(jtest.JaxTestCase):

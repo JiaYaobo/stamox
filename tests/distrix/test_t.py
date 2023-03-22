@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import pt, rt, qt, dt
+from stamox.distribution import pt, rt, qt, dt
 
 from absl.testing import absltest
 

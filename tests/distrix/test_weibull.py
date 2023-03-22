@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import pweibull, rweibull, qweibull, dweibull
+from stamox.distribution import pweibull, rweibull, qweibull, dweibull
 
 from absl.testing import absltest
 from absl.testing import parameterized

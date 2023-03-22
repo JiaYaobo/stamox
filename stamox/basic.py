@@ -1,10 +1,11 @@
 import jax.numpy as jnp
-from .core import StateFunc, StatelessFunc
+
+from .core import make_partial_pipe
 
 
-class mean(StatelessFunc):
-    def __init__(self):
-        super().__init__(name='mean', fn=jnp.mean)
-    
-    def __call__(cls, x: Any, axis=0):
-        pass
+mean = make_partial_pipe(jnp.mean)
+std = make_partial_pipe(jnp.std)
+var = make_partial_pipe(jnp.var)
+median = make_partial_pipe(jnp.median)
+
+

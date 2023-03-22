@@ -5,7 +5,7 @@ import jax.numpy as jnp
 
 import numpy as np
 
-from stamox.distrix import pF, rF, qF, dF
+from stamox.distribution import pF, rF, qF, dF
 
 from absl.testing import absltest
 from absl.testing import parameterized

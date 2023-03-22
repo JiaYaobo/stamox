@@ -4,7 +4,7 @@ import jax
 import jax.numpy as jnp
 from jax import jit, lax, vmap
 
-from stamox.distrix import pt, qt
+from stamox.distribution import pt, qt
 
 
 def t_test(x, mu=0, alternative="two.sided", conf_level=0.95):
