@@ -12,7 +12,7 @@ def pipe_jit(
     params: PyTree = None,
     name: str = "Anonymous",
 ) -> Callable:
-    """Make a Function Pipable Jitted
+    """Make a Function Pipe Jitted
 
     Args:
         cls (Callable): Function or Callable Class
