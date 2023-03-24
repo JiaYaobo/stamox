@@ -1,9 +1,9 @@
-from typing import Tuple, Sequence, Union, Any, Callable
+from typing import Tuple, Sequence, Union, Any
 
 import equinox as eqx
 from equinox import Module
 
-from .base import StateFunc, StatelessFunc
+from .base import Functional
 
 
 
@@ -15,12 +15,12 @@ class Pipe(eqx.Module):
 
     def __call__(self, x: Any, *args, **kwargs):
         for fn in self.funcs:
-            if not (isinstance(fn, StatelessFunc) or isinstance(fn, StateFunc)):
+            if not (isinstance(fn, Functional)):
                 fn = fn()
             x = fn(x, *args, **kwargs)
         return x
 
-    def __getitem__(self, i: Union[int, slice]) -> Module:
+    def __getitem__(self, i: Union[int, slice, str]) -> Module:
         if isinstance(i, int):
             return self.funcs[i]
         elif isinstance(i, slice):
@@ -51,9 +51,9 @@ class Pipe(eqx.Module):
         return Pipe([*self.funcs, _next])
 
 
-class Pipeable:
+class Pipeable(Functional):
     def __init__(self, value):
         self.value = value
     
-    def __rshift__(self, fn: Callable):
-        return Pipeable(fn(self.value))
+    def __rshift__(self, *args, **kwargs):
+        return self.value

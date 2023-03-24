@@ -8,6 +8,8 @@ from stamox import math
 from stamox import maps
 from stamox import core
 from stamox import basic
+from stamox import regression
+from stamox import decomposition
 
 
 _REQUIRED_JAX_VERSION = "0.3.23"  # pylint: disable=g-statement-before-imports
@@ -51,4 +53,14 @@ _check_py_version()
 # _ensure_jax_install()
 
 
-__all__ = ["distribution", "hypothesis", "util", "math", "maps", "core", "basic"]
+__all__ = [
+    "distribution",
+    "hypothesis",
+    "util",
+    "math",
+    "maps",
+    "core",
+    "basic",
+    "regression",
+    "decomposition",
+]

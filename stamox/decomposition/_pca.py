@@ -1,56 +1,48 @@
-import functools as ft
+from functools import partial
 
-import jax.numpy as jnp
-import jax.scipy as jsp
+import jax.numpy as np
+
 from jax import jit
+from equinox import Module
+
+from ..core import StateFunc
+from ..basic import mean
 
 
-from ..core import Model
+class PCAState(Module):
+    n_components: int
+    components: np.array
+    mean: np.array
 
 
-class PCA(Model):
-    n_samples_: int
-    n_features_: int
-    n_components_: int
-    componets_: jnp.array
-    explained_variance_: jnp.array
-    explained_variance_ratio_: jnp.array
-    singular_values: jnp.array
+class PCA(StateFunc):
+    n_components: int
 
-    def __init__(self, n_components=None) -> None:
-        super().__init__()
-        self.n_components_ = n_components
+    def __init__(self, n_components):
+        super().__init__(name="PCA", fn=None)
+        self.n_components = n_components
 
-    def fit(self, x, n_components=None):
-        n_samples, n_features = x.shape
-        self.n_samples_, self.n_features_ = n_samples, n_features
-        if n_components is None:
-            if self.n_components_ is None:
-                ValueError("Need Number of Components")
-        else:
-            self.n_components = n_components
-        U, S, Vt, self.componets_, self.explained_variance_, self.explained_variance_ratio_, self.singular_values = _pca(
-            x, n_components)
-
-        return self
+    def __call__(self, x, *args, **kwargs):
+        return _pca(x, self.n_components)
 
 
-@ft.partial(jit, static_argnums=1)
-def _pca(x, n_components):
-    n_samples, n_features = x.shape
+@partial(jit, static_argnames=('n_components'))
+def _pca(X, n_components):
+    # Subtract the mean of each feature column to center the data around the origin
+    _mean = mean(X, axis=0)
+    X = X - _mean
 
-    mean = jnp.mean(x, axis=0, keepdims=True)
+    # Compute the covariance matrix of the centered input data
+    cov_matrix = np.cov(X.T)
 
-    # Center data
-    x_centered = x - mean
+    # Compute the eigenvectors and eigenvalues of the covariance matrix
+    eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
 
-    U, S, Vt = jsp.linalg.svd(x_centered, full_matrices=False)
+    # Sort the eigenvectors in decreasing order of their corresponding eigenvalues
+    idxs = eigenvalues.argsort()[::-1]
+    eigenvectors = eigenvectors[:, idxs]
 
-    components = Vt
+    # Store only the top k eigenvectors that capture most of the variation in the data
+    _components = eigenvectors[:, : n_components]
 
-    explained_variance = (S**2) / (n_samples - 1)
-    total_var = explained_variance.sum()
-    explained_variance_ratio = explained_variance / total_var
-    singular_values = S.copy()
-
-    return U, S, Vt, components[:n_components], explained_variance[:n_components], explained_variance_ratio[:n_components], singular_values[:n_components]
+    return PCAState(n_components=n_components, components=_components, mean=_mean)

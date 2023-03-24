@@ -2,15 +2,14 @@ from functools import partial
 from typing import Callable, Any
 
 from equinox import filter_jit
-from jaxtyping import PyTree
 
-from .base import StateFunc, StatelessFunc
+from .base import Functional
 
 
 def pipe_jit(
     cls: Callable,
-    params: PyTree = None,
     name: str = "Anonymous",
+    **kwargs
 ) -> Callable:
     """Make a Function Pipe Jitted
 
@@ -22,10 +21,7 @@ def pipe_jit(
 
     def wrap(cls):
         fn = filter_jit(cls)
-        if params is None:
-            return StatelessFunc(name=name, fn=fn)
-        else:
-            return StateFunc(params=params, name=name, fn=fn)
+        return Functional(name=name, fn=fn)
 
     if cls is None:
         return wrap
@@ -34,7 +30,7 @@ def pipe_jit(
 
 
 def partial_pipe_jit(
-    cls: Callable, params: PyTree = None, name: str = "Anonymous"
+    cls: Callable, name: str = "Anonymous", **kwargs
 ) -> Callable:
     """Make a Partial Function Pipe Jitted
     Args:
@@ -49,11 +45,7 @@ def partial_pipe_jit(
             fn = partial(fn, **kwargs)
             if x is not None:
                 return fn(x)
-            if params is None:
-                return StatelessFunc(name=name, fn=fn)
-            else:
-                return StateFunc(params=params, name=name, fn=fn)
-
+            return Functional(name=name, fn=fn)
         return partial_fn
 
     if cls is None:

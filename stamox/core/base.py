@@ -2,22 +2,27 @@ from typing import Callable, Optional, Any
 from functools import partial
 
 import equinox as eqx
-from jaxtyping import PyTree
 
 
 class Functional(eqx.Module):
     """General Function"""
 
+    _name: str
     _fn: Callable
 
-    def __init__(self, fn: Optional[Callable] = None):
+    def __init__(self, name:str = 'Func', fn: Optional[Callable] = None):
         """Make a General Function
 
         Args:
             fn (Optional[Callable|None], optional): Callable object.
         """
         super().__init__()
+        self._name = name
         self._fn = fn
+    
+    @property
+    def name(self):
+        return self._name
 
     def desc(self):
         """Description for the function"""
@@ -35,71 +40,90 @@ class Functional(eqx.Module):
         return Pipe([self, _next])
 
 
+# class StateFunc(Functional):
+#     """Functions with State"""
+
+#     _name: str
+#     _params: PyTree
+
+#     def __init__(
+#         self,
+#         *,
+#         name: Optional[str] = "Anonymous",
+#         fn: Optional[Callable] = None,
+#         **params
+#     ):
+#         """Initialize a Stateful Function
+
+#         Args:
+#             params (Optional[PyTree|None], optional): Function Params. Defaults to None.
+#             name (Optional[str|None], optional): Function Name. Defaults to "Anonymous".
+#             fn (Optional[Callable|None], optional): Given Function. Defaults to None.
+#         """
+#         super().__init__(fn=fn)
+#         self._name = name
+#         self._params = params
+
+#     @property
+#     def name(self) -> str:
+#         return self._name
+
+#     @property
+#     def params(self) -> PyTree:
+#         return self._params
+
+#     def __call__(self, x: Any, *args, **kwargs):
+#         return super().__call__(x, *args, **kwargs)
+
+
+# class StatelessFunc(Functional):
+#     """Functions without State"""
+
+#     _name: str
+
+#     def __init__(
+#         self, *, name: Optional[str] = "Anonymous", fn: Optional[Callable] = None
+#     ):
+#         """Initialize a Stateless Function
+
+#         Args:
+#             name (Optional[str|None], optional): Function Name. Defaults to "Anonymous".
+#             fn (Optional[Callable|None], optional): Given Function. Defaults to None.
+#         """
+#         super().__init__(fn=fn)
+#         self._name = name
+
+#     @property
+#     def name(self):
+#         return self._name
+
+#     def __call__(self, x: Any, *args, **kwargs):
+#         return super().__call__(x, *args, **kwargs)
+    
 class StateFunc(Functional):
-    """Functions with State"""
 
-    _name: str
-    _params: PyTree
+    def __init__(self, name: str = 'State', fn: Optional[Callable] = None):
+        super().__init__(name, fn)
 
-    def __init__(
-        self,
-        *,
-        name: Optional[str] = "Anonymous",
-        fn: Optional[Callable] = None,
-        **params
-    ):
-        """Initialize a Stateful Function
+    def __repr__(self):
+        return super().__repr__()
+    
+    def _tree_flatten(self):
+        return super()._tree_flatten()
+    
+    def _summary(self):
+        pass
 
-        Args:
-            params (Optional[PyTree|None], optional): Function Params. Defaults to None.
-            name (Optional[str|None], optional): Function Name. Defaults to "Anonymous".
-            fn (Optional[Callable|None], optional): Given Function. Defaults to None.
-        """
-        super().__init__(fn=fn)
-        self._name = name
-        self._params = params
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @property
-    def params(self) -> PyTree:
-        return self._params
-
-    def __call__(self, x: Any, *args, **kwargs):
-        return super().__call__(x, *args, **kwargs)
+    def __call__(self, *args, **kwargs):
+        return self
 
 
-class StatelessFunc(Functional):
-    """Functions without State"""
-
-    _name: str
-
-    def __init__(
-        self, *, name: Optional[str] = "Anonymous", fn: Optional[Callable] = None
-    ):
-        """Initialize a Stateless Function
-
-        Args:
-            name (Optional[str|None], optional): Function Name. Defaults to "Anonymous".
-            fn (Optional[Callable|None], optional): Given Function. Defaults to None.
-        """
-        super().__init__(fn=fn)
-        self._name = name
-
-    @property
-    def name(self):
-        return self._name
-
-    def __call__(self, x: Any, *args, **kwargs):
-        return super().__call__(x, *args, **kwargs)
 
 
 def make_pipe(
     cls: Callable,
-    params: PyTree = None,
-    name: str = "Anonymous",
+    name: str = "PipeableFunc",
+    **kwargs
 ) -> Callable:
     """Make a Function Pipable
 
@@ -110,12 +134,7 @@ def make_pipe(
     """
 
     def wrap(cls):
-
-        if params is None:
-            return StatelessFunc(name=name, fn=cls)
-        else:
-            return StateFunc(params=params, name=name, fn=cls)
-
+        return Functional(name=name, fn=cls)
     if cls is None:
         return wrap
 
@@ -123,7 +142,7 @@ def make_pipe(
 
 
 def make_partial_pipe(
-    cls: Callable, params: PyTree = None, name: str = "Anonymous"
+    cls: Callable, name: str = "PipeableFunc", **kwargs
 ) -> Callable:
     """Make a Partial Function Pipe
     Args:
@@ -137,11 +156,7 @@ def make_partial_pipe(
             fn = partial(cls, **kwargs)
             if x is not None:
                 return fn(x)
-            if params is None:
-                return StatelessFunc(name=name, fn=fn)
-            else:
-                return StateFunc(params=params, name=name, fn=fn)
-
+            return Functional(name=name, fn=fn)
         return partial_fn
 
     if cls is None:
