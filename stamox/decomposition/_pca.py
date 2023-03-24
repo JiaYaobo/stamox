@@ -1,21 +1,30 @@
 from functools import partial
 
 import jax.numpy as np
+from equinox import filter_jit
 
 from jax import jit
-from equinox import Module
 
-from ..core import StateFunc
+from ..core import StateFunc, Functional
 from ..basic import mean
 
 
-class PCAState(Module):
+class PCAState(StateFunc):
     n_components: int
     components: np.array
     mean: np.array
 
+    def __init__(self, n_components, components, mean):
+        super().__init__(name='PCAState', fn=None)
+        self.n_components = n_components
+        self.components = components
+        self.mean = mean
 
-class PCA(StateFunc):
+    def _summary(self) -> str:
+        return "PCA Summary"
+
+
+class PCA(Functional):
     n_components: int
 
     def __init__(self, n_components):
@@ -23,10 +32,10 @@ class PCA(StateFunc):
         self.n_components = n_components
 
     def __call__(self, x, *args, **kwargs):
-        return _pca(x, self.n_components)
+        return _pca(x, n_components=self.n_components)
 
 
-@partial(jit, static_argnames=('n_components'))
+@filter_jit
 def _pca(X, n_components):
     # Subtract the mean of each feature column to center the data around the origin
     _mean = mean(X, axis=0)

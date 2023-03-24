@@ -1,12 +1,12 @@
 import numpy as np
 
 from stamox.decomposition import PCA
+from stamox.core import summary
 
 
 X = np.random.randn(100, 5)
 
 pca = PCA(n_components=2)
 
-X_pca = pca(X)
+print(pca >> summary >> np.mean)
 
-print(X_pca.components)

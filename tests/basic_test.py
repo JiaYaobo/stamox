@@ -9,7 +9,6 @@ x = jnp.array([1. ,2. ,3.])
 
 
 @make_pipe
-@grad
 def f(x):
     return x**2
 
@@ -17,13 +16,18 @@ def f(x):
 def g(x):
     return x + 1
 
+def m(x):
+    return x
 
-h = f >> g
+@make_partial_pipe
+def k(x, y):
+    return x ** 3 + y
+
+
+h = f >> g >> m >> k(y=1.)
 
 vmap_h = vmap(h, in_axes=(0))
 
 vmap_f = vmap(f, in_axes=(0))
 
 print(h(x))
-print(vmap_h(x))
-print(vmap_f(x))

@@ -1,4 +1,5 @@
-from typing import Tuple, Sequence, Union, Any
+from typing import Tuple, Sequence, Union, Any, Callable
+from functools import partial
 
 import equinox as eqx
 from equinox import Module
@@ -48,6 +49,8 @@ class Pipe(eqx.Module):
         return len(self.funcs)
 
     def __rshift__(self, _next):
+        if not isinstance(_next, Functional):
+            _next = Functional(fn=_next)
         return Pipe([*self.funcs, _next])
 
 
@@ -57,3 +60,43 @@ class Pipeable(Functional):
     
     def __rshift__(self, *args, **kwargs):
         return self.value
+
+def make_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Callable:
+    """Make a Function Pipable
+
+    Args:
+        cls (Callable): Function or Callable Class
+        params (PyTree, optional): Params For Function. Defaults to None.
+        name (str, optional): Name of the Function. Defaults to "Anonymous".
+    """
+
+    def wrap(cls):
+        return Functional(name=name, fn=cls)
+
+    if cls is None:
+        return wrap
+
+    return wrap(cls)
+
+
+def make_partial_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Callable:
+    """Make a Partial Function Pipe
+    Args:
+        cls (Callable): Function or Callable Class
+        params (PyTree, optional): Params For Function. Defaults to None.
+        name (str, optional): Name of the Function. Defaults to "Anonymous".
+    """
+
+    def wrap(cls) -> Callable:
+        def partial_fn(x: Any = None, **kwargs):
+            fn = partial(cls, **kwargs)
+            if x is not None:
+                return fn(x)
+            return Functional(name=name, fn=fn)
+
+        return partial_fn
+
+    if cls is None:
+        return wrap
+
+    return wrap(cls)
