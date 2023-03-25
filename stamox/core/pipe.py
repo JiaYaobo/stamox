@@ -1,7 +1,6 @@
-from typing import Tuple, Sequence, Union, Any, Callable, Optional
+from typing import Tuple, Sequence, Union, Any, Callable, Optional, AnyStr
 from functools import partial
-
-from  jax.random import KeyArray
+import inspect
 import equinox as eqx
 
 from .base import Functional
@@ -138,7 +137,7 @@ class Pipeable(Functional):
 
 
 def make_pipe(
-    cls: Optional[Callable] = None, name: str = "PipeableFunc", **kwargs
+    cls: Optional[Callable] = None, name: AnyStr = "PipeableFunc", **kwargs
 ) -> Callable:
     """Makes a Function Pipeable.
 
@@ -161,7 +160,7 @@ def make_pipe(
 
 
 def make_partial_pipe(
-    cls: Optional[Callable] = None, name: str = "PipeableFunc", **kwargs
+    cls: Optional[Callable] = None, name: AnyStr = "PipeableFunc", **kwargs
 ) -> Callable:
     """Makes a Partial Function Pipe.
 
@@ -176,7 +175,7 @@ def make_partial_pipe(
 
     def wrap(cls) -> Callable:
         def partial_fn(x: Any = None, *args, **kwargs):
-            if x is not None: 
+            if x is not None:
                 return cls(x, *args, **kwargs)
             fn = partial(cls, **kwargs)
             return Functional(name=name, fn=fn)
@@ -187,3 +186,4 @@ def make_partial_pipe(
         return wrap
 
     return wrap(cls)
+
