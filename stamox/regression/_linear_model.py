@@ -12,11 +12,6 @@ from ._base import dispatch
 
 
 
-
-def wls(X, y, weights=None, method='pinv'):
-    x = X * jnp.sqrt(weights) * x
-    pass
-
 def ols(X, y, method):
     func = dispatch(method=method)
     params = func(X, y)

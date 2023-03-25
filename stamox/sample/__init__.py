@@ -1,1 +1,1 @@
-from stamox.sample._sample import sample
+from stamox.sample._bootstrap import bootstrap_sample

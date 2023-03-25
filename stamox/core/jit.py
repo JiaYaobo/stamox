@@ -40,13 +40,13 @@ def partial_pipe_jit(
     """
 
     def wrap(cls) -> Callable:
-        def partial_fn(x: Any=None, **kwargs):
+        def partial_fn(x: Any=None, *args, **kwargs):
             fn = filter_jit(cls)
             fn = partial(fn, **kwargs)
             if x is not None:
-                return fn(x)
+                return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn)
-        return partial_fn
+        return Functional(name='partial_jitted_'+name, fn=partial_fn)
 
     if cls is None:
         return wrap

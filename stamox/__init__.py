@@ -10,6 +10,7 @@ from stamox import core
 from stamox import basic
 from stamox import regression
 from stamox import decomposition
+from stamox import sample
 
 
 _REQUIRED_JAX_VERSION = "0.3.23"  # pylint: disable=g-statement-before-imports
@@ -63,4 +64,5 @@ __all__ = [
     "basic",
     "regression",
     "decomposition",
+    "sample",
 ]

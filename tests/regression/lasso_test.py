@@ -9,4 +9,6 @@ X = np.array([[1, 2], [3, 4], [5, 6]])
 y = np.array([3, 7, 11])
 
 
-lasso.the
+lasso.fit(X, y)
+
+print(lasso.coef_)

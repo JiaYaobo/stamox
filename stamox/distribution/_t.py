@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import jax.random as jrand
 from jax import jit, grad
+from equinox import filter_jit, filter_vmap
 from jax.scipy.special import betainc
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 

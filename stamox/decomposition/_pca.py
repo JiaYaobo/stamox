@@ -1,9 +1,5 @@
-from functools import partial
-
 import jax.numpy as np
 from equinox import filter_jit
-
-from jax import jit
 
 from ..core import StateFunc, Functional
 from ..basic import mean
@@ -55,3 +51,5 @@ def _pca(X, n_components):
     _components = eigenvectors[:, : n_components]
 
     return PCAState(n_components=n_components, components=_components, mean=_mean)
+
+
