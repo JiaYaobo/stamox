@@ -15,7 +15,6 @@ from stamox.distribution._bernoulli import rbernoulli
 from stamox.distribution._binomial import rbinomial, dbinomial, pbinomial
 from stamox.distribution._triangular import ptriangular
 from stamox.distribution._geom import dgeom, pgeom, qgeom
-from stamox.distribution._runs import druns
 from stamox.distribution._rademacher import prademacher, drademacher
 from stamox.distribution._ecdf import ecdf, step_fun
 
@@ -37,7 +36,6 @@ __all__ = [
     "rbinomial", "dbinomial", "pbinomial",
     "ptriangular",
     "dgeom", "pgeom", "qgeom",
-    "druns",
     "prademacher", "drademacher",
     "ecdf", "step_fun" 
 ]

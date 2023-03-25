@@ -1,6 +1,7 @@
 from typing import Tuple, Sequence, Union, Any, Callable, Optional
 from functools import partial
 
+from  jax.random import KeyArray
 import equinox as eqx
 
 from .base import Functional
@@ -175,9 +176,9 @@ def make_partial_pipe(
 
     def wrap(cls) -> Callable:
         def partial_fn(x: Any = None, *args, **kwargs):
+            if x is not None: 
+                return cls(x, *args, **kwargs)
             fn = partial(cls, **kwargs)
-            if x is not None:
-                return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn)
 
         return Functional(name="partial_" + name, fn=partial_fn)

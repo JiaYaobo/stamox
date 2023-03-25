@@ -13,12 +13,12 @@ class NormalTest(jtest.JaxTestCase):
         key = jrand.PRNGKey(19751002)
         sample_shape = (1000000,)
         mean = 0.5
-        sigma = 2.0
-        norms = rnorm(key, mean, sigma, sample_shape)
+        sd = 2.0
+        norms = rnorm(key, mean=mean, sd=sd, sample_shape=sample_shape)
         avg = norms.mean()
         var = norms.var(ddof=1)
         self.assertAllClose(avg, mean, atol=1e-2)
-        self.assertAllClose(var, sigma**2, atol=1e-2)
+        self.assertAllClose(var, sd**2, atol=1e-2)
 
     def test_pnorm(self):
         x = np.array([-1.96, -1.645, -1.0, 0, 1.0, 1.645, 1.96])
