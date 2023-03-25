@@ -1,4 +1,4 @@
-from typing import Tuple, Sequence, Union, Any, Callable
+from typing import Tuple, Sequence, Union, Any, Callable, Optional
 from functools import partial
 
 import equinox as eqx
@@ -12,6 +12,7 @@ class Pipe(eqx.Module):
     Attributes:
         funcs (Tuple[Functional, ...]): A tuple of Functional objects.
     """
+
     funcs: Tuple[Functional, ...]
 
     def __init__(self, funcs: Sequence[Functional]) -> None:
@@ -22,7 +23,7 @@ class Pipe(eqx.Module):
         """
         self.funcs = tuple(funcs)
 
-    def __call__(self, x: Any, *args, **kwargs):
+    def __call__(self, x: Any = None, *args, **kwargs):
         """Call the Pipe object.
 
         Args:
@@ -34,6 +35,8 @@ class Pipe(eqx.Module):
             Any: The output of the Pipe object.
         """
         for fn in self.funcs:
+            if isinstance(fn, Pipeable):
+                x = fn()
             x = fn(x, *args, **kwargs)
         return x
 
@@ -103,15 +106,39 @@ class Pipe(eqx.Module):
 
 
 class Pipeable(Functional):
+    """A class for pipeable functions.
+
+    Attributes:
+        value (Any): The value to be piped.
+    """
+
     value: Any
+
     def __init__(self, value):
+        super().__init__(name="PipeableData", fn=None)
+        """Initialize the Pipeable object.
+
+        Args:
+            value (Any): The value to be piped.
+        """
         self.value = value
 
-    def __rshift__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs):
+        """Pipe the value through the function.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Any: The piped value.
+        """
         return self.value
 
 
-def make_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Callable:
+def make_pipe(
+    cls: Optional[Callable] = None, name: str = "PipeableFunc", **kwargs
+) -> Callable:
     """Makes a Function Pipeable.
 
     Args:
@@ -122,6 +149,7 @@ def make_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Callable:
     Returns:
         Callable: The wrapped function.
     """
+
     def wrap(cls):
         return Functional(name=name, fn=cls)
 
@@ -131,7 +159,9 @@ def make_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Callable:
     return wrap(cls)
 
 
-def make_partial_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Callable:
+def make_partial_pipe(
+    cls: Optional[Callable] = None, name: str = "PipeableFunc", **kwargs
+) -> Callable:
     """Makes a Partial Function Pipe.
 
     Args:
@@ -142,6 +172,7 @@ def make_partial_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Ca
     Returns:
         Callable: A partial function pipe.
     """
+
     def wrap(cls) -> Callable:
         def partial_fn(x: Any = None, *args, **kwargs):
             fn = partial(cls, **kwargs)
@@ -149,7 +180,7 @@ def make_partial_pipe(cls: Callable, name: str = "PipeableFunc", **kwargs) -> Ca
                 return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn)
 
-        return Functional(name='partial_'+name, fn=partial_fn)
+        return Functional(name="partial_" + name, fn=partial_fn)
 
     if cls is None:
         return wrap

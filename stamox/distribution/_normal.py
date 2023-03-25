@@ -143,6 +143,7 @@ def qnorm(
         >>> qnorm([0.25, 0.75], mean=3, sigma=2)
         array([1.4867225, 4.5132775])
     """
+    q = jnp.atleast_1d(q)
     if not lower_tail:
         q = 1 - q
     if log_prob:
