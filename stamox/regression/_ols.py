@@ -25,7 +25,7 @@ class OLS(Functional):
     
 
     def fit(self, X, y) -> OLSState:
-        return self._fit_ols(X, y, key=self.key)
+        return self._fit_ols(X, y)
     
     def __call__(self, Xy:Union[Tuple, List, ArrayLike]) -> OLSState:
         if isinstance(Xy, tuple) or isinstance(Xy, list):
@@ -66,8 +66,12 @@ class OLS(Functional):
         else:
             raise NotImplementedError('Not Implemented')
         coefs = X_pinv @ y
-        weight, bias = coefs[1:], coefs[0]
+        if self.use_intercept:
+            weight, bias = coefs[1:], coefs[0]
+        else:
+            weight = coefs
         state = eqx.tree_at(lambda x: x.linear.weight, state, weight)
-        state = eqx.tree_at(lambda x: x.linear.bias, state, bias)
+        if self.use_intercept:
+            state = eqx.tree_at(lambda x: x.linear.bias, state, bias)
         return state
 

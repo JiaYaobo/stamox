@@ -1,5 +1,5 @@
 from stamox.sample._bootstrap import bootstrap_sample
 
 __all__ = [
-    'bootstrap_smaple',
+    'bootstrap_sample',
 ]

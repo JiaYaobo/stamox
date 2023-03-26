@@ -1,1 +1,0 @@
-from stamox.anovax.one_way._aov import one_way

@@ -8,7 +8,7 @@ from absl.testing import parameterized
 
 from jax._src import test_util as jtest
 
-from stamox.anovax import one_way
+from stamox.anova import one_way
 
 
 class OneWayAOVTest(jtest.JaxTestCase):
