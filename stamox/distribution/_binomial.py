@@ -1,11 +1,9 @@
 import functools as ft
 
 import jax.numpy as jnp
-import jax.random as jrand
 from jax import vmap, jit, lax
 from jax.scipy.special import gammaln
 
-from ._bernoulli import rbernoulli
 from stamox.util import zero_dim_to_1_dim_array
 
 
@@ -28,9 +26,6 @@ def _dbinomial(k, n, p):
     pp = jnp.power(p, k) * jnp.power(1-p, n-k) * comb
     return pp
 
-# We need to implement pbinomial using lax.scan or other loop scheme to 
-# make it possible map on k,
-#  since vmap needs concrete shape, so jnp.arange can't be contained in mapper which is annoying :<
 @ft.partial(jit, static_argnames=('n', 'p', ))
 def _cumm_dbinomial(k ,n ,p):
     def cond(carry):
@@ -54,12 +49,3 @@ def pbinomial(k ,n ,p):
     pp = jnp.squeeze(pp, axis=1)
     return pp
 
-
-def rbinomial(key, p, n, sample_shape=()):
-    return _rbinomial(key, p, n, sample_shape)
-
-
-def _rbinomial(key, p, n, sample_shape=()):
-    keys = jrand.split(key, n)
-    rbins = vmap(rbernoulli, in_axes=(0, None, None))(keys, p, sample_shape)
-    return rbins

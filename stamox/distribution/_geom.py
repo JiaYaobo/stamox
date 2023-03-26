@@ -1,12 +1,10 @@
 import jax.numpy as jnp
-import jax.tree_util as jtu
-from jax import vmap, jit, lax
+from jax import jit, lax
 
-from ..util import atleast_1d
+from equinox import filter_jit
 from ..maps import auto_map
-from ._normal import qnorm
 
-@jit
+@filter_jit
 def _cumm_dgeom(k ,p):
 
     def cond(carry):
@@ -32,15 +30,15 @@ def pgeom(k ,p):
     return pp
 
 
+
+@filter_jit
+def _dgeom(k, p):
+    return jnp.power(1-p, k) * p
+
 def dgeom(k, p):
     # k = jnp.asarray(k, dtype=jnp.int32)
     pp = auto_map(_dgeom, k, p)
     return pp
-
-
-@jit
-def _dgeom(k, p):
-    return jnp.power(1-p, k) * p
 
 
 

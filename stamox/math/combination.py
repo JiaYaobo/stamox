@@ -3,17 +3,18 @@ import jax.tree_util as jtu
 
 from jax import jit, vmap, lax
 from jax.scipy.special import gammaln
+from equinox import filter_jit
 
 from ..util import zero_dim_to_1_dim_array
 
 
 def choose(n, k):
     k = jnp.asarray(k, dtype=jnp.int32)
-    k = zero_dim_to_1_dim_array(k)
+    k = jnp.atleast_1d(k)
     return vmap(_choose, in_axes=(None, 0))(n, k)
 
 
-@jtu.Partial(jit)
+@filter_jit
 def _cal_choose(n, k):
     log_kfrac = gammaln(k + 1)
     log_nfrac = gammaln(n + 1)
@@ -24,7 +25,7 @@ def _cal_choose(n, k):
     return comb
 
 
-@jtu.Partial(jit)
+@filter_jit
 def _choose(n, k):
     if_illegal = jnp.where(jnp.logical_or(k > n, k < 0), 1, 0)
     def func1(nn, kk): return jnp.asarray(0, dtype=jnp.int32)
