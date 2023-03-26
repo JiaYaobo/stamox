@@ -137,7 +137,7 @@ class Pipeable(Functional):
 
 
 def make_pipe(
-    cls: Optional[Callable] = None, name: AnyStr = "PipeableFunc", **kwargs
+    cls: Optional[Callable] = None, name: AnyStr = None, **kwargs
 ) -> Callable:
     """Makes a Function Pipeable.
 
@@ -149,6 +149,8 @@ def make_pipe(
     Returns:
         Callable: The wrapped function.
     """
+    if name is None and cls is not None: 
+        name = cls.__name__
 
     def wrap(cls):
         return Functional(name=name, fn=cls)
@@ -160,7 +162,7 @@ def make_pipe(
 
 
 def make_partial_pipe(
-    cls: Optional[Callable] = None, name: AnyStr = "PipeableFunc", **kwargs
+    cls: Optional[Callable] = None, name: AnyStr = None, **kwargs
 ) -> Callable:
     """Makes a Partial Function Pipe.
 
@@ -172,8 +174,10 @@ def make_partial_pipe(
     Returns:
         Callable: A partial function pipe.
     """
+    if name is None and cls is not None:
+        name = cls.__name__
 
-    def wrap(cls) -> Callable:
+    def wrap(cls: Callable) -> Callable:
         def partial_fn(x: Any = None, *args, **kwargs):
             if x is not None:
                 return cls(x, *args, **kwargs)

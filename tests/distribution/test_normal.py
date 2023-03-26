@@ -22,7 +22,9 @@ class NormalTest(jtest.JaxTestCase):
 
     def test_pnorm(self):
         x = np.array([-1.96, -1.645, -1.0, 0, 1.0, 1.645, 1.96])
-        p = pnorm(x)
+        mean = 0.
+        sd = 1.
+        p = pnorm(x, mean, sd)
         true_p = np.array(
             [0.02499789, 0.04998492, 0.15865527, 0.5, 0.8413447, 0.95001507, 0.9750021]
         )

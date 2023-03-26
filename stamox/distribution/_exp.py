@@ -38,7 +38,7 @@ def qexp(
     lower_tail=True,
     log_prob=False,
 ):
-    q = jnp.atleast_1d(x)
+    q = jnp.atleast_1d(q)
     if not lower_tail:
         q = 1 - q
     if log_prob:

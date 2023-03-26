@@ -35,7 +35,7 @@ class Functional(eqx.Module):
             raise ValueError("No Callable Function to Call")
         return self._fn(*args, **kwargs)
 
-    def __rshift__(self, _next):
+    def __rshift__(self, _next: Callable):
         """Make Pipe.
 
         Create a pipe between this function and the next one.
@@ -46,6 +46,8 @@ class Functional(eqx.Module):
         Returns:
             Pipe: A pipe between this function and the next one.
         """
+        if not isinstance(_next, Functional):
+            _next = Functional(name=_next.__name__, fn=_next)
         from .pipe import Pipe
 
         return Pipe([self, _next])

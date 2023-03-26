@@ -1,4 +1,4 @@
-from stamox.core.pipe import Pipe, Pipeable, make_pipe, make_partial_pipe, make_partial_pipe_class
+from stamox.core.pipe import Pipe, Pipeable, make_pipe, make_partial_pipe
 from stamox.core.base import (
     Functional,
     StateFunc,
@@ -13,7 +13,6 @@ __all__ = [
     "StateFunc",
     "make_pipe",
     "make_partial_pipe",
-    "make_partial_pipe_class",
     "pipe_jit",
     "partial_pipe_jit",
     "summary"

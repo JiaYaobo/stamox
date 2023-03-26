@@ -27,7 +27,7 @@ class PCA(Functional):
         super().__init__(name="PCA", fn=None)
         self.n_components = n_components
 
-    def __call__(self, x, *args, **kwargs):
+    def __call__(self, x, *, key, **kwargs):
         return _pca(x, n_components=self.n_components)
 
 

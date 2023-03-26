@@ -1,2 +1,5 @@
-from ._linear_model import ols
-from ._lasso import LassoRegression
+from._ols import OLS
+
+__all__ = [
+    'OLS',
+]

@@ -49,7 +49,6 @@ def pt(
     Returns:
         The probability of the given value for Student T distribution.
     """
-    df = df.astype(loc.dtype)
     x = jnp.atleast_1d(x)
     p = filter_vmap(_pt)(x, df, loc, scale)
     if not lower_tail:
