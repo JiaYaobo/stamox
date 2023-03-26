@@ -11,11 +11,6 @@ from stamox.distribution._exp import pexp, qexp, dexp, rexp
 from stamox.distribution._laplace import plaplace, qlaplace, dlaplace, rlaplace
 from stamox.distribution._weibull import pweibull, qweibull, dweibull, rweibull
 from stamox.distribution._poisson import ppoisson, rpoisson, qpoisson, dpoisson
-from stamox.distribution._bernoulli import rbernoulli
-from stamox.distribution._binomial import rbinomial, dbinomial, pbinomial
-from stamox.distribution._triangular import ptriangular
-from stamox.distribution._geom import dgeom, pgeom, qgeom
-from stamox.distribution._rademacher import prademacher, drademacher
 from stamox.distribution._ecdf import ecdf, step_fun
 
 __all__ = [
@@ -32,11 +27,6 @@ __all__ = [
     "plaplace", "qlaplace", "dlaplace", "rlaplace",
     "pweibull", "qweibull", "dweibull", "rweibull",
     "ppoisson", "rpoisson", "qpoisson", "dpoisson",
-    "rbernoulli",
-    "rbinomial", "dbinomial", "pbinomial",
-    "ptriangular",
-    "dgeom", "pgeom", "qgeom",
-    "prademacher", "drademacher",
     "ecdf", "step_fun" 
 ]
 

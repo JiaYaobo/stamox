@@ -1,5 +1,5 @@
 from stamox.core import make_pipe, make_partial_pipe
-from jax import grad, vmap, pmap
+from jax import grad, vmap
 import jax.random as jrandom
 import jax.numpy as jnp
 

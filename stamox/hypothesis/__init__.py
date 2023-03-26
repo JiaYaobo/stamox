@@ -4,8 +4,10 @@ from stamox.hypothesis._durbin_waston import durbin_waston
 from stamox.hypothesis._bartlett import bartlett_test
 from stamox.hypothesis._friedman import friedman_test
 from stamox.hypothesis._shapiro_wilk import shapiro_wilk_test
+from stamox.hypothesis._base import HypoTest
 
 __all__ = [
+    "HypoTest",
     "bartlett_test",
     "durbin_waston",
     "friedman_test",

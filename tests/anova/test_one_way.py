@@ -1,12 +1,9 @@
-import jax.random as jrand
-import jax.numpy as jnp
-
-import numpy as np
-
+"""Tests for one-way ANOVA."""
 from absl.testing import absltest
-from absl.testing import parameterized
 
 from jax._src import test_util as jtest
+import jax.numpy as jnp
+import numpy as np
 
 from stamox.anova import one_way
 
@@ -25,9 +22,9 @@ class OneWayAOVTest(jtest.JaxTestCase):
         tvarminne = jnp.array(
             [0.0703, 0.1026, 0.0956, 0.0973, 0.1039, 0.1045])
 
-        F, p = one_way(tillamook, newport, petersburg, magadan, tvarminne)
-        self.assertAllClose(F[0], np.array(7.121019471642447))
-        self.assertAllClose(p[0], np.array(0.0002812242314534544))
+        state = one_way(tillamook, newport, petersburg, magadan, tvarminne)
+        self.assertAllClose(state.statistic, np.array([7.121019471642447]))
+        self.assertAllClose(state.p_value, np.array([0.0002812242314534544]))
 
     def test_one_way_ndarray(self):
         a = np.array([[9.87, 9.03, 6.81],
@@ -51,11 +48,11 @@ class OneWayAOVTest(jtest.JaxTestCase):
                       [8.59, 6.01, 6.07],
                       [3.07, 9.72, 7.48]])
 
-        F, p = one_way(a, b, c)
-        self.assertAllClose(F[0], np.array(
-            [1.75676344, 0.03701228, 3.76439349]))
-        self.assertAllClose(p[0], np.array(
-            [0.20630784, 0.96375203, 0.04733157]))
+        state = one_way(a, b, c)
+        self.assertAllClose(state.statistic, np.array(
+            [[1.75676344, 0.03701228, 3.76439349]]))
+        self.assertAllClose(state.p_value, np.array(
+            [[0.20630784, 0.96375203, 0.04733157]]))
 
 
 if __name__ == '__main__':

@@ -68,7 +68,7 @@ def _bartlett(samples):
         float: The Bartlett test statistic.
     """
     k = samples.shape[0]
-    Ni = vmap(jnp.size, in_axes=(0,))(samples)
+    Ni = jnp.asarray(vmap(jnp.size, in_axes=(0,))(samples), dtype=jnp.float32)
     ssq = vmap(partial(jnp.var, ddof=1), in_axes=(0,))(samples)
     Ntot = jnp.sum(Ni, axis=0)
     spsq = jnp.sum((Ni - 1) * ssq, axis=0) / (1.0 * (Ntot - k))
@@ -80,5 +80,6 @@ def _bartlett(samples):
     )
     stats = numer / denom
     param = k - 1
+    print("here")
     pval = pchisq(stats, param, lower_tail=False)
     return BartlettTest(statistic=stats, parameters=param, p_value=pval)
