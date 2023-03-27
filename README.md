@@ -102,4 +102,5 @@ print(f(y=3.)(jnp.array([1., 2., 3.])))
 ## See More
 
 [JAX](https://github.com/google/jax)
+
 [Equinox](https://github.com/patrick-kidger/equinox#readme)
