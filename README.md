@@ -52,7 +52,7 @@ key = jrandom.PRNGKey(20010813)
 
 # random and ppf
 pipe = rnorm(sample_shape=(1000, )) >> qnorm
-print(pipe())
+print(pipe(key))
 ```
 
 * Custom Functions Pipeable
@@ -94,6 +94,10 @@ def f(x, y):
        
 print(f(y=3.)(jnp.array([1., 2., 3.])))
 ```
+
+## Acceleration Support
+
+`JAX` can be accelerated by `GPU` and `TPU`. `Stamox` is compatible with them.
 
 ## See More
 
