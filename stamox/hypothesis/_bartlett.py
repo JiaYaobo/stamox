@@ -80,6 +80,5 @@ def _bartlett(samples):
     )
     stats = numer / denom
     param = k - 1
-    print("here")
     pval = pchisq(stats, param, lower_tail=False)
     return BartlettTest(statistic=stats, parameters=param, p_value=pval)

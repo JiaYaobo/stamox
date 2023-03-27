@@ -3,6 +3,7 @@
 import sys
 
 from stamox import anova
+from stamox import cluster
 from stamox import distribution
 from stamox import hypothesis
 from stamox import util
@@ -58,6 +59,7 @@ _check_py_version()
 
 __all__ = [
     "anova",
+    "cluster"
     "distribution",
     "hypothesis",
     "util",

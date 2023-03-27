@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 from jax import vmap
+from jax import lax
 from equinox import filter_jit
 
 from ._base import HypoTest
@@ -57,9 +58,9 @@ def _shapiro_wilk(x, n):
     if n < 3:
         raise ValueError("Data must be at least length 3.")
 
-    an25 = n + 0.25
+    an25 = an + 0.25
     a = vmap(lambda i: qnorm(jnp.asarray((i - 0.375) / an25), 0.0, 1.0), in_axes=0)(
-        jnp.arange(nn2) + 1
+        jnp.arange(nn2, dtype=jnp.float32) + 1
     )
     a = jnp.squeeze(a, axis=-1)
     summ2 = 2 * jnp.sum(a**2, axis=0)
@@ -87,12 +88,13 @@ def _shapiro_wilk(x, n):
     range_x = x[n - 1] - x[0]
     sx = jnp.sum(x, axis=0) / range_x
 
-    forward = jnp.arange(1, n, 1)
-    reverse = jnp.arange(n - 1, 0, -1) - 1
+    forward = jnp.arange(1, n, 1, dtype=jnp.float32)
+    reverse = jnp.arange(n - 1, 0, -1, dtype=jnp.float32) - 1
     sa = jnp.sum(
-        vmap(lambda i, j: jnp.sign(i - j) * a[jnp.minimum(i, j)], in_axes=(0, 0))(
-            forward, reverse
-        ),
+        vmap(
+            lambda i, j: jnp.sign(i - j) * a[jnp.int32(jnp.minimum(i, j))],
+            in_axes=(0, 0),
+        )(forward, reverse),
         axis=0,
     )
     sa += -a[0]
@@ -100,19 +102,19 @@ def _shapiro_wilk(x, n):
     sx /= n
 
     def _tmp(i, j, xi):
-        asa = jnp.sign(i - j) * a[jnp.minimum(i, j)] - sa
+        asa = jnp.sign(i - j) * a[jnp.int32(jnp.minimum(i, j))] - sa
         xsx = xi / range_x - sx
         ssa = asa * asa
         ssx = xsx * xsx
         sax = asa * xsx
         return (ssa, ssx, sax)
 
-    forward = jnp.arange(0, n, 1)
-    reverse = jnp.arange(n, 0, -1) - 1
+    forward = jnp.arange(0, n, 1, dtype=jnp.float32)
+    reverse = jnp.arange(n, 0, -1, dtype=jnp.float32) - 1
     (ssa, ssx, sax) = vmap(_tmp, in_axes=(0, 0, 0))(forward, reverse, x)
-    ssa = jnp.sum(ssa, axis=0)
-    ssx = jnp.sum(ssx, axis=0)
-    sax = jnp.sum(sax, axis=0)
+    ssa = jnp.sum(ssa, axis=0, keepdims=True)
+    ssx = jnp.sum(ssx, axis=0, keepdims=True)
+    sax = jnp.sum(sax, axis=0, keepdims=True)
 
     ssassx = jnp.sqrt(ssa * ssx)
     w1 = (ssassx - sax) * (ssassx + sax) / (ssa * ssx)
@@ -124,28 +126,32 @@ def _shapiro_wilk(x, n):
         stqr = 1.04719755119660
         pw = pi6 * (jnp.arcsin(jnp.sqrt(w)) - stqr)
         return ShapiroWilkTest(statistic=w, p_value=pw)
-    
+
     y = jnp.log(w1)
     xx = jnp.log(an)
     if n <= 11:
         gamma = poly(an, _g, 2)
-        
-        if y >= gamma:
-            pw = 0.0
-            return ShapiroWilkTest(statistic=w, p_value=pw)
-        y = -jnp.log(gamma - y)
-        m = poly(an, _c3, 4)
-        s = jnp.exp(poly(an, _c4, 4))
+
+        pw = lax.select(
+            y >= gamma,
+            jnp.array([0.0]),
+            pnorm(
+                -jnp.log(gamma - y),
+                poly(an, _c3, 4),
+                jnp.exp(poly(an, _c4, 4)),
+                lower_tail=False,
+            ),
+        )
     else:
         m = poly(xx, _c5, 4)
         s = jnp.exp(poly(xx, _c6, 3))
-    pw = pnorm(y, m, s, lower_tail=False)
-    return ShapiroWilkTest(statistic=w, p_value=w)
+        pw = pnorm(y, m, s, lower_tail=False)
+    return ShapiroWilkTest(statistic=w, p_value=pw)
 
 
 @filter_jit
 def poly(x, coef, norder):
     coef = jnp.asarray(coef)
-    iss = jnp.arange(norder)
+    iss = jnp.arange(norder, dtype=jnp.float32)
     value = vmap(lambda c, i, x: x**i * c, in_axes=(0, 0, None))(coef, iss, x)
-    return jnp.sum(value, axis=0)
+    return jnp.sum(value, axis=0, keepdims=True)

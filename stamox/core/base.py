@@ -47,7 +47,10 @@ class Functional(eqx.Module):
             Pipe: A pipe between this function and the next one.
         """
         if not isinstance(_next, Functional):
-            _next = Functional(name=_next.__name__, fn=_next)
+            if hasattr(_next, "__name__"):
+                _next = Functional(name=_next.__name__, fn=_next)
+            else:
+                _next = Functional(name="Function", fn=_next)
         from .pipe import Pipe
 
         return Pipe([self, _next])

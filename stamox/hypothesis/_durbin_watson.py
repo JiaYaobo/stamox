@@ -23,7 +23,7 @@ class DurbinWastonTest(HypoTest):
 
 
 @make_partial_pipe
-def durbin_waston(resids, axis=0):
+def durbin_watson_test(resids, axis=0):
     """Computes the Durbin-Watson statistic for a given array of residuals.
 
     Args:
@@ -49,5 +49,7 @@ def _durbin_watson(resids, axis=0):
         float: The Durbin-Watson statistic.
     """
     diff_resids = jnp.diff(resids, 1, axis=axis)
-    dw = jnp.sum(diff_resids**2, axis=axis) / jnp.sum(resids**2, axis=axis)
+    dw = jnp.sum(diff_resids**2, axis=axis, keepdims=True) / jnp.sum(
+        resids**2, axis=axis, keepdims=True
+    )
     return DurbinWastonTest(statistic=dw)

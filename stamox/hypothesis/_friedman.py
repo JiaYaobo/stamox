@@ -4,6 +4,7 @@ Similar to the parametric repeated measures ANOVA, it is used to detect differen
 The procedure involves ranking each row (or block) together, then considering the values of ranks by columns. 
 Applicable to complete block designs, it is thus a special case of the Durbin test.
 """
+from jax.scipy.stats import rankdata
 import jax.numpy as jnp
 from jax import vmap
 from equinox import filter_jit
@@ -40,8 +41,9 @@ def friedman_test(*samples) -> FriedmanTest:
     Returns:
         The computed Friedman statistic.
     """
-    samples = jnp.vstack(samples)
-    _friedman(samples)
+    ImportWarning("This function is not yet functioned with ties. Use with caution.")
+    samples = jnp.vstack(samples).T
+    return _friedman(samples)
 
 
 @filter_jit
@@ -55,11 +57,11 @@ def _friedman(samples):
     Returns:
         The computed Friedman statistic.
     """
-    k_treatments, n_blocks = samples.shape
-    ranks = vmap(lambda x: jnp.argsort(-x) + 1, in_axes=(1,))(samples)
+    n_blocks, k_treatments = samples.shape
+    ranks = vmap(lambda x: rankdata(x))(samples)
     avg_ranks = jnp.mean(ranks, axis=0)
     Q = 12.0 * n_blocks / (k_treatments * (k_treatments + 1)) * jnp.sum(
-        avg_ranks**2, axis=0
+        avg_ranks**2, axis=0, keepdims=True
     ) - 3 * n_blocks * (k_treatments + 1)
     param = k_treatments - 1
     pval = pchisq(Q, param, lower_tail=False)
