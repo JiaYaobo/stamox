@@ -45,15 +45,25 @@ dnorm(x)
 * Internal Functions Pipeable
 
 ```python
-from stamox.distribution import *
+from stamox.core import make_pipe
+from stamox.regression import OLS
+from stamox.distribution import rnorm
+from stamox.basic import scale
+from equinox import filter_jit
 import jax.random as jrandom
 
 key = jrandom.PRNGKey(20010813)
 
-# random and ppf
-pipe = rnorm(sample_shape=(1000, )) >> qnorm
-print(pipe(key))
+@make_pipe
+@filter_jit
+def f(x):
+    return [x, 3 * x[:, 0] + 2 * x[:, 1] - x[:, 2]]
+pipe = rnorm(sample_shape=(1000, 3)) >> scale >> f >> OLS(use_intercept=False, key=key)
+state = pipe(key)
+print(state.params)
 ```
+
+
 
 * Custom Functions Pipeable
 
