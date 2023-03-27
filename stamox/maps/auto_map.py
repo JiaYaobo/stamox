@@ -1,6 +1,5 @@
 import jax.numpy as jnp
 from jax import vmap
-from ..util import atleast_1d
 
 
 def align_inputs(*inputs):
@@ -13,7 +12,7 @@ def align_inputs(*inputs):
 
     if n == 1:
         arg = jnp.asarray(inputs[0]).reshape(-1)
-        arg = atleast_1d(inputs[0])
+        arg = jnp.atleast_1d(inputs[0])
         return arg, [arg.size]
 
     for arg in inputs:
