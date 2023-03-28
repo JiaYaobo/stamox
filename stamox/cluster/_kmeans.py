@@ -1,10 +1,10 @@
-from jax import jit, lax, vmap
 import jax.numpy as jnp
 import jax.random as jrandom
-from jax._src.random import KeyArray
-from jaxtyping import Int32, ArrayLike
-from jax.scipy.cluster.vq import vq
 from equinox import filter_jit
+from jax import lax, vmap
+from jax._src.random import KeyArray
+from jax.scipy.cluster.vq import vq
+from jaxtyping import ArrayLike, Int32
 
 from ..core import Functional, StateFunc
 

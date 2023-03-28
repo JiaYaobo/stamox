@@ -1,7 +1,8 @@
-from jaxtyping import ArrayLike, Int, Bool, Float
 from equinox.nn import Linear
+from jaxtyping import Bool, Float, Int
 
 from ..core import StateFunc
+
 
 class RegState(StateFunc):
     linear: Linear
@@ -10,15 +11,21 @@ class RegState(StateFunc):
     use_intercept: Bool
     df_model: Float
     df_residul: Float
+
     def __init__(self, in_features, out_features, use_intercept, *, key):
-        super().__init__(name='RegState', fn=None)
+        super().__init__(name="RegState", fn=None)
         self.in_features = in_features
         self.out_features = out_features
         self.use_intercept = use_intercept
-        self.linear = Linear(in_features=in_features, out_features=out_features, use_bias=use_intercept, key=key)
-        self.df_model = 0.
-        self.df_residul = 0.
-    
+        self.linear = Linear(
+            in_features=in_features,
+            out_features=out_features,
+            use_bias=use_intercept,
+            key=key,
+        )
+        self.df_model = 0.0
+        self.df_residul = 0.0
+
     @property
     def params(self):
         if self.use_intercept is True:

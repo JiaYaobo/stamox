@@ -1,9 +1,8 @@
 """Tests for one-way ANOVA."""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import jax.numpy as jnp
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
 from stamox.anova import one_way
 

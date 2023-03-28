@@ -1,7 +1,9 @@
-from stamox.core import make_pipe, make_partial_pipe
-from jax import grad, vmap
-import jax.random as jrandom
 import jax.numpy as jnp
+import jax.random as jrandom
+from jax import grad, vmap
+
+from stamox.core import make_partial_pipe, make_pipe
+
 
 key = jrandom.PRNGKey(1)
 x = jrandom.normal(key, (100, ))

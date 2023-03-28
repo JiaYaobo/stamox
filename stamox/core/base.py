@@ -6,6 +6,7 @@ import equinox as eqx
 P = ParamSpec("P")
 T = TypeVar("T")
 
+
 class Functional(eqx.Module):
     """General Function"""
 

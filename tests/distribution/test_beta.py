@@ -1,11 +1,10 @@
 """Test for beta distribution"""
-from absl.testing import absltest
-
 import jax.random as jrand
-from jax._src import test_util as jtest
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import pbeta, rbeta, qbeta, dbeta
+from stamox.distribution import dbeta, pbeta, qbeta, rbeta
 
 
 class BetaTest(jtest.JaxTestCase):

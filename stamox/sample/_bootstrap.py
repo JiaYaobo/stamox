@@ -1,11 +1,11 @@
-from jaxtyping import ArrayLike
 import jax.random as jrandom
-from equinox import filter_vmap, filter_jit
+from equinox import filter_jit, filter_vmap
+from jaxtyping import ArrayLike
 
 from ..core import make_partial_pipe
 
 
-@make_partial_pipe(name='Bootstrap')
+@make_partial_pipe(name="Bootstrap")
 def bootstrap_sample(
     data: ArrayLike, num_samples: int, *, key: jrandom.KeyArray = None
 ):
@@ -33,4 +33,3 @@ def bootstrap_sample(
 
     samples = filter_vmap(sample_fn)(keys)
     return samples
-

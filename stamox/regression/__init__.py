@@ -1,4 +1,5 @@
-from._ols import OLS
+from ._ols import OLS
+
 
 __all__ = [
     'OLS',

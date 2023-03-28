@@ -1,15 +1,11 @@
 """Test for chisqonential distribution"""
 
 import jax.random as jrand
-
 import numpy as np
-
-from stamox.distribution import pchisq, rchisq, qchisq, dchisq
-
-from absl.testing import absltest
-from absl.testing import parameterized
-
+from absl.testing import absltest, parameterized
 from jax._src import test_util as jtest
+
+from stamox.distribution import dchisq, pchisq, qchisq, rchisq
 
 
 class ChisqTest(jtest.JaxTestCase):

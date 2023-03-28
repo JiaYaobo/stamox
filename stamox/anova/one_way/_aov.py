@@ -2,11 +2,11 @@ from functools import partial
 
 import jax.numpy as jnp
 import jax.tree_util as jtu
-from jax import jit
 from equinox import filter_jit
+from jax import jit
 
-from ...distribution import pF
 from ...core import make_partial_pipe
+from ...distribution import pF
 from ...hypothesis import HypoTest
 
 

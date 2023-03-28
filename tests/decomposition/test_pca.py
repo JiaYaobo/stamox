@@ -1,12 +1,11 @@
 """Tests for PCA."""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import numpy as np
 import sklearn.decomposition
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.decomposition import PCA
 from stamox.core import Pipeable
+from stamox.decomposition import PCA
 
 
 class PCATest(jtest.JaxTestCase):

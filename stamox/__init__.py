@@ -2,17 +2,19 @@
 
 import sys
 
-from stamox import anova
-from stamox import cluster
-from stamox import distribution
-from stamox import hypothesis
-from stamox import math
-from stamox import maps
-from stamox import core
-from stamox import basic
-from stamox import regression
-from stamox import decomposition
-from stamox import sample
+from stamox import (
+    anova,
+    basic,
+    cluster,
+    core,
+    decomposition,
+    distribution,
+    hypothesis,
+    maps,
+    math,
+    regression,
+    sample,
+)
 
 
 def _check_py_version():

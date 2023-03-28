@@ -1,8 +1,7 @@
 import jax.numpy as jnp
-
+from equinox import filter_jit, filter_vmap
 from jax import lax
 from jax.scipy.special import gammaln
-from equinox import filter_jit, filter_vmap
 
 from ..core import make_partial_pipe
 
@@ -27,6 +26,11 @@ def _cal_choose(k, n):
 @filter_jit
 def _choose(k, n):
     if_illegal = jnp.where(jnp.logical_or(k > n, k < 0), 1, 0)
-    def func1(nn, kk): return jnp.asarray(0, dtype=jnp.int32)
-    def func2(nn, kk): return _cal_choose(nn, kk)
+
+    def func1(nn, kk):
+        return jnp.asarray(0, dtype=jnp.int32)
+
+    def func2(nn, kk):
+        return _cal_choose(nn, kk)
+
     return jnp.asarray(lax.cond(if_illegal, func1, func2, k, n))

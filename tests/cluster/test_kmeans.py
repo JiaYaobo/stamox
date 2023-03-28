@@ -1,11 +1,9 @@
 """Test for Kmeans"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
-import numpy as p
 import jax.numpy as jnp
 import jax.random
+from absl.testing import absltest
 from equinox import filter_jit
+from jax._src import test_util as jtest
 
 from stamox.cluster import KMeans
 from stamox.core import Pipeable

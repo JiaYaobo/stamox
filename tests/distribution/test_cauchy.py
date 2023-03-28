@@ -1,13 +1,11 @@
 """Test for Cauchy Distribution"""
-from absl.testing import absltest
-
-import jax.random as jrand
 import jax.numpy as jnp
+import jax.random as jrand
+import numpy as np
+from absl.testing import absltest
 from jax._src import test_util as jtest
 
-import numpy as np
-
-from stamox.distribution import pcauchy, rcauchy, qcauchy, dcauchy
+from stamox.distribution import dcauchy, pcauchy, qcauchy, rcauchy
 
 
 class CauchyTest(jtest.JaxTestCase):

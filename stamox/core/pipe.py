@@ -1,18 +1,20 @@
+from functools import partial
 from typing import (
-    Tuple,
-    Sequence,
-    Union,
     Any,
+    AnyStr,
     Callable,
     Optional,
-    AnyStr,
-    TypeVar,
     ParamSpec,
+    Sequence,
+    Tuple,
+    TypeVar,
+    Union,
 )
-from functools import partial
+
 import equinox as eqx
 
 from .base import Functional
+
 
 P = ParamSpec("P")
 T = TypeVar("T")

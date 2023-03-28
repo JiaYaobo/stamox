@@ -1,16 +1,12 @@
 from functools import partial
-from typing import Callable, Any
+from typing import Any, Callable
 
 from equinox import filter_jit
 
 from .base import Functional
 
 
-def pipe_jit(
-    cls: Callable,
-    name: str = "Anonymous",
-    **kwargs
-) -> Callable:
+def pipe_jit(cls: Callable, name: str = "Anonymous", **kwargs) -> Callable:
     """Make a Function Pipe Jitted
 
     Args:
@@ -29,9 +25,7 @@ def pipe_jit(
     return wrap(cls)
 
 
-def partial_pipe_jit(
-    cls: Callable, name: str = "Anonymous", **kwargs
-) -> Callable:
+def partial_pipe_jit(cls: Callable, name: str = "Anonymous", **kwargs) -> Callable:
     """Make a Partial Function Pipe Jitted
     Args:
         cls (Callable): Function or Callable Class
@@ -40,13 +34,14 @@ def partial_pipe_jit(
     """
 
     def wrap(cls) -> Callable:
-        def partial_fn(x: Any=None, *args, **kwargs):
+        def partial_fn(x: Any = None, *args, **kwargs):
             fn = filter_jit(cls)
             fn = partial(fn, **kwargs)
             if x is not None:
                 return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn)
-        return Functional(name='partial_jitted_'+name, fn=partial_fn)
+
+        return Functional(name="partial_jitted_" + name, fn=partial_fn)
 
     if cls is None:
         return wrap

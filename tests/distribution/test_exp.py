@@ -1,5 +1,6 @@
 """Test for exponential distribution"""
 from absl.testing import absltest
+
 from jax._src import test_util as jtest
 import jax.random as jrand
 import numpy as np
