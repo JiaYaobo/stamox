@@ -93,7 +93,7 @@ print(h())
 ```python
 from stamox.core import make_pipe, make_partial_pipe, Pipeable
 import jax.numpy as jnp
-import equinox as eqx
+from equinox import filter_jit, filter_vmap, filter_grad
 
 @make_partial_pipe
 @filter_jit
