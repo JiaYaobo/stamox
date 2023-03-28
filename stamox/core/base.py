@@ -1,15 +1,18 @@
-from typing import Callable, Optional
+from typing import Callable, Optional, ParamSpec, TypeVar
 
 import equinox as eqx
 
+
+P = ParamSpec("P")
+T = TypeVar("T")
 
 class Functional(eqx.Module):
     """General Function"""
 
     _name: str
-    _fn: Callable
+    _fn: Callable[P, T]
 
-    def __init__(self, name: str = "Func", fn: Optional[Callable] = None):
+    def __init__(self, name: str = "Func", fn: Optional[Callable[P, T]] = None):
         """Make a General Function.
 
         Args:
@@ -29,7 +32,7 @@ class Functional(eqx.Module):
         """Description for the function."""
         pass
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: P.args, **kwargs: P.kwargs):
         """Call the function with given arguments."""
         if self._fn is None:
             raise ValueError("No Callable Function to Call")

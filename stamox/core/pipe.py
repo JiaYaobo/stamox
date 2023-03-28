@@ -1,9 +1,21 @@
-from typing import Tuple, Sequence, Union, Any, Callable, Optional, AnyStr
+from typing import (
+    Tuple,
+    Sequence,
+    Union,
+    Any,
+    Callable,
+    Optional,
+    AnyStr,
+    TypeVar,
+    ParamSpec,
+)
 from functools import partial
-import inspect
 import equinox as eqx
 
 from .base import Functional
+
+P = ParamSpec("P")
+T = TypeVar("T")
 
 
 class Pipe(eqx.Module):
@@ -137,57 +149,57 @@ class Pipeable(Functional):
 
 
 def make_pipe(
-    cls: Optional[Callable] = None, name: AnyStr = None, **kwargs
-) -> Callable:
+    func: Optional[Callable[P, T]] = None, name: AnyStr = None
+) -> Callable[P, T]:
     """Makes a Function Pipeable.
 
     Args:
-        cls (Callable): Function or Callable Class.
+        func (Callable): Function or Callable Class.
         name (str, optional): Name of the Function. Defaults to "PipeableFunc".
         kwargs (optional): Additional keyword arguments.
 
     Returns:
         Callable: The wrapped function.
     """
-    if name is None and cls is not None: 
-        name = cls.__name__
 
-    def wrap(cls):
-        return Functional(name=name, fn=cls)
+    if name is None and func is not None:
+        name = func.__name__
 
-    if cls is None:
+    def wrap(func: Callable[P, T]):
+        return Functional(name=name, fn=func)
+
+    if func is None:
         return wrap
 
-    return wrap(cls)
+    return wrap(func)
 
 
 def make_partial_pipe(
-    cls: Optional[Callable] = None, name: AnyStr = None, **kwargs
-) -> Callable:
+    func: Optional[Callable[P, T]] = None, name: AnyStr = None
+) -> Callable[P, T]:
     """Makes a Partial Function Pipe.
 
     Args:
-        cls (Callable): Function or Callable Class.
+        func (Callable): Function or Callable Class.
         name (str, optional): Name of the Function. Defaults to "PipeableFunc".
         kwargs (dict): Keyword arguments for the function.
 
     Returns:
         Callable: A partial function pipe.
     """
-    if name is None and cls is not None:
-        name = cls.__name__
+    if name is None and func is not None:
+        name = func.__name__
 
-    def wrap(cls: Callable) -> Callable:
+    def wrap(func: Callable[P, T]) -> Callable:
         def partial_fn(x: Any = None, *args, **kwargs):
             if x is not None:
-                return cls(x, *args, **kwargs)
-            fn = partial(cls, **kwargs)
+                return func(x, *args, **kwargs)
+            fn = partial(func, **kwargs)
             return Functional(name=name, fn=fn)
 
         return Functional(name="partial_" + name, fn=partial_fn)
 
-    if cls is None:
+    if func is None:
         return wrap
 
-    return wrap(cls)
-
+    return wrap(func)
