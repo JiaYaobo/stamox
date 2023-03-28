@@ -1,12 +1,12 @@
-from typing import Union, Optional
+from typing import Optional, Union
 
 import jax.numpy as jnp
 import jax.random as jrand
-from jax.random import KeyArray
+from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import Shape
+from jax.random import KeyArray
 from jax.scipy.special import ndtr, ndtri
-from equinox import filter_jit, filter_grad, filter_vmap
-from jaxtyping import ArrayLike, Float, Array, Bool
+from jaxtyping import Array, ArrayLike, Bool, Float
 
 from ..core import make_partial_pipe
 
@@ -34,16 +34,16 @@ def pnorm(
     Args:
         x (Union[Float, ArrayLike]): The quantiles to calculate the CDF at.
         mean (Union[Float, ArrayLike], optional): The mean of the normal distribution. Defaults to 0.0.
-        sd (Union[Float, ArrayLike], optional): The standard deviation of the normal distribution. 
+        sd (Union[Float, ArrayLike], optional): The standard deviation of the normal distribution.
             Defaults to 1.0.
-        lower_tail (bool, optional): If True, calculate the probability that x is less than or equal to the 
+        lower_tail (bool, optional): If True, calculate the probability that x is less than or equal to the
             given quantile(s). If False, calculate the probability that x is greater than the given quantile(s).
             Defaults to True.
-        log_prob (bool, optional): If True, return the log of the CDF instead of the actual value. 
+        log_prob (bool, optional): If True, return the log of the CDF instead of the actual value.
             Defaults to False.
 
     Returns:
-        Union[Float, jnp.ndarray]: The CDF of the normal distribution evaluated at x. 
+        Union[Float, jnp.ndarray]: The CDF of the normal distribution evaluated at x.
 
 
     Examples:
@@ -57,6 +57,8 @@ def pnorm(
         DeviceArray([-1.177404  , -3.7859507 , -6.5995502 ], dtype=float32)
     """
     x = jnp.atleast_1d(x)
+    mean = jnp.asarray(mean)
+    sd = jnp.asarray(sd)
     p = filter_vmap(_pnorm)(x, mean, sd)
     if not lower_tail:
         p = 1.0 - p
@@ -121,7 +123,7 @@ def qnorm(
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-)-> Array:
+) -> Array:
     """
     Calculates the quantile function of the normal distribution for a given probability.
 
@@ -145,6 +147,8 @@ def qnorm(
         array([1.4867225, 4.5132775])
     """
     q = jnp.atleast_1d(q)
+    mean = jnp.asarray(mean)
+    sd = jnp.asarray(sd)
     if not lower_tail:
         q = 1 - q
     if log_prob:
@@ -183,12 +187,13 @@ def rnorm(
     Returns:
         A NumPy array containing random numbers from a normal distribution.
     """
+    mean = jnp.asarray(mean)
+    sd = jnp.asarray(sd)
     probs = _rnorm(key, mean, sd, sample_shape)
     if not lower_tail:
         probs = 1 - probs
-        
+
     if log_prob:
         probs = jnp.log(probs)
-    
-    return probs
 
+    return probs

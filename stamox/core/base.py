@@ -29,6 +29,11 @@ class Functional(eqx.Module):
         """Get the name of the function."""
         return self._name
 
+    @property
+    def func(self):
+        """Get the function."""
+        return self._fn
+
     def desc(self):
         """Description for the function."""
         pass
@@ -50,13 +55,13 @@ class Functional(eqx.Module):
         Returns:
             Pipe: A pipe between this function and the next one.
         """
+        from .pipe import Pipe
         if not isinstance(_next, Functional):
             if hasattr(_next, "__name__"):
                 _next = Functional(name=_next.__name__, fn=_next)
             else:
                 _next = Functional(name="Function", fn=_next)
-        from .pipe import Pipe
-
+        
         return Pipe([self, _next])
 
 
@@ -68,7 +73,7 @@ class StateFunc(Functional):
         fn (Optional[Callable]): Function to be called.
     """
 
-    def __init__(self, name: str = "State", fn: Optional[Callable] = None):
+    def __init__(self, name: str = "State", fn: Optional[Callable[P, T]] = None):
         """Initialize the state function."""
         super().__init__(name, fn)
 

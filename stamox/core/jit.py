@@ -1,41 +1,50 @@
 from functools import partial
-from typing import Any, Callable
+from typing import Any, Callable, ParamSpec, TypeVar
 
 from equinox import filter_jit
 
 from .base import Functional
 
 
-def pipe_jit(cls: Callable, name: str = "Anonymous", **kwargs) -> Callable:
+P = ParamSpec("P")
+T = TypeVar("T")
+
+
+def pipe_jit(func: Callable[P, T], name: str = "Anonymous") -> Callable[P, T]:
     """Make a Function Pipe Jitted
 
     Args:
-        cls (Callable): Function or Callable Class
+        func (Callable): Function or Callable Class
         params (PyTree, optional): Params For Function. Defaults to None.
         name (str, optional): Name of the Function. Defaults to "Anonymous".
     """
 
-    def wrap(cls):
-        fn = filter_jit(cls)
-        return Functional(name=name, fn=fn)
+    if name is None and func is not None:
+        name = func.__name__
 
-    if cls is None:
+    def wrap(func: Callable[P, T]) -> Callable:
+        fn = filter_jit(func)
+        return Functional(name="jitted_" + name, fn=fn)
+
+    if func is None:
         return wrap
 
-    return wrap(cls)
+    return wrap(func)
 
 
-def partial_pipe_jit(cls: Callable, name: str = "Anonymous", **kwargs) -> Callable:
+def partial_pipe_jit(func: Callable[P, T], name: str = "Anonymous") -> Callable[P, T]:
     """Make a Partial Function Pipe Jitted
     Args:
-        cls (Callable): Function or Callable Class
+        func (Callable): Function or Callable Class
         params (PyTree, optional): Params For Function. Defaults to None.
         name (str, optional): Name of the Function. Defaults to "Anonymous".
     """
+    if name is None and func is not None:
+        name = func.__name__
 
-    def wrap(cls) -> Callable:
+    def wrap(func: Callable[P, T]) -> Callable:
         def partial_fn(x: Any = None, *args, **kwargs):
-            fn = filter_jit(cls)
+            fn = filter_jit(func)
             fn = partial(fn, **kwargs)
             if x is not None:
                 return fn(x, *args, **kwargs)
@@ -43,7 +52,7 @@ def partial_pipe_jit(cls: Callable, name: str = "Anonymous", **kwargs) -> Callab
 
         return Functional(name="partial_jitted_" + name, fn=partial_fn)
 
-    if cls is None:
+    if func is None:
         return wrap
 
-    return wrap(cls)
+    return wrap(func)
