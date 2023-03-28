@@ -14,7 +14,7 @@ LONG_DESCRIPTION = (HERE / "README.md").read_text()
 LONG_DESC_TYPE = "text/markdown"
 
 INSTALL_REQUIRES = [
-    "jax>=0.4.4",
+    "jax>=0.4.6",
     "jaxtyping>=0.2.14",
     "typing_extensions>=4.5.0",
     "equinox>=0.10.1",
