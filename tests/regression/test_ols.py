@@ -1,12 +1,11 @@
 """Test for OLS"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import jax.random as jrandom
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.regression import OLS
 from stamox.core import Pipeable
+from stamox.regression import OLS
 
 
 class OLSTest(jtest.JaxTestCase):

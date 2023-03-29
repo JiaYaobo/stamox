@@ -10,7 +10,9 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 
-def pipe_jit(func: Callable[P, T], name: str = "Anonymous") -> Callable[P, T]:
+def pipe_jit(
+    func: Callable[P, T], *, donate: str = "none", name: str = "Anonymous"
+) -> Callable[P, T]:
     """Make a Function Pipe Jitted
 
     Args:
@@ -23,7 +25,7 @@ def pipe_jit(func: Callable[P, T], name: str = "Anonymous") -> Callable[P, T]:
         name = func.__name__
 
     def wrap(func: Callable[P, T]) -> Callable:
-        fn = filter_jit(func)
+        fn = filter_jit(func, donate=donate)
         return Functional(name="jitted_" + name, fn=fn)
 
     if func is None:
@@ -32,7 +34,9 @@ def pipe_jit(func: Callable[P, T], name: str = "Anonymous") -> Callable[P, T]:
     return wrap(func)
 
 
-def partial_pipe_jit(func: Callable[P, T], name: str = "Anonymous") -> Callable[P, T]:
+def partial_pipe_jit(
+    func: Callable[P, T], *, name: str = "Anonymous"
+) -> Callable[P, T]:
     """Make a Partial Function Pipe Jitted
     Args:
         func (Callable): Function or Callable Class
@@ -43,14 +47,14 @@ def partial_pipe_jit(func: Callable[P, T], name: str = "Anonymous") -> Callable[
         name = func.__name__
 
     def wrap(func: Callable[P, T]) -> Callable:
-        def partial_fn(x: Any = None, *args, **kwargs):
-            fn = filter_jit(func)
+        def partial_fn(x: Any = None, *args, donate: str = "none", **kwargs):
+            fn = filter_jit(func, donate=donate)
             fn = partial(fn, **kwargs)
             if x is not None:
                 return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn)
 
-        return Functional(name="partial_jitted_" + name, fn=partial_fn)
+        return Functional(name="partial_jitted_" + name, fn=partial_fn, is_partial=True)
 
     if func is None:
         return wrap

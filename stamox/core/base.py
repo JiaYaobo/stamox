@@ -12,8 +12,14 @@ class Functional(eqx.Module):
 
     _name: str
     _fn: Callable[P, T]
+    _is_partial: bool
 
-    def __init__(self, name: str = "Func", fn: Optional[Callable[P, T]] = None):
+    def __init__(
+        self,
+        fn: Optional[Callable[P, T]] = None,
+        name: str = "Func",
+        is_partial: bool = False,
+    ):
         """Make a General Function.
 
         Args:
@@ -23,6 +29,7 @@ class Functional(eqx.Module):
         super().__init__()
         self._name = name
         self._fn = fn
+        self._is_partial = is_partial
 
     @property
     def name(self):
@@ -56,12 +63,13 @@ class Functional(eqx.Module):
             Pipe: A pipe between this function and the next one.
         """
         from .pipe import Pipe
+
         if not isinstance(_next, Functional):
             if hasattr(_next, "__name__"):
                 _next = Functional(name=_next.__name__, fn=_next)
             else:
                 _next = Functional(name="Function", fn=_next)
-        
+
         return Pipe([self, _next])
 
 
@@ -73,9 +81,13 @@ class StateFunc(Functional):
         fn (Optional[Callable]): Function to be called.
     """
 
-    def __init__(self, name: str = "State", fn: Optional[Callable[P, T]] = None):
+    def __init__(
+        self,
+        fn: Optional[Callable[P, T]] = None,
+        name: str = "State",
+    ):
         """Initialize the state function."""
-        super().__init__(name, fn)
+        super().__init__(fn=fn, name=name)
 
     def __repr__(self):
         """Return a string representation of the state function."""

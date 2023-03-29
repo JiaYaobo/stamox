@@ -1,12 +1,10 @@
 """Test for F distribution"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
-
 import jax.random as jrand
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import pF, rF, qF, dF
+from stamox.distribution import dF, pF, qF, rF
 
 
 class FTest(jtest.JaxTestCase):

@@ -1,12 +1,10 @@
 """Test for weibull distribution"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
-
 import jax.random as jrand
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import pweibull, rweibull, qweibull, dweibull
+from stamox.distribution import dweibull, pweibull, qweibull, rweibull
 
 
 class WeiBullTest(jtest.JaxTestCase):

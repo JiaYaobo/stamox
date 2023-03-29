@@ -1,12 +1,10 @@
 """Test for pareto distribution"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
-
 import jax.random as jrand
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import ppareto, rpareto, qpareto, dpareto
+from stamox.distribution import dpareto, ppareto, qpareto, rpareto
 
 
 class ParetoTest(jtest.JaxTestCase):

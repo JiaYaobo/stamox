@@ -26,15 +26,15 @@ _check_py_version()
 
 
 __all__ = [
-    "anova",
+    "basic",
     "cluster",
+    "core",
+    "decomposition",
     "distribution",
     "hypothesis",
-    "math",
     "maps",
-    "core",
-    "basic",
+    "math",
     "regression",
-    "decomposition",
     "sample",
+    "anova",
 ]

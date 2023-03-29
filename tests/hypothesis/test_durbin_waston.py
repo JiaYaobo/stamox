@@ -1,13 +1,13 @@
 """Test for Durbin-Watson test"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import numpy as np
-from statsmodels.stats.stattools import durbin_watson
+from absl.testing import absltest
 from equinox import filter_jit
+from jax._src import test_util as jtest
+from statsmodels.stats.stattools import durbin_watson
 
-from stamox.hypothesis import durbin_watson_test
 from stamox.core import Pipeable
+from stamox.hypothesis import durbin_watson_test
+
 
 class DurbinWastonTest(jtest.JaxTestCase):
     def test_durbin_waston(self):

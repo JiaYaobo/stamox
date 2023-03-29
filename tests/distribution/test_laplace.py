@@ -1,11 +1,10 @@
 """Test for laplace distribution"""
-from absl.testing import absltest
-
 import jax.random as jrand
 import numpy as np
+from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.distribution import plaplace, rlaplace, qlaplace, dlaplace
+from stamox.distribution import dlaplace, plaplace, qlaplace, rlaplace
 
 
 class LaplaceTest(jtest.JaxTestCase):

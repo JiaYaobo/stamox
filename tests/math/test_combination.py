@@ -1,8 +1,7 @@
 """Test for Combination"""
-from absl.testing import absltest
-
 import jax.numpy as jnp
 import numpy as np
+from absl.testing import absltest
 from jax._src import test_util as jtest
 
 from stamox.math.combination import choose

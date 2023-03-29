@@ -1,12 +1,9 @@
 """Test Basic Functions"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
-import jax.random as jrandom
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.basic import mean, median, scale, var, std
+from stamox.basic import mean, median, scale, std, var
 from stamox.core import Pipeable
 
 

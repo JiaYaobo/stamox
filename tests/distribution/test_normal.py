@@ -1,11 +1,10 @@
 """Test for normal distribution"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import jax.random as jrand
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import pnorm, qnorm, rnorm, dnorm
+from stamox.distribution import dnorm, pnorm, qnorm, rnorm
 
 
 class NormalTest(jtest.JaxTestCase):

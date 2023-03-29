@@ -1,11 +1,10 @@
 """Test for student t distribution"""
-from absl.testing import absltest
-
 import jax.random as jrand
-from jax._src import test_util as jtest
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import pt, rt, qt, dt
+from stamox.distribution import dt, pt, qt, rt
 
 
 class TTest(jtest.JaxTestCase):

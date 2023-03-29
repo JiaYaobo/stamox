@@ -1,12 +1,11 @@
 """Test for Bartlett test"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import numpy as np
+from absl.testing import absltest
 from equinox import filter_jit
+from jax._src import test_util as jtest
 
+from stamox.core import Pipeable
 from stamox.hypothesis import bartlett_test
-from stamox.core import Pipeable, make_pipe
 
 
 class BartlettTest(jtest.JaxTestCase):

@@ -2,7 +2,7 @@
 
 import jax.random as jrand
 import numpy as np
-from absl.testing import absltest, parameterized
+from absl.testing import absltest
 from jax._src import test_util as jtest
 
 from stamox.distribution import dchisq, pchisq, qchisq, rchisq

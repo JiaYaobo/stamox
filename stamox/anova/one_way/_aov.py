@@ -39,6 +39,15 @@ def _sum_of_squares(a, axis=0):
 
 @make_partial_pipe
 def one_way(*samples, axis=0) -> OneWayAnovaTest:
+    """Performs a one-way ANOVA test.
+
+    Args:
+        *samples: A sequence of samples to compare.
+        axis (int): The axis along which the samples are compared.
+
+    Returns:
+        OneWayAnovaTest: The result of the one-way ANOVA test.
+    """
     samples = [jnp.asarray(sample) for sample in samples]
     ngroups = len(samples)
     return _one_way(samples, ngroups, axis=axis)

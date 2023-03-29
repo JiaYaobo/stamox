@@ -58,6 +58,8 @@ def partial_pipe_vmap(
         name (str, optional): Name of the Function. Defaults to "Anonymous".
     """
     if name is None and func is not None:
+        if isinstance(func, Functional):
+            name = func.name
         name = func.__name__
 
     def wrap(func: Callable[P, T]) -> Callable:
@@ -82,10 +84,12 @@ def partial_pipe_vmap(
                 axis_size=axis_size,
             )
             if x is not None:
-                return fn(x, *args, **kwargs)
+                return fn(x, *args)
             return Functional(name=name, fn=fn)
 
-        return Functional(name="partial_vmapped_" + name, fn=partial_fn)
+        return Functional(
+            name="partial_vmapped_" + name, fn=partial_fn, is_partial=True
+        )
 
     if func is None:
         return wrap
@@ -166,7 +170,7 @@ def partial_pipe_pmap(
             )
             if x is not None:
                 return fn(x, *args, **kwargs)
-            return Functional(name=name, fn=fn)
+            return Functional(name=name, fn=fn, is_partial=True)
 
         return Functional(name="partial_pmapped_" + name, fn=partial_fn)
 

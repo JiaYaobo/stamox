@@ -1,11 +1,10 @@
 """Test for Bootstrap Sampler."""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import jax.random as jrandom
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.sample import bootstrap_sample
 from stamox.core import Pipeable
+from stamox.sample import bootstrap_sample
 
 
 class BootstrapSamplerTest(jtest.JaxTestCase):

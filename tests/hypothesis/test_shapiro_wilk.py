@@ -1,14 +1,14 @@
 """Test for Shapiro-Wilk test"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
-import  jax.random as jrandom
+import jax.random as jrandom
 import numpy as np
-from scipy.stats import shapiro
+from absl.testing import absltest
 from equinox import filter_jit
+from jax._src import test_util as jtest
+from scipy.stats import shapiro
 
-from stamox.hypothesis import shapiro_wilk_test
 from stamox.core import Pipeable
+from stamox.hypothesis import shapiro_wilk_test
+
 
 class ShapiroWilkTest(jtest.JaxTestCase):
     def test_shapiro_wilk(self):

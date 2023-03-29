@@ -1,11 +1,10 @@
 """Test for exponential distribution"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
 import jax.random as jrand
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import pexp, rexp, qexp, dexp
+from stamox.distribution import dexp, pexp, qexp, rexp
 
 
 class ExpTest(jtest.JaxTestCase):

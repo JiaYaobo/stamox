@@ -1,12 +1,10 @@
 """Test for poisson distribution"""
-from absl.testing import absltest
-
-from jax._src import test_util as jtest
-
 import jax.random as jrand
 import numpy as np
+from absl.testing import absltest
+from jax._src import test_util as jtest
 
-from stamox.distribution import ppoisson, rpoisson, qpoisson, dpoisson
+from stamox.distribution import dpoisson, ppoisson, qpoisson, rpoisson
 
 
 class PoissonTest(jtest.JaxTestCase):

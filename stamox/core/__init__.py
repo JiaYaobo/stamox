@@ -14,17 +14,17 @@ from stamox.core.summary import summary
 
 
 __all__ = [
+    "Functional",
+    "make_partial_pipe",
+    "make_pipe",
+    "partial_pipe_jit",
+    "partial_pipe_pmap",
+    "partial_pipe_vmap",
     "Pipe",
     "Pipeable",
-    "Functional",
-    "StateFunc",
-    "make_pipe",
-    "make_partial_pipe",
     "pipe_jit",
-    "partial_pipe_jit",
-    "partial_pipe_vmap",
-    "partial_pipe_pmap",
     "pipe_pmap",
     "pipe_vmap",
+    "StateFunc",
     "summary",
 ]
