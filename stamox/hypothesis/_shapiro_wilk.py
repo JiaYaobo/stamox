@@ -1,11 +1,11 @@
 import jax.numpy as jnp
-from jax import vmap
-from jax import lax
 from equinox import filter_jit
+from jax import lax, vmap
 
-from ._base import HypoTest
-from ..distribution import qnorm, pnorm
 from ..core import make_pipe
+from ..distribution import pnorm, qnorm
+from ._base import HypoTest
+
 
 _g = [-2.273, 0.459]
 _c1 = [0.0, 0.221157, -0.147981, -2.07119, 4.434685, -2.706056]

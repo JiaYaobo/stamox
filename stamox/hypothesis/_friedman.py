@@ -4,14 +4,14 @@ Similar to the parametric repeated measures ANOVA, it is used to detect differen
 The procedure involves ranking each row (or block) together, then considering the values of ranks by columns. 
 Applicable to complete block designs, it is thus a special case of the Durbin test.
 """
-from jax.scipy.stats import rankdata
 import jax.numpy as jnp
-from jax import vmap
 from equinox import filter_jit
+from jax import vmap
+from jax.scipy.stats import rankdata
 
-from ._base import HypoTest
-from ..distribution import pchisq
 from ..core import make_pipe
+from ..distribution import pchisq
+from ._base import HypoTest
 
 
 class FriedmanTest(HypoTest):

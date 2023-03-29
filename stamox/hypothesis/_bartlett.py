@@ -8,12 +8,12 @@ which can be verified with Bartlett's test.
 from functools import partial
 
 import jax.numpy as jnp
-from jax import vmap
 from equinox import filter_jit
+from jax import vmap
 
-from ._base import HypoTest
 from ..core import make_pipe
 from ..distribution import pchisq
+from ._base import HypoTest
 
 
 class BartlettTest(HypoTest):

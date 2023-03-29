@@ -1,9 +1,8 @@
 import jax.numpy as jnp
 from equinox import filter_jit
 
-
-from ._base import HypoTest
 from ..core import make_partial_pipe
+from ._base import HypoTest
 
 
 class DurbinWastonTest(HypoTest):

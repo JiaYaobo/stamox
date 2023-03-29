@@ -2,6 +2,7 @@ import functools as ft
 
 import jax.numpy as jnp
 from jax import jit
+
 from stamox.distribution import pbeta
 
 

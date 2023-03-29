@@ -1,9 +1,7 @@
 import functools as ft
 
 import jax.numpy as jnp
-from jax import jit, vmap, grad
-
-from ..util import zero_dim_to_1_dim_array
+from jax import grad, jit, vmap
 
 
 def squared_difference(x, y):
@@ -12,7 +10,7 @@ def squared_difference(x, y):
 
 def dtriangular(x, low, high, peak):
     x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
+    x = jnp.atleast_1d(x)
     _dΔ = grad(_ptriangular)
     grads = vmap(_dΔ, in_axes=(0, None, None, None))(x, low, high, peak)
     return grads
@@ -20,7 +18,7 @@ def dtriangular(x, low, high, peak):
 
 def ptriangular(x, low, high, peak):
     x = jnp.asarray(x)
-    x = zero_dim_to_1_dim_array(x)
+    x = jnp.atleast_1d(x)
     p = vmap(_ptriangular, in_axes=(0, None, None, None))(x, low, high, peak)
     return p
 

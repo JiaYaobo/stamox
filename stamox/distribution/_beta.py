@@ -1,11 +1,11 @@
-from typing import Union, Optional
+from typing import Optional, Union
 
-import jax.random as jrand
 import jax.numpy as jnp
+import jax.random as jrand
+from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import KeyArray, Shape
 from jax.scipy.special import betainc
 from jaxtyping import ArrayLike, Float
-from equinox import filter_jit, filter_vmap, filter_grad
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
 from ..core import make_partial_pipe

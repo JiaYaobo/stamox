@@ -1,8 +1,9 @@
 import jax.numpy as jnp
-from jax import jit, lax
-
 from equinox import filter_jit
+from jax import lax
+
 from ..maps import auto_map
+
 
 @filter_jit
 def _cumm_dgeom(k ,p):

@@ -1,8 +1,7 @@
 import functools as ft
 
-import jax
 import jax.numpy as jnp
-from jax import jit, lax, vmap
+from jax import jit
 
 from stamox.distribution import pt, qt
 

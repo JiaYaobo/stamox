@@ -5,6 +5,7 @@ from jax import jit
 
 from ..distribution import pnorm, qnorm
 
+
 def p_test(x, mu=0, alternative="two.sided", conf_level=0.95):
     return _p_test_single(x, mu, alternative, conf_level)
 

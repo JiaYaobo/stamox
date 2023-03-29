@@ -1,4 +1,5 @@
 from typing import AnyStr
+
 from jaxtyping import ArrayLike
 
 from ..core import StateFunc

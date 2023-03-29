@@ -1,15 +1,13 @@
 import functools as ft
 
 import jax.numpy as jnp
-from jax import vmap, jit, lax
+from jax import jit, lax, vmap
 from jax.scipy.special import gammaln
-
-from stamox.util import zero_dim_to_1_dim_array
 
 
 def dbinomial(k, n, p):
     k = jnp.asarray(k, dtype=jnp.int32)
-    k = zero_dim_to_1_dim_array(k)
+    k = jnp.atleast_1d(k)
     n = int(n)
     p = float(p)
     dens = vmap(_dbinomial, in_axes=(0, None, None))(k, n, p)

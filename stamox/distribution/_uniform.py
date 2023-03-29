@@ -1,10 +1,10 @@
-from typing import Union, Optional
+from typing import Optional, Union
 
-import jax.random as jrand
 import jax.numpy as jnp
+import jax.random as jrand
+from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import KeyArray, Shape
-from jaxtyping import ArrayLike, Float, Array, Bool
-from equinox import filter_jit, filter_vmap, filter_grad
+from jaxtyping import Array, ArrayLike, Bool, Float
 
 from ..core import make_partial_pipe
 

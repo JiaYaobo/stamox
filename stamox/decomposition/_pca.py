@@ -1,9 +1,9 @@
 import jax.numpy as jnp
+from equinox import filter_jit
 from jax import vmap
 from jaxtyping import ArrayLike
-from equinox import filter_jit
 
-from ..core import StateFunc, Functional
+from ..core import Functional, StateFunc
 
 
 class PCAState(StateFunc):
