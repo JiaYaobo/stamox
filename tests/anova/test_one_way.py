@@ -5,6 +5,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 
 from stamox.anova import one_way
+from stamox.core import summary
 
 
 class OneWayAOVTest(jtest.JaxTestCase):
@@ -22,8 +23,8 @@ class OneWayAOVTest(jtest.JaxTestCase):
             [0.0703, 0.1026, 0.0956, 0.0973, 0.1039, 0.1045])
 
         state = one_way(tillamook, newport, petersburg, magadan, tvarminne)
-        self.assertAllClose(state.statistic, np.array([7.121019471642447]))
-        self.assertAllClose(state.p_value, np.array([0.0002812242314534544]))
+        self.assertAllClose(state.statistic, np.array(7.121019471642447))
+        self.assertAllClose(state.p_value, np.array(0.0002812242314534544))
 
     def test_one_way_ndarray(self):
         a = np.array([[9.87, 9.03, 6.81],
@@ -49,9 +50,9 @@ class OneWayAOVTest(jtest.JaxTestCase):
 
         state = one_way(a, b, c)
         self.assertAllClose(state.statistic, np.array(
-            [[1.75676344, 0.03701228, 3.76439349]]))
+            [1.75676344, 0.03701228, 3.76439349]))
         self.assertAllClose(state.p_value, np.array(
-            [[0.20630784, 0.96375203, 0.04733157]]))
+            [0.20630784, 0.96375203, 0.04733157]))
 
 
 if __name__ == '__main__':

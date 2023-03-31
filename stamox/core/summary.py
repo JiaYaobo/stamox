@@ -1,6 +1,8 @@
 from .base import Functional, StateFunc
 
 
-class summary(Functional):
+class Summary(Functional):
     def __call__(self, x: StateFunc, *args, **kwargs):
-        return x._summary()
+        return print(x._summary())
+    
+summary = Summary()
