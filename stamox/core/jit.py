@@ -54,7 +54,7 @@ def partial_pipe_jit(
                 return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn)
 
-        return Functional(name="partial_jitted_" + name, fn=partial_fn, is_partial=True)
+        return Functional(name="partial_jitted_" + name, fn=partial_fn)
 
     if func is None:
         return wrap

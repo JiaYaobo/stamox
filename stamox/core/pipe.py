@@ -1,7 +1,7 @@
+import weakref
 from functools import partial
 from typing import (
     Any,
-    AnyStr,
     Callable,
     Optional,
     ParamSpec,
@@ -37,6 +37,16 @@ class Pipe(eqx.Module):
         """
         self.funcs = tuple(funcs)
 
+    def _debug_call(self, x: Any = None, *args, **kwargs):
+        for fn in self.funcs:
+            if fn._is_fully_partial:
+                print(f"{fn.name} called, function info: {fn.desc()}")
+                x = fn()
+                continue
+            print(f"{fn.name} called, function info: {fn.desc()}")
+            x = fn(x, *args, **kwargs)
+        return x
+
     def __call__(self, x: Any = None, *args, **kwargs):
         """Call the Pipe object.
 
@@ -49,8 +59,9 @@ class Pipe(eqx.Module):
             Any: The output of the Pipe object.
         """
         for fn in self.funcs:
-            if isinstance(fn, Pipeable):
+            if fn._is_fully_partial:
                 x = fn()
+                continue
             x = fn(x, *args, **kwargs)
         return x
 
@@ -126,16 +137,29 @@ class Pipeable(Functional):
         value (Any): The value to be piped.
     """
 
-    value: Any
+    _data_ref: Any
 
-    def __init__(self, value):
+    def __init__(self, data):
         super().__init__(name="PipeableData", fn=None)
         """Initialize the Pipeable object.
 
         Args:
             value (Any): The value to be piped.
         """
-        self.value = value
+        # make weakref for large scale data
+        self._data_ref = weakref.ref(data, self._on_delete)
+
+    def _on_delete(self, ref):
+        """Callback for when the value is deleted.
+
+        Args:
+            ref (Any): The weak reference to the value.
+        """
+        return None
+    
+    @property
+    def value(self):
+        return self._data_ref()
 
     def __call__(self, *args, **kwargs):
         """Pipe the value through the function.
@@ -151,7 +175,7 @@ class Pipeable(Functional):
 
 
 def make_pipe(
-    func: Optional[Callable[P, T]] = None, name: AnyStr = None
+    func: Optional[Callable[P, T]] = None, name: str = None
 ) -> Callable[P, T]:
     """Makes a Function Pipeable.
 
@@ -177,7 +201,7 @@ def make_pipe(
 
 
 def make_partial_pipe(
-    func: Optional[Callable[P, T]] = None, name: AnyStr = None
+    func: Optional[Callable[P, T]] = None, name: str = None
 ) -> Callable[P, T]:
     """Makes a Partial Function Pipe.
 
@@ -193,13 +217,16 @@ def make_partial_pipe(
         name = func.__name__
 
     def wrap(func: Callable[P, T]) -> Callable:
+        if isinstance(func, Functional):
+            func = func.func
+
         def partial_fn(x: Any = None, *args, **kwargs):
             if x is not None:
                 return func(x, *args, **kwargs)
             fn = partial(func, **kwargs)
             return Functional(name=name, fn=fn)
 
-        return Functional(name="partial_" + name, fn=partial_fn, is_partial=True)
+        return Functional(name="partial_" + name, fn=partial_fn)
 
     if func is None:
         return wrap

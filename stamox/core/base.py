@@ -1,4 +1,4 @@
-from typing import Callable, Optional, ParamSpec, TypeVar
+from typing import Callable, Optional, ParamSpec, TypeVar, Union
 
 import equinox as eqx
 
@@ -13,12 +13,14 @@ class Functional(eqx.Module):
     _name: str
     _fn: Callable[P, T]
     _is_partial: bool
+    _is_fully_partial: bool
 
     def __init__(
         self,
         fn: Optional[Callable[P, T]] = None,
         name: str = "Func",
         is_partial: bool = False,
+        is_fully_partial: bool = False,
     ):
         """Make a General Function.
 
@@ -30,6 +32,7 @@ class Functional(eqx.Module):
         self._name = name
         self._fn = fn
         self._is_partial = is_partial
+        self._is_fully_partial = is_fully_partial
 
     @property
     def name(self):
@@ -43,7 +46,7 @@ class Functional(eqx.Module):
 
     def desc(self):
         """Description for the function."""
-        pass
+        return self.__repr__()
 
     def __call__(self, *args: P.args, **kwargs: P.kwargs):
         """Call the function with given arguments."""
@@ -103,4 +106,4 @@ class StateFunc(Functional):
 
     def __call__(self, *args, **kwargs):
         """Call the state function."""
-        return self
+        return self.func(*args, **kwargs)

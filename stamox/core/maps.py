@@ -87,9 +87,7 @@ def partial_pipe_vmap(
                 return fn(x, *args)
             return Functional(name=name, fn=fn)
 
-        return Functional(
-            name="partial_vmapped_" + name, fn=partial_fn, is_partial=True
-        )
+        return Functional(name="partial_vmapped_" + name, fn=partial_fn)
 
     if func is None:
         return wrap

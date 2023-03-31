@@ -28,7 +28,7 @@ class OLS(Functional):
     def fit(self, X, y) -> OLSState:
         return self._fit_ols(X, y)
 
-    def __call__(self, Xy: Union[Tuple, List, ArrayLike]) -> OLSState:
+    def __call__(self, Xy: Union[Tuple, List, ArrayLike], *, key=None) -> OLSState:
         if isinstance(Xy, tuple) or isinstance(Xy, list):
             X = Xy[0]
             y = Xy[1]
