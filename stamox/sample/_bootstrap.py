@@ -1,11 +1,16 @@
+from typing import Callable, TypeVar
+
 import jax.random as jrandom
 from equinox import filter_jit, filter_vmap
-from jaxtyping import ArrayLike
+from jaxtyping import ArrayLike, PyTree
 
 from ..core import make_partial_pipe
 
 
-@make_partial_pipe(name="Bootstrap")
+ReturnValue = TypeVar("ReturnValue")
+
+
+@make_partial_pipe(name="BootstrapSampler")
 def bootstrap_sample(
     data: ArrayLike, num_samples: int, *, key: jrandom.KeyArray = None
 ):
@@ -33,3 +38,20 @@ def bootstrap_sample(
 
     samples = filter_vmap(sample_fn)(keys)
     return samples
+
+
+@make_partial_pipe(name="Bootstrap")
+def boostrap(
+    data: ArrayLike, call: Callable[..., ReturnValue], num_samples: int
+) -> PyTree:
+    """Generates `num_samples` bootstrap samples from `data` with replacement, and calls `call` on each sample.
+
+    Args:
+        data (array-like): The original data.
+        call (Callable[..., ReturnValue]): The function to call on each bootstrap sample.
+
+    Returns:
+        size of num_samples call(data)
+    """
+    samples = bootstrap_sample(data, num_samples=num_samples)
+    return filter_jit(filter_vmap(call)(samples))

@@ -1,3 +1,4 @@
+from stamox.core._inverse import inverse
 from stamox.core.base import (
     Functional,
     StateFunc,
@@ -14,6 +15,7 @@ from stamox.core.summary import summary
 
 
 __all__ = [
+    "inverse",
     "Functional",
     "make_partial_pipe",
     "make_pipe",
