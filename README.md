@@ -4,9 +4,9 @@
 
 Just out of curiosity of Fucntional Programming, I wrote this package. It is a thin wrapper of `JAX` and `Equinox` for statistics. It is not a complete package, and in heavy development.
 
-Inspired by many packages from Python and R, I hope to fuse different features of them into one package, like `%>%` in `dplyr`,
-or apis from statsmodels and scipy etc.
+Inspired by many packages from Python and R, I hope to fuse different features of them into one package, like `%>%` in `dplyr`, or apis from statsmodels and scipy etc. And another important thing is that `JAX` is *really* fast, here's a easy benchmark:
 
+![benchmar](./benchmark/benchmark1.png)
 
 ## Installation
 
