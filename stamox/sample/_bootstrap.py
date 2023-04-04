@@ -1,5 +1,6 @@
 from typing import Callable, TypeVar
 
+import jax.numpy as jnp
 import jax.random as jrandom
 from equinox import filter_jit, filter_vmap
 from jaxtyping import ArrayLike, PyTree
@@ -33,7 +34,7 @@ def bootstrap_sample(
         # Draw n random indices from the data, with replacement
         sample_indices = jrandom.choice(key, n, (n,), replace=True)
         # Use the drawn indices to create a new bootstrap sample
-        sample = data[sample_indices, :]
+        sample = data[sample_indices, ...]
         return sample
 
     samples = filter_vmap(sample_fn)(keys)
@@ -41,8 +42,8 @@ def bootstrap_sample(
 
 
 @make_partial_pipe(name="Bootstrap")
-def boostrap(
-    data: ArrayLike, call: Callable[..., ReturnValue], num_samples: int
+def bootstrap(
+    data: ArrayLike, call: Callable[..., ReturnValue], num_samples: int, *, key
 ) -> PyTree:
     """Generates `num_samples` bootstrap samples from `data` with replacement, and calls `call` on each sample.
 
@@ -53,5 +54,5 @@ def boostrap(
     Returns:
         size of num_samples call(data)
     """
-    samples = bootstrap_sample(data, num_samples=num_samples)
-    return filter_jit(filter_vmap(call)(samples))
+    samples = bootstrap_sample(data, num_samples=num_samples, key=key)
+    return filter_jit(filter_vmap(call))(samples)

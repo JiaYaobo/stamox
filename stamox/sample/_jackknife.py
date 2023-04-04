@@ -43,4 +43,4 @@ def jackknife(
     data: ArrayLike, call: Callable[..., ReturnValue]
 ) -> PyTree:
     samples = jackknife_sample(data)
-    return filter_jit(filter_vmap(call)(samples))
+    return filter_jit(filter_vmap(call))(samples)
