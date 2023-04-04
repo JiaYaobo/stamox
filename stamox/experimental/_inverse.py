@@ -27,6 +27,7 @@ _inverse_registry[lax.acosh_p] = jnp.cosh
 _inverse_registry[lax.atanh_p] = jnp.tanh
 
 
+# only support unop now, developing...
 def inverse(fun: Callable[..., ReturnValue]) -> Callable[..., ReturnValue]:
     @wraps(fun)
     def wrapped(*args, **kwargs):
