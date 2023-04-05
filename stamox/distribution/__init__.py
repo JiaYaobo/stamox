@@ -1,17 +1,18 @@
-from stamox.distribution._t import pt, qt, rt, dt
-from stamox.distribution._normal import pnorm, qnorm, rnorm, dnorm
-from stamox.distribution._beta import pbeta, qbeta, rbeta, dbeta
-from stamox.distribution._gamma import pgamma, qgamma, rgamma, dgamma
-from stamox.distribution._uniform import runif, punif, qunif, dunif
-from stamox.distribution._chisq import pchisq, qchisq, rchisq, dchisq
-from stamox.distribution._pareto import ppareto, qpareto, rpareto, dpareto
-from stamox.distribution._f import pF, qF, dF, rF
-from stamox.distribution._cauchy import pcauchy, qcauchy, dcauchy, rcauchy
-from stamox.distribution._exp import pexp, qexp, dexp, rexp
-from stamox.distribution._laplace import plaplace, qlaplace, dlaplace, rlaplace
-from stamox.distribution._weibull import pweibull, qweibull, dweibull, rweibull
-from stamox.distribution._poisson import ppoisson, rpoisson, qpoisson, dpoisson
+from stamox.distribution._beta import dbeta, pbeta, qbeta, rbeta
+from stamox.distribution._cauchy import dcauchy, pcauchy, qcauchy, rcauchy
+from stamox.distribution._chisq import dchisq, pchisq, qchisq, rchisq
 from stamox.distribution._ecdf import ecdf, step_fun
+from stamox.distribution._exp import dexp, pexp, qexp, rexp
+from stamox.distribution._f import dF, pF, qF, rF
+from stamox.distribution._gamma import dgamma, pgamma, qgamma, rgamma
+from stamox.distribution._laplace import dlaplace, plaplace, qlaplace, rlaplace
+from stamox.distribution._normal import dnorm, pnorm, qnorm, rnorm
+from stamox.distribution._pareto import dpareto, ppareto, qpareto, rpareto
+from stamox.distribution._poisson import dpoisson, ppoisson, qpoisson, rpoisson
+from stamox.distribution._t import dt, pt, qt, rt
+from stamox.distribution._uniform import dunif, punif, qunif, runif
+from stamox.distribution._weibull import dweibull, pweibull, qweibull, rweibull
+
 
 __all__ = [
     "pt","qt", "rt", "dt",
