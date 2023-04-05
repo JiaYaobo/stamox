@@ -1,49 +1,94 @@
-import functools as ft
-
 import jax.numpy as jnp
-from jax import jit, lax, vmap
-from jax.scipy.special import gammaln
+from equinox import filter_jit, filter_vmap
+from jaxtyping import ArrayLike, Bool
+from tensorflow_probability.substrates.jax.distributions import Binomial as tfp_Binomial
+
+from ..core import make_partial_pipe
 
 
-def dbinomial(k, n, p):
-    k = jnp.asarray(k, dtype=jnp.int32)
-    k = jnp.atleast_1d(k)
-    n = int(n)
-    p = float(p)
-    dens = vmap(_dbinomial, in_axes=(0, None, None))(k, n, p)
-    return dens
+@filter_jit
+def _pbinom(q, size, prob) -> ArrayLike:
+    bino = tfp_Binomial(total_count=size, probs=prob)
+    return bino.cdf(q)
 
 
-@ft.partial(jit, static_argnames=('n', 'p'))
-def _dbinomial(k, n, p):
-    k = jnp.array(k, jnp.int32)
-    log_kfrac = gammaln(k + 1)
-    log_nfrac = gammaln(n + 1)
-    log_n_kfrac = gammaln(n-k + 1)
-    comb = jnp.exp(log_nfrac - log_kfrac - log_n_kfrac)
-    pp = jnp.power(p, k) * jnp.power(1-p, n-k) * comb
-    return pp
+@make_partial_pipe
+def pbinom(
+    q: ArrayLike,
+    size: ArrayLike,
+    prob: ArrayLike,
+    lower_tail: Bool = True,
+    log_prob: Bool = False,
+) -> ArrayLike:
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pbinom)(q, size, prob)
+    if not lower_tail:
+        p = 1 - p
+    if log_prob:
+        p = jnp.log(p)
+    return p
 
-@ft.partial(jit, static_argnames=('n', 'p', ))
-def _cumm_dbinomial(k ,n ,p):
-    def cond(carry):
-        i, k,  _ = carry
-        return i <= k
-    def body(carry):
-        i, k, ds0 = carry
-        ds1 = ds0 + dbinomial(i, n, p)
-        i = i + 1
-        carry = (i, k, ds1)
-        return carry
-    i = 0
-    init = (i,  k,  jnp.asarray([0.]))
-    out = lax.while_loop(cond, body, init)
-    return out[2] 
 
-def pbinomial(k ,n ,p):
-    k = jnp.asarray(k ,jnp.int32)
-    pp = vmap(_cumm_dbinomial, in_axes=(0, None, None))(k, n, p)
-    pp = lax.clamp(0., pp, 1.)
-    pp = jnp.squeeze(pp, axis=1)
-    return pp
+@filter_jit
+def _dbinom(q, size, prob) -> ArrayLike:
+    bino = tfp_Binomial(total_count=size, probs=prob)
+    return bino.prob(q)
 
+
+@make_partial_pipe
+def dbinom(
+    q: ArrayLike,
+    size: ArrayLike,
+    prob: ArrayLike,
+    lower_tail: Bool = True,
+    log_prob: Bool = False,
+) -> ArrayLike:
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_dbinom)(q, size, prob)
+    if not lower_tail:
+        p = 1 - p
+    if log_prob:
+        p = jnp.log(p)
+    return p
+
+@filter_jit
+def _qbinom(p, size, prob) -> ArrayLike:
+    bino = tfp_Binomial(total_count=size, probs=prob)
+    return bino.quantile(p)
+
+@make_partial_pipe
+def qbinom(
+    p: ArrayLike,
+    size: ArrayLike,
+    prob: ArrayLike,
+    lower_tail: Bool = True,
+    log_prob: Bool = False,
+) -> ArrayLike:
+    p = jnp.atleast_1d(p)
+    if not lower_tail:
+        p = 1 - p
+    if log_prob:
+        p = jnp.exp(p)
+    q = filter_vmap(_qbinom)(p, size, prob)
+    return q
+
+@filter_jit
+def _rbinom(key, n, prob, size) -> ArrayLike:
+    bino = tfp_Binomial(total_count=n, probs=prob)
+    return bino.sample(sample_shape=size, seed=key)
+
+@make_partial_pipe
+def rbinom(
+    key: ArrayLike,
+    n: ArrayLike,
+    prob: ArrayLike,
+    size: ArrayLike,
+    lower_tail: Bool = True,
+    log_prob: Bool = False,
+) -> ArrayLike:
+    rvs = filter_vmap(_rbinom)(key, n, prob, size)
+    if not lower_tail:
+        rvs = 1 - rvs
+    if log_prob:
+        rvs = jnp.log(rvs)
+    return rvs

@@ -7,9 +7,9 @@ from jax._src.random import Shape
 from jax.random import KeyArray
 from jax.scipy.special import gammainc, gammaln
 from jaxtyping import Array, ArrayLike, Bool, Float
+from tensorflow_probability.substrates.jax.distributions.poisson import Poisson
 
 from ..core import make_partial_pipe
-from ._normal import qnorm
 
 
 @filter_jit
@@ -20,7 +20,7 @@ def _ppoisson(x: Union[Float, ArrayLike], rate: Union[Float, ArrayLike]) -> Arra
 
 @make_partial_pipe
 def ppoisson(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     rate: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
@@ -28,16 +28,16 @@ def ppoisson(
     """Computes the cumulative distribution function of the Poisson distribution.
 
     Args:
-        x (Union[Float, ArrayLike]): The value at which to evaluate the CDF.
+        q (Union[Float, ArrayLike]): The value at which to evaluate the CDF.
         rate (Union[Float, ArrayLike]): The rate parameter of the Poisson distribution.
         lower_tail (bool, optional): Whether to compute the lower tail of the CDF. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        Array: The cumulative distribution function of the Poisson distribution evaluated at `x`.
+        Array: The cumulative distribution function of the Poisson distribution evaluated at `q`.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_ppoisson)(x, rate)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_ppoisson)(q, rate)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -90,8 +90,8 @@ def _rpoisson(
 @make_partial_pipe
 def rpoisson(
     key: KeyArray,
-    rate: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    rate: Union[Float, ArrayLike] = None,
     lower_tail=True,
     log_prob=False,
 ) -> Array:
@@ -107,43 +107,23 @@ def rpoisson(
     Returns:
         Array: Samples from the Poisson distribution.
     """
-    probs = _rpoisson(key, rate, sample_shape)
+    rvs = _rpoisson(key, rate, sample_shape=sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs
 
 
 @filter_jit
 def _qpoisson(q, rate):
     """
-    Computes the p-th quantile of a Poisson distribution with mean lambda_val using the
-    Cornish-Fisher expansion.
+    Computes the p-th quantile of a Poisson distribution with mean rate use approximate
     """
-    # Compute the z-score corresponding to the desired quantile
-    z = qnorm(q)
+    pass
 
-    # Compute the skewness and kurtosis of the Poisson distribution
-    skewness = jnp.sqrt(rate)
-    kurtosis = 1 / rate
 
-    # Compute the third and fourth standardized moments
-    standardized_third_moment = skewness**3
-    standardized_fourth_moment = 3 + 1 / rate
-
-    # Compute the adjusted z-score using the Cornish-Fisher expansion
-    adjusted_z = (
-        z
-        + (z**2 - 1) * skewness / 6
-        + (z**3 - 3 * z) * (kurtosis - standardized_fourth_moment) / 24
-        - (2 * z**3 - 5 * z) * standardized_third_moment**2 / 36
-    )
-
-    # Compute the approximate quantile using the adjusted z-score
-    quantile = rate + jnp.sqrt(rate) * adjusted_z
-
-    return jnp.round(quantile.squeeze())
+    
 
 
 @make_partial_pipe
@@ -152,7 +132,7 @@ def qpoisson(
     rate: Union[Float, ArrayLike],
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Computes the quantile function of the Poisson distribution.
 
     Args:
@@ -163,6 +143,7 @@ def qpoisson(
         Array: The quantile function of the Poisson distribution evaluated at `q`.
     """
     ImportWarning("qpoisson is not yet well tested.")
+    raise NotImplementedError("Not Implemented Yet!")
     q = jnp.atleast_1d(q)
     if not lower_tail:
         q = 1 - q

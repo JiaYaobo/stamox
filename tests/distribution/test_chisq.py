@@ -14,7 +14,7 @@ class ChisqTest(jtest.JaxTestCase):
         key = jrand.PRNGKey(19751002)
         sample_shape = (10000000, )
         df = 3.
-        ts = rchisq(key, df, sample_shape)
+        ts = rchisq(key, sample_shape, df)
         avg = ts.mean()
         var = ts.var(ddof=1)
         self.assertAllClose(avg, df, atol=1e-2)

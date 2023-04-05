@@ -1,6 +1,5 @@
 from typing import Callable, TypeVar
 
-import jax.numpy as jnp
 import jax.random as jrandom
 from equinox import filter_jit, filter_vmap
 from jaxtyping import ArrayLike, PyTree

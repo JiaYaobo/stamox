@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import KeyArray, Shape
-from jaxtyping import Array, ArrayLike, Float
+from jaxtyping import ArrayLike, Float
 
 from ..core import make_partial_pipe
 
@@ -14,32 +14,32 @@ def _pweibull(
     x: Union[Float, ArrayLike],
     concentration: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-) -> Array:
+):
     return 1 - jnp.exp(-((x / scale) ** concentration))
 
 
 @make_partial_pipe
 def pweibull(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     concentration: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-) -> Array:
+) -> ArrayLike:
     """Computes the cumulative distribution function of the Weibull distribution.
 
     Args:
-        x (Union[Float, ArrayLike]): The value at which to evaluate the CDF.
+        q (Union[Float, ArrayLike]): The value at which to evaluate the CDF.
         concentration (Union[Float, ArrayLike], optional): The concentration parameter of the Weibull distribution. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Weibull distribution. Defaults to 1.0.
         lower_tail (bool, optional): Whether to compute the lower tail of the CDF. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        Array: The cumulative distribution function of the Weibull distribution evaluated at `x`.
+        Array: The cumulative distribution function of the Weibull distribution evaluated at `q`.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_pweibull)(x, concentration, scale)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pweibull)(q, concentration, scale)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -51,7 +51,9 @@ _dweibull = filter_grad(filter_jit(_pweibull))
 
 
 @make_partial_pipe
-def dweibull(x, concentration=0.0, scale=1.0, lower_tail=True, log_prob=False):
+def dweibull(
+    x, concentration=0.0, scale=1.0, lower_tail=True, log_prob=False
+) -> ArrayLike:
     """Computes the probability density function of the Weibull distribution.
 
     Args:
@@ -78,23 +80,23 @@ def _qweibull(
     q: Union[Float, ArrayLike],
     concentration: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-) -> Array:
+) -> ArrayLike:
     x = jnp.float_power(-jnp.log(1 - q), 1 / concentration) * scale
     return x
 
 
 @make_partial_pipe
 def qweibull(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     concentration: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-) -> Array:
+) -> ArrayLike:
     """Computes the quantile function of the Weibull distribution.
 
     Args:
-        q (Union[Float, ArrayLike]): The quantiles to compute.
+        p (Union[Float, ArrayLike]): The quantiles to compute.
         concentration (Union[Float, ArrayLike], optional): The concentration parameter of the Weibull distribution. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Weibull distribution. Defaults to 1.0.
         lower_tail (bool, optional): Whether to compute the lower tail of the distribution. Defaults to True.
@@ -103,13 +105,13 @@ def qweibull(
     Returns:
         Array: The computed quantiles.
     """
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    x = filter_vmap(_qweibull)(q, concentration, scale)
-    return x
+        p = jnp.exp(p)
+    q = filter_vmap(_qweibull)(p, concentration, scale)
+    return q
 
 
 @filter_jit
@@ -125,28 +127,28 @@ def _rweibull(
 @make_partial_pipe
 def rweibull(
     key: KeyArray,
+    sample_shape: Optional[Shape] = None,
     concentration: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-    sample_shape: Optional[Shape] = None,
     lower_tail: bool = True,
     log_prob: bool = False,
-):
+) -> ArrayLike:
     """Generates samples from the Weibull distribution.
 
     Args:
         key (KeyArray): Random key used for generating random numbers.
+        sample_shape (Optional[Shape], optional): Shape of the output sample. Defaults to None.
         concentration (Union[Float, ArrayLike], optional): Concentration parameter of the Weibull distribution. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): Scale parameter of the Weibull distribution. Defaults to 1.0.
-        sample_shape (Optional[Shape], optional): Shape of the output sample. Defaults to None.
         lower_tail (bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        probs (float): Probability of the Weibull distribution.
+        rvs (float): Probability of the Weibull distribution.
     """
-    probs = _rweibull(key, concentration, scale, sample_shape)
+    rvs = _rweibull(key, concentration, scale, sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs

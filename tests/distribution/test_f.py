@@ -13,7 +13,7 @@ class FTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         dfn = 5.0
         dfd = 5.0
-        Fs = rF(key, dfn, dfd, sample_shape)
+        Fs = rF(key, sample_shape, dfn, dfd)
         avg = Fs.mean()
         self.assertAllClose(avg, dfd / (dfd - 2), atol=1e-2)
 

@@ -16,10 +16,7 @@ def fdtr(a, b, x):
 
 def fdtri(a, b, y):
     y = 1.0 - y
-    # Compute probability for x = 0.5.
     w = betainc(0.5 * b, 0.5 * a, 0.5)
-    # If that is greater than y, then the solution w < .5.
-    # Otherwise, solve at 1-y to remove cancellation in (b - b*w).
     cond0 = (w > y) | (y < 0.001)
     w = jnp.where(
         cond0,

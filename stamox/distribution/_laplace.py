@@ -22,7 +22,7 @@ def _plaplace(
 
 @make_partial_pipe
 def plaplace(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
@@ -31,17 +31,17 @@ def plaplace(
     """Calculates the Laplace cumulative density function.
 
     Args:
-        x (Union[Float, ArrayLike]): The value at which to evaluate the Plaplace PDF.
+        q (Union[Float, ArrayLike]): The value at which to evaluate the Plaplace PDF.
         loc (Union[Float, ArrayLike], optional): The location parameter of the Plaplace PDF. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Plaplace PDF. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail of the Plaplace PDF. Defaults to True.
         log_prob (Bool, optional): Whether to return the logarithm of the Plaplace PDF. Defaults to False.
 
     Returns:
-        Array: The Laplace CDF evaluated at `x`.
+        Array: The Laplace CDF evaluated at `q`.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_plaplace)(x, loc, scale)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_plaplace)(q, loc, scale)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -93,7 +93,7 @@ def _qlaplace(
 
 @make_partial_pipe
 def qlaplace(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
@@ -102,7 +102,7 @@ def qlaplace(
     """Computes the quantile of the Laplace distribution.
 
     Args:
-        q (Union[Float, ArrayLike]): Quantiles to compute.
+        p (Union[Float, ArrayLike]): Quantiles to compute.
         loc (Union[Float, ArrayLike], optional): Location parameter. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): Scale parameter. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to compute the lower tail. Defaults to True.
@@ -111,12 +111,12 @@ def qlaplace(
     Returns:
         Array: The quantiles of the Laplace distribution.
     """
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    return filter_vmap(_qlaplace)(q, loc, scale)
+        p = jnp.exp(p)
+    return filter_vmap(_qlaplace)(p, loc, scale)
 
 
 @filter_jit
@@ -136,9 +136,9 @@ def _rlaplace(
 @make_partial_pipe
 def rlaplace(
     key: KeyArray,
+    sample_shape: Optional[Shape] = None,
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-    sample_shape: Optional[Shape] = None,
     lower_tail: Bool = True,
     log_prob: Bool = False,
 ) -> Array:
@@ -155,9 +155,9 @@ def rlaplace(
     Returns:
         Array: An array containing the random Laplace samples.
     """
-    probs = _rlaplace(key, loc, scale, sample_shape)
+    rvs = _rlaplace(key, loc, scale, sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs

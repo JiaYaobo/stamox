@@ -29,17 +29,17 @@ def _pt(
 
 @make_partial_pipe(name='pt')
 def pt(
-    x,
+    q: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-):
+) -> ArrayLike:
     """Calculates the probability of a given value for Student T distribution.
 
     Args:
-        x: The value to calculate the probability of.
+        q: The value to calculate the probability of.
         df: The degrees of freedom of the distribution.
         loc: The location parameter of the distribution.
         scale: The scale parameter of the distribution.
@@ -49,8 +49,8 @@ def pt(
     Returns:
         The probability of the given value for Student T distribution.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_pt)(x, df, loc, scale)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pt)(q, df, loc, scale)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -70,7 +70,7 @@ def dt(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-):
+) -> ArrayLike:
     """Calculates the probability density function of a Student's t-distribution.
 
     Args:
@@ -109,17 +109,17 @@ def _qt(
 
 @make_partial_pipe(name='qt')
 def qt(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-):
+) -> ArrayLike:
     """Calculates the quantile of Student T distribution.
 
     Args:
-        q: A float or array-like object representing the quantile to be calculated.
+        p: A float or array-like object representing the quantile to be calculated.
         df: An int, float, or array-like object representing the degrees of freedom.
         loc: An optional float or array-like object representing the location parameter. Defaults to 0.0.
         scale: An optional float or array-like object representing the scale parameter. Defaults to 1.0.
@@ -129,12 +129,12 @@ def qt(
     Returns:
         The quantile of the Student T distribution.
     """
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    q = filter_vmap(_qt)(q, df, loc, scale)
+        p = jnp.exp(p)
+    q = filter_vmap(_qt)(p, df, loc, scale)
     return q
 
 
@@ -155,28 +155,28 @@ def _rt(
 @make_partial_pipe(name='rt')
 def rt(
     key: KeyArray,
-    df: Union[Int, Float, ArrayLike],
+    sample_shape: Optional[Shape] = None,
+    df: Union[Int, Float, ArrayLike] = None,
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-    sample_shape: Optional[Shape] = None,
     lower_tail = True,
     log_prob = False,
-):
+) -> ArrayLike:
     """Generates random numbers from a t-distribution.
 
     Args:
         key: Type of the random number generator.
+        sample_shape: Shape of the output array.
         df: Degrees of freedom.
         loc: Location parameter.
         scale: Scale parameter.
-        sample_shape: Shape of the output array.
 
     Returns:
         Random numbers from a t-distribution.
     """
-    probs = _rt(key, df, loc, scale, sample_shape)
+    rvs = _rt(key, df, loc, scale, sample_shape)
     if not lower_tail:
-        probs =  1 - probs
+        rvs =  1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs

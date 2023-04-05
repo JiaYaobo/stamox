@@ -5,7 +5,7 @@ import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import Shape
 from jax.random import KeyArray
-from jaxtyping import Array, ArrayLike, Bool, Float
+from jaxtyping import ArrayLike, Bool, Float
 
 from ..core import make_partial_pipe
 
@@ -15,23 +15,23 @@ def _pcauchy(
     x: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-) -> Array:
+) -> ArrayLike:
     scaled = (x - loc) / scale
     return jnp.arctan(scaled) / jnp.pi + 0.5
 
 
 @make_partial_pipe
 def pcauchy(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Calculates the cumulative denisty probability c function of the Cauchy distribution.
 
     Args:
-        x (Union[Float, ArrayLike]): The value at which to evaluate the PDF.
+        q (Union[Float, ArrayLike]): The value at which to evaluate the PDF.
         loc (Union[Float, ArrayLike], optional): The location parameter of the Cauchy distribution. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Cauchy distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail probability. Defaults to True.
@@ -40,8 +40,8 @@ def pcauchy(
     Returns:
         Array: The cumulative density function of the Cauchy distribution.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_pcauchy)(x, loc, scale)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pcauchy)(q, loc, scale)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -59,7 +59,7 @@ def dcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Computes the pdf of the Cauchy distribution.
 
     Args:
@@ -97,7 +97,7 @@ def qcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Computes the quantile of the Cauchy distribution.
 
     Args:
@@ -134,19 +134,19 @@ def _rcauchy(
 @make_partial_pipe
 def rcauchy(
     key: KeyArray,
+    sample_shape: Optional[Shape] = None,
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-    sample_shape: Optional[Shape] = None,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Generates random samples from the Cauchy distribution.
 
     Args:
         key: A PRNGKey to use for generating the samples.
+        sample_shape: The shape of the output array.
         loc: The location parameter of the Cauchy distribution.
         scale: The scale parameter of the Cauchy distribution.
-        sample_shape: The shape of the output array.
         lower_tail: Whether to return the lower tail probability.
         log_prob: Whether to return the log probability.
 

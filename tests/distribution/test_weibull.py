@@ -13,7 +13,7 @@ class WeiBullTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         a = 1.0
         b = 1.0
-        ts = rweibull(key, a, b, sample_shape)
+        ts = rweibull(key, sample_shape, a, b)
         avg = ts.mean()
         var = ts.var(ddof=1)
         self.assertAllClose(avg, 1.0, atol=1e-2)

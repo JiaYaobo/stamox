@@ -13,7 +13,7 @@ class BetaTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         a = 2.0
         b = 2.0
-        ts = rbeta(key, a, b, sample_shape)
+        ts = rbeta(key,sample_shape, a, b)
         avg = ts.mean()
         var = ts.var(ddof=1)
         self.assertAllClose(avg, a / (a + b), atol=1e-2)

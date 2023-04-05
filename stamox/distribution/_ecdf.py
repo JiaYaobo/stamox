@@ -1,5 +1,8 @@
+from typing import Callable
+
 import jax.numpy as jnp
 from jax import jit
+from jaxtyping import ArrayLike
 
 from ..core import make_partial_pipe
 
@@ -40,8 +43,8 @@ def step_fun(x, y, ival=0.0, sorted=False, side="left"):
     return _call
 
 
-@make_partial_pipe
-def ecdf(x, side="right"):
+@make_partial_pipe(name="ecdf")
+def ecdf(x: ArrayLike, side="right") -> Callable[..., ArrayLike]:
     """Calculates the empirical cumulative distribution function (ECDF) of a given array.
 
     Args:

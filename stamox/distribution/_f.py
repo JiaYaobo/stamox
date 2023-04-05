@@ -21,7 +21,7 @@ def _pf(
 
 @make_partial_pipe
 def pF(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
     lower_tail=True,
@@ -30,17 +30,17 @@ def pF(
     """Calculates the cumulative distribution function of the F-distribution.
 
     Args:
-        x (Union[Float, ArrayLike]): The value at which to evaluate the cdf.
+        q (Union[Float, ArrayLike]): The value at which to evaluate the cdf.
         dfn (Union[Float, ArrayLike]): The numerator degrees of freedom.
         dfd (Union[Float, ArrayLike]): The denominator degrees of freedom.
         lower_tail (bool, optional): If True (default), the lower tail probability is returned.
         log_prob (bool, optional): If True, the logarithm of the probability is returned.
 
     Returns:
-        float or array_like: The cumulative distribution function evaluated at `x`.
+        float or array_like: The cumulative distribution function evaluated at `q`.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_pf)(x, dfn, dfd)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pf)(q, dfn, dfd)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -91,7 +91,7 @@ def _qf(
 
 @make_partial_pipe
 def qF(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
     lower_tail=True,
@@ -100,7 +100,7 @@ def qF(
     """Calculates the quantile function of a given distribution.
 
     Args:
-        q (Union[Float, ArrayLike]): The quantile to calculate.
+        p (Union[Float, ArrayLike]): The quantile to calculate.
         dfn (Union[Float, ArrayLike]): The degrees of freedom for the numerator.
         dfd (Union[Float, ArrayLike]): The degrees of freedom for the denominator.
         lower_tail (bool, optional): Whether to calculate the lower tail or not. Defaults to True.
@@ -109,12 +109,12 @@ def qF(
     Returns:
         Array: The calculated quantile.
     """
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    return filter_vmap(_qf)(q, dfn, dfd)
+        p = jnp.exp(p)
+    return filter_vmap(_qf)(p, dfn, dfd)
 
 
 @filter_jit
@@ -134,9 +134,9 @@ def _rf(
 @make_partial_pipe
 def rF(
     key: KeyArray,
-    dfn: Union[Float, ArrayLike],
-    dfd: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    dfn: Union[Float, ArrayLike] = None,
+    dfd: Union[Float, ArrayLike] = None,
     lower_tail=True,
     log_prob=False,
 ):
@@ -144,18 +144,18 @@ def rF(
 
     Args:
         key (KeyArray): Random key used for PRNG.
+        sample_shape (Optional[Shape], optional): Shape of the samples to be drawn. Defaults to None.
         dfn (Union[Float, ArrayLike]): Degrees of freedom in numerator.
         dfd (Union[Float, ArrayLike]): Degrees of freedom in denominator.
-        sample_shape (Optional[Shape], optional): Shape of the samples to be drawn. Defaults to None.
         lower_tail (bool, optional): Whether to calculate the lower tail probability. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
         probs (float or array): Probability of the random variable following a F-distribution.
     """
-    probs = _rf(key, dfn, dfd, sample_shape)
+    rvs = _rf(key, dfn, dfd, sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs

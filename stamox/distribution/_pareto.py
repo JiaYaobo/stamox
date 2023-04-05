@@ -21,7 +21,7 @@ def _ppareto(
 
 @make_partial_pipe
 def ppareto(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     scale: Union[Float, ArrayLike],
     alpha: Union[Float, ArrayLike],
     lower_tail=True,
@@ -30,17 +30,17 @@ def ppareto(
     """Computes the cumulative distribution function of the Pareto distribution.
 
     Args:
-        x (Union[Float, ArrayLike]): The value at which to evaluate the CDF.
+        q (Union[Float, ArrayLike]): The value at which to evaluate the CDF.
         scale (Union[Float, ArrayLike]): The scale parameter of the Pareto distribution.
         alpha (Union[Float, ArrayLike]): The shape parameter of the Pareto distribution.
         lower_tail (bool, optional): Whether to compute the lower tail of the CDF. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        Array: The cumulative distribution function of the Pareto distribution evaluated at `x`.
+        Array: The cumulative distribution function of the Pareto distribution evaluated at `q`.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_ppareto)(x, scale, alpha)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_ppareto)(q, scale, alpha)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -91,7 +91,7 @@ def _qpareto(
 
 @make_partial_pipe
 def qpareto(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     scale: Union[Float, ArrayLike],
     alpha: Union[Float, ArrayLike],
     lower_tail: Bool = True,
@@ -100,7 +100,7 @@ def qpareto(
     """Computes the quantile function of the Pareto distribution.
 
     Args:
-        q (Union[Float, ArrayLike]): Quantiles to compute.
+        p (Union[Float, ArrayLike]): Quantiles to compute.
         scale (Union[Float, ArrayLike]): Scale parameter of the Pareto distribution.
         alpha (Union[Float, ArrayLike]): Shape parameter of the Pareto distribution.
         lower_tail (Bool, optional): Whether to compute the lower tail probability. Defaults to True.
@@ -110,12 +110,12 @@ def qpareto(
         Array: The quantiles of the Pareto distribution.
     """
 
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    return filter_vmap(_qpareto)(q, scale, alpha)
+        p = jnp.exp(p)
+    return filter_vmap(_qpareto)(p, scale, alpha)
 
 
 @filter_jit
@@ -135,9 +135,9 @@ def _rpareto(
 @make_partial_pipe
 def rpareto(
     key: KeyArray,
-    scale: Union[Float, ArrayLike],
-    alpha: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    scale: Union[Float, ArrayLike] = None,
+    alpha: Union[Float, ArrayLike] = None,
     lower_tail: Bool = True,
     log_prob: Bool = False,
 ) -> Array:
@@ -145,18 +145,18 @@ def rpareto(
 
     Args:
         key (KeyArray): A random number generator key.
+        sample_shape (Optional[Shape], optional): The shape of the samples to be drawn. Defaults to None.
         scale (Union[Float, ArrayLike]): The scale parameter of the Pareto distribution.
         alpha (Union[Float, ArrayLike]): The shape parameter of the Pareto distribution.
-        sample_shape (Optional[Shape], optional): The shape of the samples to be drawn. Defaults to None.
         lower_tail (Bool, optional): Whether to calculate the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
         Array: random variable following a Pareto distribution.
     """
-    probs = _rpareto(key, scale, alpha, sample_shape)
+    rvs = _rpareto(key, scale, alpha, sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs

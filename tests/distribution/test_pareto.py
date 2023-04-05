@@ -13,7 +13,7 @@ class ParetoTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         scale = 0.1
         alpha = 3.0
-        ts = rpareto(key, scale, alpha, sample_shape)
+        ts = rpareto(key, sample_shape, scale, alpha)
         avg = ts.mean()
         var = ts.var(ddof=1)
         self.assertAllClose(avg, alpha * scale / (alpha - 1), atol=1e-2)

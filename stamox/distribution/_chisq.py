@@ -42,7 +42,7 @@ def dchisq(
 
 @make_partial_pipe
 def pchisq(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
@@ -50,7 +50,7 @@ def pchisq(
     """Calculates the chi-squared probability density function.
 
     Args:
-        x: A float or array-like object representing the value of the chi-squared
+        q: A float or array-like object representing the value of the chi-squared
         variable.
         df: An int, float, or array-like object representing the degrees of freedom.
         lower_tail: A boolean indicating whether to calculate the lower tail (default
@@ -61,8 +61,8 @@ def pchisq(
     Returns:
         The chi-squared probability density function.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_pgamma)(x, df / 2, 1 / 2)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pgamma)(q, df / 2, 1 / 2)
     if not lower_tail:
         p = 1.0 - p
     if log_prob:
@@ -72,7 +72,7 @@ def pchisq(
 
 @make_partial_pipe
 def qchisq(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
@@ -80,7 +80,7 @@ def qchisq(
     """Computes the quantile of the chi-squared distribution.
 
     Args:
-      q: A float or array-like object representing the quantile.
+      p: A float or array-like object representing the quantile.
       df: An int, float, or array-like object representing the degrees of freedom.
       lower_tail: A boolean indicating whether to compute the lower tail (defaults to True).
       log_prob: A boolean indicating whether to compute the log probability (defaults to False).
@@ -88,13 +88,13 @@ def qchisq(
     Returns:
       The quantile of the chi-squared distribution.
     """
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    x = filter_vmap(_qgamma)(q, df / 2, 1 / 2)
-    return x
+        p = jnp.exp(p)
+    q = filter_vmap(_qgamma)(p, df / 2, 1 / 2)
+    return q
 
 
 @filter_jit
@@ -112,8 +112,8 @@ def _rchisq(
 @make_partial_pipe
 def rchisq(
     key: KeyArray,
-    df: Union[Int, Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    df: Union[Int, Float, ArrayLike] = None,
     lower_tail=True,
     log_prob=False,
 ):
@@ -121,17 +121,17 @@ def rchisq(
 
     Args:
       key: A KeyArray object.
-      df: An integer, float, or array-like object.
       sample_shape: An optional shape for the sample.
+      df: An integer, float, or array-like object.
       lower_tail: A boolean indicating whether to use the lower tail of the distribution.
       log_prob: A boolean indicating whether to return the log probability.
 
     Returns:
-      rv: The random chisquare-distribution numbers.
+      rvs: The random chisquare-distribution numbers.
     """
-    rv = _rchisq(key, df, sample_shape)
+    rvs = _rchisq(key, df, sample_shape)
     if not lower_tail:
-        rv = 1 - rv
+        rvs = 1 - rvs
     if log_prob:
-        rv = jnp.log(rv)
-    return rv
+        rvs = jnp.log(rvs)
+    return rvs

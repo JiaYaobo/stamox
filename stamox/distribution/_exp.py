@@ -16,9 +16,9 @@ def _pexp(x: Union[float, ArrayLike], rate: float) -> Float:
 
 @make_partial_pipe(name="pexp")
 def pexp(
-    x: Union[float, ArrayLike], rate: float, lower_tail=True, log_prob=False
+    q: Union[float, ArrayLike], rate: float, lower_tail=True, log_prob=False
 ) -> Float:
-    p = filter_vmap(_pexp)(x, rate)
+    p = filter_vmap(_pexp)(q, rate)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -33,17 +33,17 @@ def _qexp(q: Union[float, ArrayLike], rate: float) -> Float:
 
 @make_partial_pipe
 def qexp(
-    q: Union[float, ArrayLike],
+    p: Union[float, ArrayLike],
     rate: Union[float, ArrayLike],
     lower_tail=True,
     log_prob=False,
 ):
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    x = filter_vmap(_qexp)(q, rate)
+        p = jnp.exp(p)
+    x = filter_vmap(_qexp)(p, rate)
     return x
 
 
@@ -76,14 +76,14 @@ def _rexp(
 @make_partial_pipe
 def rexp(
     key: KeyArray,
-    rate: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    rate: Union[Float, ArrayLike] = None,
     lower_tail=True,
     log_prob=False,
 ):
-    sample = _rexp(key, rate, sample_shape)
+    rvs = _rexp(key, rate, sample_shape)
     if not lower_tail:
-        sample = 1 - sample
+        rvs = 1 - rvs
     if log_prob:
-        sample = jnp.log(sample)
-    return sample
+        rvs = jnp.log(rvs)
+    return rvs

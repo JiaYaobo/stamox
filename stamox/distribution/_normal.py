@@ -23,7 +23,7 @@ def _pnorm(
 
 @make_partial_pipe
 def pnorm(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
@@ -32,7 +32,7 @@ def pnorm(
     """Calculate the cumulative distribution function (CDF) of the normal distribution.
 
     Args:
-        x (Union[Float, ArrayLike]): The quantiles to calculate the CDF at.
+        q (Union[Float, ArrayLike]): The quantiles to calculate the CDF at.
         mean (Union[Float, ArrayLike], optional): The mean of the normal distribution. Defaults to 0.0.
         sd (Union[Float, ArrayLike], optional): The standard deviation of the normal distribution.
             Defaults to 1.0.
@@ -56,10 +56,8 @@ def pnorm(
         >>> pnorm([1.5, 2.0, 2.5], mean=2.0, sd=0.5, log_prob=True)
         DeviceArray([-1.177404  , -3.7859507 , -6.5995502 ], dtype=float32)
     """
-    x = jnp.atleast_1d(x)
-    mean = jnp.asarray(mean)
-    sd = jnp.asarray(sd)
-    p = filter_vmap(_pnorm)(x, mean, sd)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pnorm)(q, mean, sd)
     if not lower_tail:
         p = 1.0 - p
     if log_prob:
@@ -108,17 +106,17 @@ def dnorm(
 
 @filter_jit
 def _qnorm(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
 ):
-    x = ndtri(q)
+    x = ndtri(p)
     return x * sd + mean
 
 
 @make_partial_pipe
 def qnorm(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
@@ -128,7 +126,7 @@ def qnorm(
     Calculates the quantile function of the normal distribution for a given probability.
 
     Args:
-        q (float or jnp.ndarray): Probability values.
+        p (float or jnp.ndarray): Probability values.
         mean (float or jnp.ndarray, optional): Mean of the normal distribution. Default is 0.0.
         sd (float or jnp.ndarray, optional): Standard deviation of the normal distribution. Default is 1.0.
         lower_tail (bool, optional): If `True`, returns P(X ≤ x). If `False`, returns P(X > x). Default is `True`.
@@ -146,14 +144,12 @@ def qnorm(
         >>> qnorm([0.25, 0.75], mean=3, sd=2)
         array([1.4867225, 4.5132775])
     """
-    q = jnp.atleast_1d(q)
-    mean = jnp.asarray(mean)
-    sd = jnp.asarray(sd)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    x = filter_vmap(_qnorm)(q, mean, sd)
+        p = jnp.exp(p)
+    x = filter_vmap(_qnorm)(p, mean, sd)
     return x
 
 
@@ -169,9 +165,9 @@ def _rnorm(key, mean, sd, sample_shape):
 @make_partial_pipe
 def rnorm(
     key: KeyArray,
+    sample_shape: Optional[Shape] = None,
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
-    sample_shape: Optional[Shape] = None,
     lower_tail: Bool = True,
     log_prob: Bool = False,
 ) -> Array:
@@ -179,21 +175,19 @@ def rnorm(
 
     Args:
         key: A KeyArray object used to generate the random numbers.
-        mean: The mean of the normal distribution. Defaults to 0.0.
-        sd: The standard deviation of the normal distribution. Defaults to 1.0.
         sample_shape: An optional tuple of integers specifying the shape of the
         output array. Defaults to an empty tuple.
+        mean: The mean of the normal distribution. Defaults to 0.0.
+        sd: The standard deviation of the normal distribution. Defaults to 1.0.
 
     Returns:
         A NumPy array containing random numbers from a normal distribution.
     """
-    mean = jnp.asarray(mean)
-    sd = jnp.asarray(sd)
-    probs = _rnorm(key, mean, sd, sample_shape)
+    rvs = _rnorm(key, mean, sd, sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
 
     if log_prob:
-        probs = jnp.log(probs)
+        rvs = jnp.log(rvs)
 
-    return probs
+    return rvs

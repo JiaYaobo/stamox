@@ -13,7 +13,7 @@ class GammaTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         shape = 2.0
         rate = 2.0
-        gammas = rgamma(key, shape, rate, sample_shape)
+        gammas = rgamma(key, sample_shape, shape, rate)
         avg = gammas.mean()
         var = gammas.var(ddof=1)
         self.assertAllClose(avg, shape / rate, atol=1e-2)
@@ -42,7 +42,7 @@ class GammaTest(jtest.JaxTestCase):
         grads = dgamma(x, shape, rate)
         true_grads = np.array([0.3274923, 0.5362560, 0.6585740, 0.7189263, 0.7357589])
         self.assertArraysAllClose(grads, true_grads)
-    
+
     def test_partial_pgamma(self):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         shape = 2.0
@@ -50,7 +50,7 @@ class GammaTest(jtest.JaxTestCase):
         p = pgamma(shape=shape, rate=rate)(x)
         true_p = np.array([0.01752310, 0.06155194, 0.12190138, 0.19120786, 0.26424112])
         self.assertArraysAllClose(p, true_p)
-    
+
     def test_partial_qgamma(self):
         q = np.array([0.01752310, 0.06155194, 0.12190138, 0.19120786, 0.26424112])
         shape = 2.0
@@ -58,7 +58,7 @@ class GammaTest(jtest.JaxTestCase):
         x = qgamma(shape=shape, rate=rate)(q)
         true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
-    
+
     def test_partial_dgamma(self):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         shape = 2.0
@@ -66,7 +66,7 @@ class GammaTest(jtest.JaxTestCase):
         grads = dgamma(shape=shape, rate=rate)(x)
         true_grads = np.array([0.3274923, 0.5362560, 0.6585740, 0.7189263, 0.7357589])
         self.assertArraysAllClose(grads, true_grads)
-    
+
     def test_partial_rgamma(self):
         key = jrand.PRNGKey(19751002)
         sample_shape = (1000000,)

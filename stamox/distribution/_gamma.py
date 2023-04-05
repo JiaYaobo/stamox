@@ -13,24 +13,24 @@ from ..core import make_partial_pipe
 
 @filter_jit
 def _pgamma(
-    x, shape: Union[Float, ArrayLike] = 1.0, rate: Union[Float, ArrayLike] = 1.0
+    q, shape: Union[Float, ArrayLike] = 1.0, rate: Union[Float, ArrayLike] = 1.0
 ):
-    """Computes the gamma function for a given x, shape, and rate.
+    """Computes the gamma function for a given q, shape, and rate.
 
     Args:
-        x: A float or array-like object representing the input to the gamma function.
+        q: A float or array-like object representing the input to the gamma function.
         shape: A float or array-like object representing the shape parameter of the gamma function.
         rate: A float or array-like object representing the rate parameter of the gamma function.
 
     Returns:
         The result of the gamma function for the given inputs.
     """
-    return gammainc(shape, x * rate)
+    return gammainc(shape, q * rate)
 
 
 @make_partial_pipe
 def pgamma(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
@@ -39,7 +39,7 @@ def pgamma(
     """Computes the probability density function of the gamma distribution.
 
     Args:
-        x: A float or array-like object representing the input to the gamma function.
+        q: A float or array-like object representing the input to the gamma function.
         shape: A float or array-like object representing the shape parameter of the gamma function.
         rate: A float or array-like object representing the rate parameter of the gamma function.
         lower_tail: A boolean indicating whether to compute the lower tail of the gamma function.
@@ -48,8 +48,8 @@ def pgamma(
     Returns:
         The probability density function of the gamma distribution for the given inputs.
     """
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_pgamma)(x, shape, rate)
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pgamma)(q, shape, rate)
     if not lower_tail:
         p = 1.0 - p
     if log_prob:
@@ -106,7 +106,7 @@ def _qgamma(
 
 @make_partial_pipe
 def qgamma(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
@@ -115,7 +115,7 @@ def qgamma(
     """Computes the quantile of the gamma distribution.
 
     Args:
-        q: A float or array-like object representing the quantile.
+        p: A float or array-like object representing the quantile.
         shape: A float or array-like object representing the shape parameter of the gamma distribution.
         rate: A float or array-like object representing the rate parameter of the gamma distribution.
         lower_tail: A boolean indicating whether to compute the lower tail (default) or upper tail.
@@ -124,21 +124,21 @@ def qgamma(
     Returns:
         The quantile of the gamma distribution.
     """
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    x = filter_vmap(_qgamma)(q, shape, rate)
+        p = jnp.exp(p)
+    x = filter_vmap(_qgamma)(p, shape, rate)
     return x
 
 
 @make_partial_pipe
 def rgamma(
     key,
+    sample_shape: Optional[Shape] = None,
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
-    sample_shape: Optional[Shape] = None,
     lower_tail=True,
     log_prob=False,
 ):
@@ -146,9 +146,9 @@ def rgamma(
 
     Args:
         key: A PRNGKey to use for the random number generation.
+        sample_shape: An optional shape for the output array.
         shape: The shape parameter of the gamma distribution.
         rate: The rate parameter of the gamma distribution.
-        sample_shape: An optional shape for the output array.
         lower_tail: Whether to return the lower tail of the distribution.
         log_prob: Whether to return the log probability of the result.
 

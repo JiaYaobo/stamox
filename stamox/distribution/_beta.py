@@ -20,14 +20,26 @@ def _pbeta(
 
 @make_partial_pipe
 def pbeta(
-    x: Union[Float, ArrayLike],
+    q: Union[Float, ArrayLike],
     a: Union[Float, ArrayLike],
     b: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
 ):
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_pbeta)(x, a, b)
+    """Computes the cumulative distribution function of the beta distribution.
+
+    Args:
+        q (Union[Float, ArrayLike]): Quantiles.
+        a (Union[Float, ArrayLike]): Shape parameter.
+        b (Union[Float, ArrayLike]): Shape parameter.
+        lower_tail (bool, optional): If True (default), probabilities are P[X ≤ x], otherwise, P[X > x].
+        log_prob (bool, optional): If True, probabilities are given as log(P).
+
+    Returns:
+        float or ndarray: The probability or log of the probability for each quantile.
+    """
+    q = jnp.atleast_1d(q)
+    p = filter_vmap(_pbeta)(q, a, b)
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -45,7 +57,7 @@ def dbeta(
     b: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-):
+) -> ArrayLike:
     """Calculates the probability density function of the beta distribution.
 
     Args:
@@ -69,23 +81,23 @@ def dbeta(
 
 @filter_jit
 def _qbeta(
-    q: Union[Float, ArrayLike], a: Union[Float, ArrayLike], b: Union[Float, ArrayLike]
+    p: Union[Float, ArrayLike], a: Union[Float, ArrayLike], b: Union[Float, ArrayLike]
 ):
-    return tfp_special.betaincinv(a, b, q)
+    return tfp_special.betaincinv(a, b, p)
 
 
 @make_partial_pipe
 def qbeta(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     a: Union[Float, ArrayLike],
     b: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-):
-    """Computes the beta distribution function.
+) -> ArrayLike:
+    """Computes the quantile of beta distribution function.
 
     Args:
-      q: A float or array-like object representing the quantile.
+      p: A float or array-like object representing the quantile.
       a: A float or array-like object representing the alpha parameter.
       b: A float or array-like object representing the beta parameter.
       lower_tail: A boolean indicating whether to compute the lower tail of the
@@ -96,31 +108,31 @@ def qbeta(
     Returns:
       The value of the beta distribution at the given quantile.
     """
-    q = jnp.atleast_1d(q)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    x = filter_vmap(_qbeta)(q, a, b)
+        p = jnp.exp(p)
+    x = filter_vmap(_qbeta)(p, a, b)
     return x
 
 
 @make_partial_pipe
 def rbeta(
     key: KeyArray,
-    a: Union[Float, ArrayLike],
-    b: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    a: Union[Float, ArrayLike] = None,
+    b: Union[Float, ArrayLike] = None,
     lower_tail=True,
     log_prob=False,
-):
+) -> ArrayLike:
     """Generates random numbers from the Beta distribution.
 
     Args:
         key: A PRNGKey used for random number generation.
+        sample_shape: An optional shape for the output samples.
         a: The shape parameter of the Beta distribution. Can be either a float or an array-like object.
         b: The scale parameter of the Beta distribution. Can be either a float or an array-like object.
-        sample_shape: An optional shape for the output samples.
         lower_tail: Whether to return the lower tail probability (defaults to True).
         log_prob: Whether to return the log probability (defaults to False).
 
@@ -141,7 +153,7 @@ def _rbeta(
     a: Union[Float, ArrayLike],
     b: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
-):
+) -> ArrayLike:
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(a), jnp.shape(b))
     a = jnp.broadcast_to(a, sample_shape)
