@@ -14,6 +14,7 @@ from stamox import (
     math,
     regression,
     sample,
+    transformation,
 )
 
 
@@ -26,6 +27,7 @@ _check_py_version()
 
 
 __all__ = [
+    "anova",
     "basic",
     "cluster",
     "core",
@@ -36,5 +38,5 @@ __all__ = [
     "math",
     "regression",
     "sample",
-    "anova",
+    "transformation",
 ]

@@ -5,7 +5,7 @@ from .core import make_partial_pipe
 
 
 mean = make_partial_pipe(jnp.mean, name="mean")
-std = make_partial_pipe(jnp.std, name="std")
+sd = make_partial_pipe(jnp.std, name="sd")
 var = make_partial_pipe(jnp.var, name="var")
 median = make_partial_pipe(jnp.median, name="median")
 
@@ -14,7 +14,7 @@ median = make_partial_pipe(jnp.median, name="median")
 def scale(x, axis=0):
     # calculate standardized x along axis
     _mean = mean(x, axis=axis)
-    _std = std(x, axis=axis, ddof=1)
+    _std = sd(x, axis=axis, ddof=1)
     _scaled = vmap(lambda a, b, c: (a - b) / c, in_axes=(axis, None, None))(
         x, _mean, _std
     )

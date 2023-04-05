@@ -1,8 +1,14 @@
 import jax.numpy as jnp
+from jax import lax
+from jaxtyping import ArrayLike
+
+from .core import partial_pipe_jit
 
 
-def z_fisher(r=None, z=None):
-    if z is None:
-        return  jnp.arctanh(r)
-    else:
-        return jnp.tanh(z)
+@partial_pipe_jit
+def boxcox(x: ArrayLike, lmbda: ArrayLike) -> ArrayLike:
+    return lax.select(lmbda == 0, jnp.log(x), (x ** lmbda - 1) / lmbda)
+
+
+
+
