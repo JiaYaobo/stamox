@@ -146,7 +146,7 @@ class Pipeable(Functional):
             value (Any): The value to be piped.
         """
         # make weakref for large scale data
-        self.value = args
+        self.value = tuple(args) if len(args) > 1 else args[0]
 
     def __call__(self, *args, **kwargs):
         """Pipe the value through the function.
