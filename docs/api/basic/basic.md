@@ -1,0 +1,4 @@
+# Basic Functions
+
+::: stamox.basic
+        
