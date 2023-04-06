@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import KeyArray, Shape
-from jaxtyping import Array, ArrayLike, Bool, Float
+from jaxtyping import ArrayLike, Bool, Float
 
 from ..core import make_partial_pipe
 
@@ -12,9 +12,9 @@ from ..core import make_partial_pipe
 @filter_jit
 def _punif(
     x: Union[Float, ArrayLike],
-    mini: Union[Float, Array] = 0.0,
-    maxi: Union[Float, Array] = 1.0,
-) -> Array:
+    mini: Union[Float, ArrayLike] = 0.0,
+    maxi: Union[Float, ArrayLike] = 1.0,
+):
     p = (x - mini) / (maxi - mini)
     p = jnp.clip(p, a_min=mini, a_max=maxi)
     return p
@@ -23,11 +23,11 @@ def _punif(
 @make_partial_pipe
 def punif(
     q: Union[Float, ArrayLike],
-    mini: Union[Float, Array] = 0.0,
-    maxi: Union[Float, Array] = 1.0,
+    mini: Union[Float, ArrayLike] = 0.0,
+    maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Computes the cumulative distribution function of the uniform distribution.
 
     Args:
@@ -38,7 +38,11 @@ def punif(
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        Array: The cumulative distribution function of the uniform distribution evaluated at `q`.
+        ArrayLike: The cumulative distribution function of the uniform distribution evaluated at `q`.
+
+    Example:
+        >>> punif(0.5)
+        Array([0.5], dtype=float32, weak_type=True)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_punif)(q, mini, maxi)
@@ -55,11 +59,11 @@ _dunif = filter_grad(filter_jit(_punif))
 @make_partial_pipe
 def dunif(
     x: Union[Float, ArrayLike],
-    mini: Union[Float, Array] = 0.0,
-    maxi: Union[Float, Array] = 1.0,
+    mini: Union[Float, ArrayLike] = 0.0,
+    maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-):
+) -> ArrayLike:
     """Calculates the probability density function of a uniform distribution.
 
     Args:
@@ -70,7 +74,11 @@ def dunif(
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        float or ndarray: The probability density of the given value(s).
+        ArrayLike: The probability density of the given value(s).
+
+    Example:
+        >>> dunif(0.5)
+        Array([1.], dtype=float32, weak_type=True)
     """
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dunif)(x, mini, maxi)
@@ -84,8 +92,8 @@ def dunif(
 @filter_jit
 def _qunif(
     q: Union[Float, ArrayLike],
-    mini: Union[Float, Array] = 0.0,
-    maxi: Union[Float, Array] = 1.0,
+    mini: Union[Float, ArrayLike] = 0.0,
+    maxi: Union[Float, ArrayLike] = 1.0,
 ):
     x = q * (maxi - mini) + mini
     x = jnp.clip(x, a_min=mini, a_max=maxi)
@@ -95,11 +103,11 @@ def _qunif(
 @make_partial_pipe
 def qunif(
     p: Union[Float, ArrayLike],
-    mini: Union[Float, Array] = 0.0,
-    maxi: Union[Float, Array] = 1.0,
+    mini: Union[Float, ArrayLike] = 0.0,
+    maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-):
+) -> ArrayLike:
     """
     Computes the quantile function of a uniform distribution.
 
@@ -111,7 +119,11 @@ def qunif(
         log_prob (Bool, optional): Whether to compute the log probability or not. Defaults to False.
 
     Returns:
-        Union[Float, Array]: The quantiles of the uniform distribution.
+       ArrayLike: The quantiles of the uniform distribution.
+
+    Example:
+        >>> qunif(0.5)
+        Array([0.5], dtype=float32, weak_type=True)
     """
     p = jnp.atleast_1d(p)
     if not lower_tail:
@@ -125,8 +137,8 @@ def qunif(
 @filter_jit
 def _runif(
     key: KeyArray,
-    mini: Union[Float, Array] = 0.0,
-    maxi: Union[Float, Array] = 1.0,
+    mini: Union[Float, ArrayLike] = 0.0,
+    maxi: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
 ):
     return jrand.uniform(key, sample_shape, minval=mini, maxval=maxi)
@@ -136,11 +148,11 @@ def _runif(
 def runif(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,
-    mini: Union[Float, Array] = 0.0,
-    maxi: Union[Float, Array] = 1.0,
+    mini: Union[Float, ArrayLike] = 0.0,
+    maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-):
+) -> ArrayLike:
     """Generates random numbers from a uniform distribution.
 
     Args:
@@ -152,7 +164,13 @@ def runif(
         log_prob: Whether to return the log probability of the generated values.
 
     Returns:
-        An array of random numbers from a uniform distribution.
+        ArrayLike: An array of random numbers from a uniform distribution.
+
+    Example:
+        >>> runif(key, sample_shape=(2, 3))
+        Array([[0.57450044, 0.09968603, 0.7419659 ],
+                [0.8941783 , 0.59656656, 0.45325184]], dtype=float32)
+
     """
     rvs = _runif(key, mini, maxi, sample_shape)
     if not lower_tail:

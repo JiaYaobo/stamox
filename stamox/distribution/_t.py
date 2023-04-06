@@ -33,8 +33,8 @@ def pt(
     df: Union[Int, Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-    lower_tail=True,
-    log_prob=False,
+    lower_tail: bool = True,
+    log_prob: bool = False,
 ) -> ArrayLike:
     """Calculates the probability of a given value for Student T distribution.
 
@@ -47,7 +47,11 @@ def pt(
         log_prob: Whether to return the log probability or not.
 
     Returns:
-        The probability of the given value for Student T distribution.
+        ArrayLike: The cdf value of the given value for Student T distribution.
+
+    Example:
+        >>> pt(1.0, 1.0)
+        Array([0.74999994], dtype=float32, weak_type=True)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pt)(q, df, loc, scale)
@@ -68,8 +72,8 @@ def dt(
     df: Union[Int, Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-    lower_tail=True,
-    log_prob=False,
+    lower_tail: bool=True,
+    log_prob: bool=False,
 ) -> ArrayLike:
     """Calculates the probability density function of a Student's t-distribution.
 
@@ -83,7 +87,11 @@ def dt(
         log_prob: Whether to return the log probability. Defaults to False.
 
     Returns:
-        The probability density function evaluated at `x`.
+        ArrayLike: The probability density function evaluated at `x`.
+
+    Example:
+        >>> dt(1.0, 1.0)
+        Array([0.1591549], dtype=float32, weak_type=True)
     """
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dt)(x, df, loc, scale)
@@ -127,7 +135,11 @@ def qt(
         log_prob: A boolean indicating whether the probability should be logged. Defaults to False.
 
     Returns:
-        The quantile of the Student T distribution.
+        ArrayLike: The quantile of the Student T distribution.
+
+    Example:
+        >>> qt(0.5, 1.0)
+        Array([0.], dtype=float32, weak_type=True)
     """
     p = jnp.atleast_1d(p)
     if not lower_tail:
@@ -147,10 +159,13 @@ def _rt(
     sample_shape: Optional[Shape] = None,
 ):
     if sample_shape is None:
-        sample_shape = jnp.broadcast_shapes(jnp.shape(df), jnp.shape(loc), jnp.shape(scale))
+        sample_shape = jnp.broadcast_shapes(
+            jnp.shape(df), jnp.shape(loc), jnp.shape(scale)
+        )
     scale = jnp.broadcast_to(scale, sample_shape)
     loc = jnp.broadcast_to(loc, sample_shape)
     return jrand.t(key, df, sample_shape) * scale + loc
+
 
 @make_partial_pipe
 def rt(
@@ -159,8 +174,8 @@ def rt(
     df: Union[Int, Float, ArrayLike] = None,
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-    lower_tail = True,
-    log_prob = False,
+    lower_tail: bool = True,
+    log_prob: bool = False,
 ) -> ArrayLike:
     """Generates random numbers from a t-distribution.
 
@@ -172,11 +187,16 @@ def rt(
         scale: Scale parameter.
 
     Returns:
-        Random numbers from a t-distribution.
+        ArrayLike: Random numbers from a t-distribution.
+
+    Example:
+        >>> rt(key, (2, 3), 1.0)
+        Array([[1.9982358e+02, 2.3699088e-01, 6.6509140e-01],
+                [5.3681795e-02, 3.3967651e+01, 6.8611817e+00]], dtype=float32)
     """
     rvs = _rt(key, df, loc, scale, sample_shape)
     if not lower_tail:
-        rvs =  1 - rvs
+        rvs = 1 - rvs
     if log_prob:
         rvs = jnp.log(rvs)
     return rvs

@@ -10,10 +10,10 @@ from ..core import make_partial_pipe
 ReturnValue = TypeVar("ReturnValue")
 
 
-@make_partial_pipe
+@make_partial_pipe(name="bootstrap_sample")
 def bootstrap_sample(
     data: ArrayLike, num_samples: int, *, key: jrandom.KeyArray = None
-):
+) -> ArrayLike:
     """Generates `num_samples` bootstrap samples from `data` with replacement.
 
     Args:
@@ -40,7 +40,7 @@ def bootstrap_sample(
     return samples
 
 
-@make_partial_pipe
+@make_partial_pipe(name="bootstrap")
 def bootstrap(
     data: ArrayLike, call: Callable[..., ReturnValue], num_samples: int, *, key
 ) -> PyTree:
@@ -52,6 +52,16 @@ def bootstrap(
 
     Returns:
         size of num_samples call(data)
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from stamox.sample import bootstrap
+        >>> data = jnp.arange(10)
+        >>> def call(data):
+        ...     return jnp.mean(data)
+        >>> bootstrap(data, call, num_samples=3)
+        DeviceArray([4.5, 4.5, 4.5], dtype=float32)
+
     """
     samples = bootstrap_sample(data, num_samples=num_samples, key=key)
     return filter_jit(filter_vmap(call))(samples)

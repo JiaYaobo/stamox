@@ -31,14 +31,18 @@ def pcauchy(
     """Calculates the cumulative denisty probability c function of the Cauchy distribution.
 
     Args:
-        q (Union[Float, ArrayLike]): The value at which to evaluate the PDF.
+        q (Union[Float, ArrayLike]): The value at which to evaluate the CDF.
         loc (Union[Float, ArrayLike], optional): The location parameter of the Cauchy distribution. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Cauchy distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        Array: The cumulative density function of the Cauchy distribution.
+        ArrayLike: The cumulative density function of the Cauchy distribution.
+
+    Example:
+        >>> pcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
+        Array([0.75], dtype=float32, weak_type=True)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pcauchy)(q, loc, scale)
@@ -70,7 +74,11 @@ def dcauchy(
         log_prob (Bool, optional): Whether to compute the log probability. Defaults to False.
 
     Returns:
-        Array: The pdf of the Cauchy distribution.
+        ArrayLike: The pdf of the Cauchy distribution.
+
+    Example:
+        >>> dcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
+        Array([0.15915494], dtype=float32, weak_type=True)
     """
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dcauchy)(x, loc, scale)
@@ -101,14 +109,18 @@ def qcauchy(
     """Computes the quantile of the Cauchy distribution.
 
     Args:
-        q (Union[Float, ArrayLike]): Quantiles to compute.
-        loc (Union[Float, ArrayLike], optional): Location parameter. Defaults to 0.0.
-        scale (Union[Float, ArrayLike], optional): Scale parameter. Defaults to 1.0.
-        lower_tail (Bool, optional): Whether to compute the lower tail. Defaults to True.
-        log_prob (Bool, optional): Whether to compute the log probability. Defaults to False.
+        q (Union[float, array-like]): Quantiles to compute.
+        loc (Union[float, array-like], optional): Location parameter. Defaults to 0.0.
+        scale (Union[float, array-like], optional): Scale parameter. Defaults to 1.0.
+        lower_tail (bool, optional): Whether to compute the lower tail. Defaults to True.
+        log_prob (bool, optional): Whether to compute the log probability. Defaults to False.
 
     Returns:
-        Array: The quantiles of the Cauchy distribution.
+        ArrayLike: The quantiles of the Cauchy distribution.
+
+    Example:
+        >>> qcauchy(0.5, loc=1.0, scale=2.0, lower_tail=True, log_prob=False)
+        Array([1.], dtype=float32, weak_type=True)
     """
     q = jnp.atleast_1d(q)
     if not lower_tail:
@@ -151,7 +163,13 @@ def rcauchy(
         log_prob: Whether to return the log probability.
 
     Returns:
-        An array of samples from the Cauchy distribution.
+        ArrayLike: An array of samples from the Cauchy distribution.
+
+    Example:
+        >>> key = jax.random.PRNGKey(0)
+        >>> rcauchy(key, sample_shape=(2, 3), loc=0.0, scale=1.0)
+        Array([[ 0.23841971, -3.0880406 ,  0.9507532 ],
+                [ 2.8963416 ,  0.31303588, -0.14792857]], dtype=float32)
     """
     probs = _rcauchy(key, loc, scale, sample_shape)
     if not lower_tail:

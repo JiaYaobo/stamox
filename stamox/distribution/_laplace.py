@@ -5,7 +5,7 @@ import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import Shape
 from jax.random import KeyArray
-from jaxtyping import Array, ArrayLike, Bool, Float
+from jaxtyping import ArrayLike, Bool, Float
 
 from ..core import make_partial_pipe
 
@@ -15,7 +15,7 @@ def _plaplace(
     x: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-) -> Array:
+) :
     scaled = (x - loc) / scale
     return 0.5 - 0.5 * jnp.sign(scaled) * jnp.expm1(-jnp.abs(scaled))
 
@@ -27,7 +27,7 @@ def plaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Calculates the Laplace cumulative density function.
 
     Args:
@@ -38,7 +38,11 @@ def plaplace(
         log_prob (Bool, optional): Whether to return the logarithm of the Plaplace PDF. Defaults to False.
 
     Returns:
-        Array: The Laplace CDF evaluated at `q`.
+        ArrayLike: The Laplace CDF evaluated at `q`.
+
+    Example:
+        >>> plaplace(1.0, 1.0, 1.0)
+        Array([0.5], dtype=float32, weak_type=True)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_plaplace)(q, loc, scale)
@@ -59,7 +63,7 @@ def dlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Calculates the Laplace probability density function for a given x, location and scale.
 
     Args:
@@ -70,7 +74,11 @@ def dlaplace(
         log_prob (Bool, optional): Whether to return the logarithm of the probability. Defaults to False.
 
     Returns:
-        Array: The probability density at the given x.
+        ArrayLike: The probability density at the given x.
+
+    Example:
+        >>> dlaplace(1.0, 1.0, 1.0)
+        Array([0.], dtype=float32, weak_type=True)
     """
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dlaplace)(x, loc, scale)
@@ -98,7 +106,7 @@ def qlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Computes the quantile of the Laplace distribution.
 
     Args:
@@ -109,7 +117,11 @@ def qlaplace(
         log_prob (Bool, optional): Whether to compute the log probability. Defaults to False.
 
     Returns:
-        Array: The quantiles of the Laplace distribution.
+        ArrayLike: The quantiles of the Laplace distribution.
+
+    Example:
+        >>> qlaplace(0.5, 1.0, 1.0)
+        Array([1.], dtype=float32, weak_type=True)
     """
     p = jnp.atleast_1d(p)
     if not lower_tail:
@@ -141,19 +153,25 @@ def rlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
+) -> ArrayLike:
     """Generates random Laplace samples from a given key.
 
     Args:
         key (KeyArray): The PRNG key to use for generating the samples.
+        sample_shape (Optional[Shape], optional): The shape of the output array. Defaults to None.
         loc (Union[Float, ArrayLike], optional): The location parameter of the Laplace distribution. Defaults to 0.0.
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Laplace distribution. Defaults to 1.0.
-        sample_shape (Optional[Shape], optional): The shape of the output array. Defaults to None.
         lower_tail (Bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        Array: An array containing the random Laplace samples.
+        ArrayLike: An array containing the random Laplace samples.
+
+    Example:
+        >>> rlaplace(key, (2, 3))
+        Array([[-0.16134426,  1.6125823 , -0.6615164 ],
+                [-1.5528525 , -0.21459664,  0.09816013]], dtype=float32)
+        
     """
     rvs = _rlaplace(key, loc, scale, sample_shape)
     if not lower_tail:

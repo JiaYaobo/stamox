@@ -4,7 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import KeyArray, Shape
-from jaxtyping import Array, ArrayLike, Float
+from jaxtyping import ArrayLike, Float
 
 from ..core import make_partial_pipe
 from ..math.special import fdtr, fdtri
@@ -24,9 +24,9 @@ def pF(
     q: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
-    lower_tail=True,
-    log_prob=False,
-):
+    lower_tail: bool = True,
+    log_prob: bool = False,
+) -> ArrayLike:
     """Calculates the cumulative distribution function of the F-distribution.
 
     Args:
@@ -37,7 +37,11 @@ def pF(
         log_prob (bool, optional): If True, the logarithm of the probability is returned.
 
     Returns:
-        float or array_like: The cumulative distribution function evaluated at `q`.
+        ArrayLike: The cumulative distribution function evaluated at `q`.
+
+    Example:
+        >>> pF(1.0, 1.0, 1.0)
+        Array([0.5000001], dtype=float32, weak_type=True)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pf)(q, dfn, dfd)
@@ -56,9 +60,9 @@ def dF(
     x: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
-    lower_tail=True,
-    log_prob=False,
-):
+    lower_tail: bool = True,
+    log_prob: bool = False,
+) -> ArrayLike:
     """Calculates the gradient of the cumulative distribution function for a given x, dfn and dfd.
 
     Args:
@@ -69,7 +73,11 @@ def dF(
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        grads (float or array): The gradient of the cumulative distribution function.
+        ArrayLike: The gradient of the cumulative distribution function.
+
+    Example:
+        >>> dF(1.0, 1.0, 1.0)
+        Array([0.1591549], dtype=float32, weak_type=True)
     """
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_df)(x, dfn, dfd)
@@ -94,9 +102,9 @@ def qF(
     p: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
-    lower_tail=True,
-    log_prob=False,
-) -> Array:
+    lower_tail: bool = True,
+    log_prob: bool = False,
+) -> ArrayLike:
     """Calculates the quantile function of a given distribution.
 
     Args:
@@ -107,7 +115,11 @@ def qF(
         log_prob (bool, optional): Whether to calculate the log probability or not. Defaults to False.
 
     Returns:
-        Array: The calculated quantile.
+        ArrayLike: The calculated quantile.
+
+    Example:
+        >>> qF(0.5, 1.0, 1.0)
+        Array([0.99999714], dtype=float32)
     """
     p = jnp.atleast_1d(p)
     if not lower_tail:
@@ -137,10 +149,10 @@ def rF(
     sample_shape: Optional[Shape] = None,
     dfn: Union[Float, ArrayLike] = None,
     dfd: Union[Float, ArrayLike] = None,
-    lower_tail=True,
-    log_prob=False,
+    lower_tail: bool = True,
+    log_prob: bool = False,
 ):
-    """Calculates the probability of a random variable following a F-distribution.
+    """Generate random variates from F-distribution.
 
     Args:
         key (KeyArray): Random key used for PRNG.
@@ -151,7 +163,12 @@ def rF(
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        probs (float or array): Probability of the random variable following a F-distribution.
+        ArrayLike : Random variates from F-distribution.
+
+    Example:
+        >>> rF(jax.random.PRNGKey(0), dfn=1.0, dfd=1.0)
+        Array(40.787617, dtype=float32)
+
     """
     rvs = _rf(key, dfn, dfd, sample_shape)
     if not lower_tail:

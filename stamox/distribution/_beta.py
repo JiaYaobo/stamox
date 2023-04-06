@@ -25,7 +25,7 @@ def pbeta(
     b: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-):
+) -> ArrayLike:
     """Computes the cumulative distribution function of the beta distribution.
 
     Args:
@@ -36,7 +36,14 @@ def pbeta(
         log_prob (bool, optional): If True, probabilities are given as log(P).
 
     Returns:
-        float or ndarray: The probability or log of the probability for each quantile.
+        ArrayLike: The probability or log of the probability for each quantile.
+
+    Example:
+        >>> q = jnp.array([0.1, 0.5, 0.9])
+        >>> a = 2.0
+        >>> b = 3.0
+        >>> pbeta(q, a, b)
+        Array([0.05230004, 0.68749976, 0.9963    ], dtype=float32)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pbeta)(q, a, b)
@@ -68,7 +75,11 @@ def dbeta(
       log_prob: A boolean indicating whether to return the logarithm of the PDF (default False).
 
     Returns:
-      The probability density function of the beta distribution evaluated at x.
+      ArrayLike: The probability density function of the beta distribution evaluated at x.
+
+    Example:
+        >>> dbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
+        Array([1.4999996], dtype=float32, weak_type=True)
     """
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dbeta)(x, a, b)
@@ -91,8 +102,8 @@ def qbeta(
     p: Union[Float, ArrayLike],
     a: Union[Float, ArrayLike],
     b: Union[Float, ArrayLike],
-    lower_tail=True,
-    log_prob=False,
+    lower_tail: bool = True,
+    log_prob: bool = False,
 ) -> ArrayLike:
     """Computes the quantile of beta distribution function.
 
@@ -106,7 +117,11 @@ def qbeta(
         (defaults to False).
 
     Returns:
-      The value of the beta distribution at the given quantile.
+      ArrayLike: The value of the beta distribution at the given quantile.
+
+    Example:
+        >>> qbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
+        Array([0.38572744], dtype=float32)
     """
     p = jnp.atleast_1d(p)
     if not lower_tail:
@@ -123,8 +138,8 @@ def rbeta(
     sample_shape: Optional[Shape] = None,
     a: Union[Float, ArrayLike] = None,
     b: Union[Float, ArrayLike] = None,
-    lower_tail=True,
-    log_prob=False,
+    lower_tail: bool = True,
+    log_prob: bool = False,
 ) -> ArrayLike:
     """Generates random numbers from the Beta distribution.
 
@@ -137,7 +152,12 @@ def rbeta(
         log_prob: Whether to return the log probability (defaults to False).
 
     Returns:
-        A numpy array containing random numbers from the Beta distribution.
+        ArrayLike: Random numbers from the Beta distribution.
+
+    Example:
+        >>> key = jax.random.PRNGKey(0)
+        >>> rbeta(key, sample_shape=(3,), a=2, b=3)
+        Array([0.02809353, 0.13760717, 0.49360353], dtype=float32)
     """
     probs = _rbeta(key, a, b, sample_shape)
     if not lower_tail:

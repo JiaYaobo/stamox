@@ -6,7 +6,7 @@ from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import Shape
 from jax.random import KeyArray
 from jax.scipy.special import ndtr, ndtri
-from jaxtyping import Array, ArrayLike, Bool, Float
+from jaxtyping import ArrayLike, Bool, Float
 
 from ..core import make_partial_pipe
 
@@ -28,7 +28,7 @@ def pnorm(
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-) -> Array:
+) -> ArrayLike:
     """Calculate the cumulative distribution function (CDF) of the normal distribution.
 
     Args:
@@ -43,18 +43,15 @@ def pnorm(
             Defaults to False.
 
     Returns:
-        Union[Float, jnp.ndarray]: The CDF of the normal distribution evaluated at x.
+        ArrayLike: The CDF of the normal distribution evaluated at x.
 
 
     Examples:
         >>> pnorm(2.0)
-        0.977249869052224
+        Array([0.97724986], dtype=float32)
 
         >>> pnorm([1.5, 2.0, 2.5], mean=2.0, sd=0.5, lower_tail=False)
-        DeviceArray([0.3085378 , 0.02275013, 0.0013499 ], dtype=float32)
-
-        >>> pnorm([1.5, 2.0, 2.5], mean=2.0, sd=0.5, log_prob=True)
-        DeviceArray([-1.177404  , -3.7859507 , -6.5995502 ], dtype=float32)
+        Array([0.8413447 , 0.5       , 0.15865529], dtype=float32)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pnorm)(q, mean, sd)
@@ -75,7 +72,7 @@ def dnorm(
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-) -> Array:
+) -> ArrayLike:
     """
     Probability density function (PDF) for Normal distribution.
 
@@ -87,13 +84,13 @@ def dnorm(
         log_prob (bool, optional): If True, returns the log-probability instead of the probability.
 
     Returns:
-        grads: The probability density function evaluated at point(s) x.
+        ArrayLike: The probability density function evaluated at point(s) x.
 
     Example:
         >>> import jax.numpy as jnp
         >>> x = jnp.array([0.5, 1.0, -1.5])
-        >>> dnorm(x) # doctest: +SKIP
-        DeviceArray([0.35206532, 0.24197073, 0.05854983], dtype=float32)
+        >>> dnorm(x)
+        Array([0.35206532, 0.24197075, 0.12951761], dtype=float32)
     """
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dnorm)(x, mean, sd)
@@ -121,7 +118,7 @@ def qnorm(
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-) -> Array:
+) -> ArrayLike:
     """
     Calculates the quantile function of the normal distribution for a given probability.
 
@@ -133,16 +130,14 @@ def qnorm(
         log_prob (bool, optional): If `True`, returns the logarithm of the quantile function. Default is `False`.
 
     Returns:
-        jnp.ndarray: The inverse cumulative density function of the normal distribution evaluated at `q`.
+        ArrayLike: The inverse cumulative density function of the normal distribution evaluated at `q`.
 
-    Raises:
-        ValueError: When the input probabilities are not between 0 and 1.
 
     Examples:
         >>> qnorm(0.5)
-        array(0.)
+        Array([0.], dtype=float32)
         >>> qnorm([0.25, 0.75], mean=3, sd=2)
-        array([1.4867225, 4.5132775])
+        Array([1.6510204, 4.3489795], dtype=float32)
     """
     p = jnp.atleast_1d(p)
     if not lower_tail:
@@ -170,8 +165,8 @@ def rnorm(
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-) -> Array:
-    """Generates random numbers from a normal distribution.
+) -> ArrayLike:
+    """Generates random variables from a normal distribution.
 
     Args:
         key: A KeyArray object used to generate the random numbers.
@@ -181,7 +176,17 @@ def rnorm(
         sd: The standard deviation of the normal distribution. Defaults to 1.0.
 
     Returns:
-        A NumPy array containing random numbers from a normal distribution.
+        ArrayLike: Random samples from a normal distribution.
+    
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from jax import random
+        >>> key = random.PRNGKey(0)
+        >>> rnorm(key, sample_shape=(3, 2))
+        Array([[ 0.18784384, -1.2833426 ],
+                [ 0.6494181 ,  1.2490594 ],
+                [ 0.24447003, -0.11744965]], dtype=float32)
+
     """
     rvs = _rnorm(key, mean, sd, sample_shape)
     if not lower_tail:

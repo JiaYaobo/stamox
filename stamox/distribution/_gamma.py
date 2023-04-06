@@ -15,16 +15,6 @@ from ..core import make_partial_pipe
 def _pgamma(
     q, shape: Union[Float, ArrayLike] = 1.0, rate: Union[Float, ArrayLike] = 1.0
 ):
-    """Computes the gamma function for a given q, shape, and rate.
-
-    Args:
-        q: A float or array-like object representing the input to the gamma function.
-        shape: A float or array-like object representing the shape parameter of the gamma function.
-        rate: A float or array-like object representing the rate parameter of the gamma function.
-
-    Returns:
-        The result of the gamma function for the given inputs.
-    """
     return gammainc(shape, q * rate)
 
 
@@ -33,10 +23,10 @@ def pgamma(
     q: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
-    lower_tail=True,
-    log_prob=False,
-):
-    """Computes the probability density function of the gamma distribution.
+    lower_tail: bool = True,
+    log_prob: bool = False,
+) -> ArrayLike:
+    """Computes the cumulative distribution function of the gamma distribution.
 
     Args:
         q: A float or array-like object representing the input to the gamma function.
@@ -46,7 +36,11 @@ def pgamma(
         log_prob: A boolean indicating whether to compute the logarithm of the probability density function.
 
     Returns:
-        The probability density function of the gamma distribution for the given inputs.
+        ArrayLike: The CDF value of the given value or array of values.
+
+    Example:
+        >>> pgamma(1.0, 0.5, 0.5)
+        Array([0.6826893], dtype=float32, weak_type=True)
     """
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pgamma)(q, shape, rate)
@@ -65,9 +59,9 @@ def dgamma(
     x: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
-    lower_tail=True,
-    log_prob=False,
-):
+    lower_tail: bool = True,
+    log_prob: bool = False,
+) -> ArrayLike:
     """Compute density of gamma distribution.
 
     Args:
@@ -83,8 +77,12 @@ def dgamma(
             Defaults to False.
 
     Returns:
-        grads (float or array): The density of the gamma distribution evaluated
+        ArrayLike: The density of the gamma distribution evaluated
             at `x`. If `log_prob` is True, returns the log probability.
+
+    Example:
+        >>> dgamma(1.0, 0.5, 0.5)
+        Array([0.24197064], dtype=float32, weak_type=True)
     """
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dgamma)(x, shape, rate)
@@ -109,9 +107,9 @@ def qgamma(
     p: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
-    lower_tail=True,
-    log_prob=False,
-):
+    lower_tail: bool = True,
+    log_prob: bool = False,
+) -> ArrayLike:
     """Computes the quantile of the gamma distribution.
 
     Args:
@@ -122,7 +120,11 @@ def qgamma(
         log_prob: A boolean indicating whether to compute the log probability (default False).
 
     Returns:
-        The quantile of the gamma distribution.
+        ArrayLike: The quantile of the gamma distribution.
+
+    Example:
+        >>> qgamma(0.5, 0.5, 0.5)
+        Array([0.45493677], dtype=float32)
     """
     p = jnp.atleast_1d(p)
     if not lower_tail:
@@ -139,9 +141,9 @@ def rgamma(
     sample_shape: Optional[Shape] = None,
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
-    lower_tail=True,
-    log_prob=False,
-):
+    lower_tail: bool = True,
+    log_prob: bool = False,
+) -> ArrayLike:
     """Generates random gamma values.
 
     Args:
@@ -153,7 +155,11 @@ def rgamma(
         log_prob: Whether to return the log probability of the result.
 
     Returns:
-        A random gamma value or an array of random gamma values.
+        ArrayLike: A random gamma value or an array of random gamma values.
+
+    Example:
+        >>> rgamma(key, shape=0.5, rate=0.5)
+        Array(0.3384059, dtype=float32)
     """
     rv = _rgamma(key, shape, rate, sample_shape)
     if not lower_tail:
