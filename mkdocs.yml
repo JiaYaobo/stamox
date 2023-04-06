@@ -27,3 +27,10 @@ plugins:
                     members_order: source  # order methods according to their order of definition in the source code, not alphabetical order
                     heading_level: 4
 
+site_name: Stamox
+site_description: The documentation for the Stamox software library.
+site_author: Yaobo Jia
+
+repo_url: https://github.com/jiayaobo/stamox
+repo_name: jiayaobo/stamox
+
