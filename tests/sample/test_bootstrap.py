@@ -5,7 +5,7 @@ from jax._src import test_util as jtest
 
 from stamox.basic import mean
 from stamox.core import Pipeable
-from stamox.sample import bootstrap_sample, bootstrap
+from stamox.sample import bootstrap, bootstrap_sample
 
 
 class BootstrapSamplerTest(jtest.JaxTestCase):

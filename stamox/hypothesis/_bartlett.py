@@ -6,10 +6,12 @@ which can be verified with Bartlett's test.
 """
 
 from functools import partial
+from typing import Sequence
 
 import jax.numpy as jnp
 from equinox import filter_jit
 from jax import vmap
+from jaxtyping import ArrayLike
 
 from ..core import make_pipe
 from ..distribution import pchisq
@@ -17,6 +19,15 @@ from ._base import HypoTest
 
 
 class BartlettTest(HypoTest):
+    """Class for performing a Bartlett's test.
+
+    This class is used to perform a Bartlett's test, which tests the null hypothesis that all input samples are from populations with equal variances.
+
+    Attributes:
+        statistic (float): The test statistic.
+        parameters (int): The degrees of freedom.
+        p_value (float): The p-value of the test.
+    """
     def __init__(
         self,
         statistic=None,
@@ -36,21 +47,28 @@ class BartlettTest(HypoTest):
             name="BartlettTest",
         )
 
+    def __repr__(self):
+        return f"{self.name}(statistic={self.statistic}, parameters={self.parameters}, p_value={self.p_value})"
+
     @property
     def df(self):
         return self.parameters
 
 
 @make_pipe
-def bartlett_test(*samples) -> BartlettTest:
+def bartlett_test(*samples: Sequence[ArrayLike]) -> BartlettTest:
     """Calculates the Bartlett test statistic for multiple samples.
 
     Args:
-        *samples (array_like): A sequence of 1-D arrays, each containing
+        *samples Sequence[ArrayLike]): A sequence of 1-D arrays, each containing
             a sample of scores. All samples must have the same length.
 
     Returns:
-        float: The Bartlett test statistic.
+        BartlettTest: The Bartlett Test object.
+
+    Example:
+        >>> bartlett_test([1, 2, 3], [1, 2, 3])
+        BartlettTest(statistic=0.0, parameters=1, p_value=1.0)
     """
     samples = jnp.vstack(samples)
     return _bartlett(samples)
@@ -80,5 +98,5 @@ def _bartlett(samples):
     )
     stats = numer / denom
     param = k - 1
-    pval = pchisq(stats, param, lower_tail=False)
+    pval = pchisq(stats, param, lower_tail=False).squeeze()
     return BartlettTest(statistic=stats, parameters=param, p_value=pval)

@@ -23,7 +23,7 @@ class BartlettTest(jtest.JaxTestCase):
             dtype=np.float32,
         )
         state = bartlett_test(a, b, c)
-        self.assertAllClose(state.p_value, np.array([1.1254782518834628e-05]))
+        self.assertAllClose(state.p_value, np.array(1.1254782518834628e-05))
 
     def test_pipe_bartlett(self):
         a = np.array(
@@ -40,7 +40,7 @@ class BartlettTest(jtest.JaxTestCase):
         )
         h = Pipeable([a, b, c]) >> bartlett_test
         state = h()
-        self.assertAllClose(state.p_value, np.array([1.1254782518834628e-05]))
+        self.assertAllClose(state.p_value, np.array(1.1254782518834628e-05))
     
     def test_pipe_bartlett_jit(self):
         a = np.array(
@@ -57,7 +57,7 @@ class BartlettTest(jtest.JaxTestCase):
         )
         h = Pipeable([a, b, c]) >> filter_jit(bartlett_test)
         state = h()
-        self.assertAllClose(state.p_value, np.array([1.1254782518834628e-05]))
+        self.assertAllClose(state.p_value, np.array(1.1254782518834628e-05))
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 from equinox import filter_jit
 from jax import lax, vmap
+from jaxtyping import ArrayLike
 
 from ..core import make_pipe
 from ..distribution import pnorm, qnorm
@@ -18,6 +19,15 @@ _a_1 = 0.70710678  # sqrt(2)
 
 
 class ShapiroWilkTest(HypoTest):
+    """Class to perform the Shapiro-Wilk test.
+
+    This class is a subclass of HypoTest and provides methods to perform the Shapiro-Wilk test.
+
+    Attributes:
+        statistic (float): The test statistic.
+        p_value (float): The p-value of the test.
+    """
+
     def __init__(
         self,
         statistic=None,
@@ -32,16 +42,26 @@ class ShapiroWilkTest(HypoTest):
             statistic, parameters, p_value, estimate, null_value, alternative, name
         )
 
+    def __repr__(self):
+        return f"{self.name}(statistic={self.statistic}, parameters={self.parameters}, p_value={self.p_value})"
+
 
 @make_pipe
-def shapiro_wilk_test(x):
+def shapiro_wilk_test(x: ArrayLike) -> ShapiroWilkTest:
     """Computes the Shapiro-Wilk test for normality.
 
     Args:
-        x (jnp.ndarray): The data to be tested.
+        x (ArrayLike): The data to be tested.
 
     Returns:
-        w (float): The Shapiro-Wilk statistic.
+        ShapiroWilkTest: The Shapiro-Wilk Test object.
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from stamox.hypothesis import shapiro_wilk_test
+        >>> x = jnp.array([1, 2, 3, 4, 5])
+        >>> shapiro_wilk_test(x)
+        Shapiro-Wilk Test(statistic=0.0, p_value=None)
     """
     x = jnp.ravel(x)
     x = jnp.sort(x)
@@ -145,7 +165,8 @@ def _shapiro_wilk(x, n):
     else:
         m = poly(xx, _c5, 4)
         s = jnp.exp(poly(xx, _c6, 3))
-        pw = pnorm(y, m, s, lower_tail=False)
+        pw = pnorm(y, m, s, lower_tail=False).squeeze()
+    w = w.squeeze()
     return ShapiroWilkTest(statistic=w, p_value=pw)
 
 

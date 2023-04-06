@@ -1,11 +1,23 @@
 import jax.numpy as jnp
 from equinox import filter_jit
+from jaxtyping import ArrayLike
 
 from ..core import make_partial_pipe
 from ._base import HypoTest
 
 
-class DurbinWastonTest(HypoTest):
+class DurbinWatsonTest(HypoTest):
+    """
+    Class for performing the Durbin-Watson Test.
+
+    This class is a subclass of HypoTest and provides methods to perform the Durbin-Waston Test.
+
+    Attributes:
+        statistic (float): The test statistic.
+        parameters (tuple): The parameters of the test.
+        p_value (float): The p-value of the test.
+    """
+
     def __init__(
         self,
         statistic=None,
@@ -14,15 +26,18 @@ class DurbinWastonTest(HypoTest):
         estimate=None,
         null_value=None,
         alternative=None,
-        name="Durbin-Waston Test",
+        name="Durbin-Watson Test",
     ):
         super().__init__(
             statistic, parameters, p_value, estimate, null_value, alternative, name
         )
 
+    def __repr__(self):
+        return f"{self.name}(statistic={self.statistic}, parameters={self.parameters}, p_value={self.p_value})"
+
 
 @make_partial_pipe
-def durbin_watson_test(resids, axis=0):
+def durbin_watson_test(resids: ArrayLike, axis: int = 0):
     """Computes the Durbin-Watson statistic for a given array of residuals.
 
     Args:
@@ -30,7 +45,14 @@ def durbin_watson_test(resids, axis=0):
         axis (int, optional): The axis along which to compute the statistic. Defaults to 0.
 
     Returns:
-        float: The Durbin-Watson statistic.
+        DurbinWatsonTest: The Durbin-Watson Test object.
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from stamox.hypothesis import durbin_watson_test
+        >>> resids = jnp.array([1, 2, 3, 4, 5])
+        >>> durbin_watson_test(resids)
+        Durbin-Waston Test(statistic=0.0, parameters=None, p_value=None)
     """
     resids = jnp.atleast_1d(resids)
     return _durbin_watson(resids, axis)
@@ -51,4 +73,4 @@ def _durbin_watson(resids, axis=0):
     dw = jnp.sum(diff_resids**2, axis=axis, keepdims=True) / jnp.sum(
         resids**2, axis=axis, keepdims=True
     )
-    return DurbinWastonTest(statistic=dw)
+    return DurbinWatsonTest(statistic=dw)

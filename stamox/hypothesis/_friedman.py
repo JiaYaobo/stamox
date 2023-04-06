@@ -4,10 +4,13 @@ Similar to the parametric repeated measures ANOVA, it is used to detect differen
 The procedure involves ranking each row (or block) together, then considering the values of ranks by columns. 
 Applicable to complete block designs, it is thus a special case of the Durbin test.
 """
+from typing import Sequence
+
 import jax.numpy as jnp
 from equinox import filter_jit
 from jax import vmap
 from jax.scipy.stats import rankdata
+from jaxtyping import ArrayLike
 
 from ..core import make_pipe
 from ..distribution import pchisq
@@ -15,6 +18,16 @@ from ._base import HypoTest
 
 
 class FriedmanTest(HypoTest):
+    """Class for performing Friedman Rank Sum Test.
+
+    This class is a subclass of HypoTest and provides methods to perform the 
+    Friedman Rank Sum Test.
+
+    Attributes:
+        statistic (float): The test statistic.
+        parameters (tuple): Parameters of the distribution.
+        p_value (float): The p-value of the test.
+    """
     def __init__(
         self,
         statistic=None,
@@ -28,10 +41,13 @@ class FriedmanTest(HypoTest):
         super().__init__(
             statistic, parameters, p_value, estimate, null_value, alternative, name
         )
+    
+    def __repr__(self):
+        return f"{self.name}(statistic={self.statistic}, parameters={self.parameters}, p_value={self.p_value})"
 
 
 @make_pipe
-def friedman_test(*samples) -> FriedmanTest:
+def friedman_test(*samples: Sequence[ArrayLike]) -> FriedmanTest:
     """Computes the Friedman statistic for a set of samples.
 
     Args:
@@ -39,7 +55,7 @@ def friedman_test(*samples) -> FriedmanTest:
             observations.
 
     Returns:
-        The computed Friedman statistic.
+        FriedmanTest: The Friedman Test object.
     """
     ImportWarning("This function is not yet functioned with ties. Use with caution.")
     samples = jnp.vstack(samples).T

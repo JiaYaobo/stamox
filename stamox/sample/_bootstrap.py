@@ -22,7 +22,18 @@ def bootstrap_sample(
         key (jrandom.KeyArray, optional): A random key array. Defaults to None.
 
     Returns:
-        numpy.ndarray: An array of size (num_samples, len(data)) containing the bootstrap samples.
+        ArrayLike: An array of size `(num_samples, len(data))` containing the bootstrap samples.
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> import jax.random as jrandom
+        >>> from stamox.sample import bootstrap_sample
+        >>> data = jnp.arange(10)
+        >>> key = jrandom.PRNGKey(0)
+        >>> bootstrap_sample(data, num_samples=3, key=key)
+        Array([[9, 1, 6, 2, 9, 3, 9, 9, 4, 5],
+                [4, 0, 4, 4, 6, 2, 5, 6, 5, 3],
+                [7, 6, 9, 0, 0, 7, 0, 5, 8, 4]], dtype=int32)
     """
     # Determine the number of elements in the data
     n = data.shape[0]
@@ -42,7 +53,11 @@ def bootstrap_sample(
 
 @make_partial_pipe(name="bootstrap")
 def bootstrap(
-    data: ArrayLike, call: Callable[..., ReturnValue], num_samples: int, *, key
+    data: ArrayLike,
+    call: Callable[..., ReturnValue],
+    num_samples: int,
+    *,
+    key: jrandom.KeyArray = None
 ) -> PyTree:
     """Generates `num_samples` bootstrap samples from `data` with replacement, and calls `call` on each sample.
 
@@ -51,17 +66,16 @@ def bootstrap(
         call (Callable[..., ReturnValue]): The function to call on each bootstrap sample.
 
     Returns:
-        size of num_samples call(data)
+        PyTree: The return value of `call` on each bootstrap sample.
 
     Example:
         >>> import jax.numpy as jnp
+        >>> import jax.random as jrandom
         >>> from stamox.sample import bootstrap
         >>> data = jnp.arange(10)
-        >>> def call(data):
-        ...     return jnp.mean(data)
-        >>> bootstrap(data, call, num_samples=3)
-        DeviceArray([4.5, 4.5, 4.5], dtype=float32)
+        >>> bootstrap(data, jnp.mean, 3, key=key)
+        Array([5.7000003, 3.9      , 4.6      ], dtype=float32)
 
     """
     samples = bootstrap_sample(data, num_samples=num_samples, key=key)
-    return filter_jit(filter_vmap(call))(samples)
+    return filter_jit(filter_vmap(lambda x: call(x)))(samples)

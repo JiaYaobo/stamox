@@ -1,5 +1,6 @@
 import jax.numpy as jnp
 from jax import vmap
+from jaxtyping import ArrayLike
 
 from .core import make_partial_pipe
 
@@ -11,8 +12,16 @@ median = make_partial_pipe(jnp.median)
 
 
 @make_partial_pipe
-def scale(x, axis=0):
-    # calculate standardized x along axis
+def scale(x: ArrayLike, axis: int = 0) -> ArrayLike:
+    """Calculate standardized x along axis.
+
+    Args:
+        x (array-like): Input array.
+        axis (int, optional): Axis along which to calculate mean and standard deviation. Defaults to 0.
+
+    Returns:
+        ArrayLike: Standardized x along axis.
+    """
     _mean = mean(x, axis=axis)
     _std = sd(x, axis=axis, ddof=1)
     _scaled = vmap(lambda a, b, c: (a - b) / c, in_axes=(axis, None, None))(

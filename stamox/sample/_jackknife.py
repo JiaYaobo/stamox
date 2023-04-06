@@ -12,16 +12,24 @@ ReturnValue = TypeVar("ReturnValue")
 
 @make_partial_pipe
 @filter_jit
-def jackknife_sample(data: ArrayLike):
+def jackknife_sample(data: ArrayLike) -> ArrayLike:
     """Generates `num_samples` jackknife samples from `data` with replacement.
 
     Args:
         data (array-like): The original data.
-        num_samples (int): The number of jackknife samples to generate.
-        key (jrandom.KeyArray, optional): A random key array. Defaults to None.
 
     Returns:
-        numpy.ndarray: An array of size (num_samples, len(data)) containing the jackknife samples.
+        ArrayLike: An array of size (len(data)-1, len(data)) containing the jackknife samples.
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from stamox.sample import jackknife_sample
+        >>> data = jnp.arange(3)
+        >>> jackknife_sample(data)
+        Array([[1, 2],
+                [0, 2],
+                [0, 1]], dtype=int32)
+
     """
     n = jnp.shape(data)[0]
 
@@ -31,16 +39,28 @@ def jackknife_sample(data: ArrayLike):
         idx = jnp.where(idx >= i, idx + 1, idx)[:-1]
         return x[idx]
 
-    samples = filter_vmap(apply_except_one, in_axes=(None, 0))(
-        data, jnp.arange(n)
-    )
+    samples = filter_vmap(apply_except_one, in_axes=(None, 0))(data, jnp.arange(n))
 
     return samples
 
 
 @make_partial_pipe
-def jackknife(
-    data: ArrayLike, call: Callable[..., ReturnValue]
-) -> PyTree:
+def jackknife(data: ArrayLike, call: Callable[..., ReturnValue]) -> PyTree:
+    """Computes the jackknife estimate of a given data set.
+
+    Args:
+        data (ArrayLike): The data set to be analyzed.
+        call (Callable[..., ReturnValue]): A function to be applied to each sample.
+
+    Returns:
+        PyTree: The jackknife estimate of the data set.
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from stamox.sample import jackknife
+        >>> data = jnp.arange(3)
+        >>> jackknife(data, lambda x: jnp.mean(x))
+        Array([1.5, 1. , 0.5], dtype=float32)
+    """
     samples = jackknife_sample(data)
-    return filter_jit(filter_vmap(call))(samples)
+    return filter_jit(filter_vmap(lambda x: call(x)))(samples)
