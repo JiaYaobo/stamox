@@ -4,9 +4,9 @@ theme:
   name: material
 
 plugins:
-    - search  # default search plugin; needs manually re-enabling when using any other plugins
-    - autorefs  # Cross-links to headings
-    - mknotebooks  # Jupyter notebooks
+    - search
+    - autorefs
+    - mknotebooks
     - mkdocstrings:
         handlers:
             python:
@@ -17,14 +17,14 @@ plugins:
                     - jaxtyping.set_array_name_format("array")
 
                 selection:
-                    inherited_members: true  # Allow looking up inherited methods
+                    inherited_members: true
                 rendering:
-                    show_root_heading: true  # actually display anything at all...
-                    show_root_full_path: true  # display "diffrax.asdf" not just "asdf"
+                    show_root_heading: true
+                    show_root_full_path: true
                     show_if_no_docstring: true
                     show_signature_annotations: true
-                    show_source: false  # don't include source code
-                    members_order: source  # order methods according to their order of definition in the source code, not alphabetical order
+                    show_source: false 
+                    members_order: source 
                     heading_level: 4
 
 site_name: Stamox
