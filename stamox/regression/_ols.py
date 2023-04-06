@@ -1,4 +1,4 @@
-from typing import AnyStr, List, Tuple, Union
+from typing import List, Tuple, Union
 
 import equinox as eqx
 import jax.numpy as jnp
