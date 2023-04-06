@@ -3,7 +3,7 @@ import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.basic import mean, median, scale, std, var
+from stamox.basic import mean, median, scale, sd, var
 from stamox.core import Pipeable
 
 
@@ -28,11 +28,11 @@ class BasicTest(jtest.JaxTestCase):
 
     def test_std(self):
         a = np.random.normal(size=(10000, 3))
-        self.assertAllClose(std(a, axis=1), np.std(a, axis=1))
+        self.assertAllClose(sd(a, axis=1), np.std(a, axis=1))
 
     def test_pipe_std(self):
         a = np.random.normal(size=(10000, 3))
-        p = Pipeable(a) >> std(axis=1)
+        p = Pipeable(a) >> sd(axis=1)
         self.assertAllClose(p(a), np.std(a, axis=1))
 
     def test_var(self):

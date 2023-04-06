@@ -16,10 +16,10 @@ class OLSState(RegState):
 
 class OLS(Functional):
     use_intercept: Bool
-    method: AnyStr
+    method: str
     key: KeyArray
 
-    def __init__(self, use_intercept=True, method="inv", *, key):
+    def __init__(self, use_intercept=True, method="inv", *, key=None):
         super().__init__(name="OLS", fn=None)
         self.use_intercept = use_intercept
         self.method = method
@@ -28,7 +28,7 @@ class OLS(Functional):
     def fit(self, X, y) -> OLSState:
         return self._fit_ols(X, y)
 
-    def __call__(self, Xy: Union[Tuple, List, ArrayLike], *, key=None) -> OLSState:
+    def __call__(self, Xy: Union[Tuple, List, ArrayLike]) -> OLSState:
         if isinstance(Xy, tuple) or isinstance(Xy, list):
             X = Xy[0]
             y = Xy[1]

@@ -1,4 +1,4 @@
-from functools import partial
+from functools import partial, wraps
 from typing import Any, Callable, ParamSpec, TypeVar
 
 from equinox import filter_jit
@@ -24,14 +24,16 @@ def pipe_jit(
     if name is None and func is not None:
         name = func.__name__
 
+    @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
         fn = filter_jit(func, donate=donate)
-        return Functional(name="jitted_" + name, fn=fn)
 
-    if func is None:
-        return wrap
+        @wraps(func)
+        def create_functional(*args, **kwargs):
+            return Functional(name=name, fn=fn)(*args, **kwargs)
+        return create_functional
 
-    return wrap(func)
+    return wrap if func is None else wrap(func)
 
 
 def partial_pipe_jit(
@@ -46,7 +48,10 @@ def partial_pipe_jit(
     if name is None and func is not None:
         name = func.__name__
 
+    @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
+
+        @wraps(func)
         def partial_fn(x: Any = None, *args, donate: str = "none", **kwargs):
             fn = filter_jit(func, donate=donate)
             fn = partial(fn, **kwargs)
@@ -54,9 +59,6 @@ def partial_pipe_jit(
                 return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn)
 
-        return Functional(name="partial_jitted_" + name, fn=partial_fn)
+        return partial_fn
 
-    if func is None:
-        return wrap
-
-    return wrap(func)
+    return wrap if func is None else wrap(func)

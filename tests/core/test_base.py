@@ -1,5 +1,4 @@
 """Test Base Functions"""
-import jax.numpy as jnp
 from absl.testing import absltest
 from jax._src import test_util as jtest
 

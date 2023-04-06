@@ -1,4 +1,4 @@
-from functools import partial
+from functools import partial, wraps
 from typing import (
     Any,
     Callable,
@@ -178,14 +178,17 @@ def make_pipe(
     if name is None and func is not None:
         name = func.__name__
 
+    @wraps(func)
     def wrap(func: Callable[P, T]):
-        return Functional(name=name, fn=func)
+        if isinstance(func, Functional):
+            func = func.func
+        
+        @wraps(func)
+        def create_functional(*args, **kwargs):
+            return Functional(name=name, fn=func)(*args, **kwargs)
+        return create_functional
 
-    if func is None:
-        return wrap
-
-    return wrap(func)
-
+    return wrap(func) if func is not None else wrap
 
 def make_partial_pipe(
     func: Optional[Callable[P, T]] = None, name: str = None
@@ -202,20 +205,21 @@ def make_partial_pipe(
     """
     if name is None and func is not None:
         name = func.__name__
+        
 
+    @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
 
+        @wraps(func)
         def partial_fn(x: Any = None, *args, **kwargs):
             if x is not None:
                 return func(x, *args, **kwargs)
             fn = partial(func, **kwargs)
             return Functional(name=name, fn=fn)
 
-        return Functional(name=name, fn=partial_fn)
-
-    if func is None:
-        return wrap
-
-    return wrap(func)
+        return partial_fn
+    
+    return wrap if func is None else wrap(func)
+    

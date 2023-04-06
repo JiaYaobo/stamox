@@ -1,7 +1,7 @@
 # Student T Distribution
 
 ::: stamox.distribution.pt
-
+ 
 ---
 
 ::: stamox.distribution.qt

@@ -14,7 +14,7 @@ def _pexp(x: Union[float, ArrayLike], rate: float) -> Float:
     return -jnp.expm1(-rate * x)
 
 
-@make_partial_pipe(name="pexp")
+@make_partial_pipe
 def pexp(
     q: Union[float, ArrayLike], rate: float, lower_tail=True, log_prob=False
 ) -> Float:
@@ -50,7 +50,7 @@ def qexp(
 _dexp = filter_jit(filter_grad(_pexp))
 
 
-@make_partial_pipe(name="dexp")
+@make_partial_pipe
 def dexp(x: Union[float, ArrayLike], rate: float, lower_tail=True, log_prob=False):
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dexp)(x, rate)

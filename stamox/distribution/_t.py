@@ -27,7 +27,7 @@ def _pt(
     )
 
 
-@make_partial_pipe(name='pt')
+@make_partial_pipe
 def pt(
     q: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -62,7 +62,7 @@ def pt(
 _dt = filter_jit(filter_grad(_pt))
 
 
-@make_partial_pipe(name='dt')
+@make_partial_pipe
 def dt(
     x: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -107,7 +107,7 @@ def _qt(
     return scaled * scale + loc
 
 
-@make_partial_pipe(name='qt')
+@make_partial_pipe
 def qt(
     p: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -152,7 +152,7 @@ def _rt(
     loc = jnp.broadcast_to(loc, sample_shape)
     return jrand.t(key, df, sample_shape) * scale + loc
 
-@make_partial_pipe(name='rt')
+@make_partial_pipe
 def rt(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

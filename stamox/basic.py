@@ -4,13 +4,13 @@ from jax import vmap
 from .core import make_partial_pipe
 
 
-mean = make_partial_pipe(jnp.mean, name="mean")
-sd = make_partial_pipe(jnp.std, name="sd")
-var = make_partial_pipe(jnp.var, name="var")
-median = make_partial_pipe(jnp.median, name="median")
+mean = make_partial_pipe(jnp.mean)
+sd = make_partial_pipe(jnp.std)
+var = make_partial_pipe(jnp.var)
+median = make_partial_pipe(jnp.median)
 
 
-@make_partial_pipe(name="scale")
+@make_partial_pipe
 def scale(x, axis=0):
     # calculate standardized x along axis
     _mean = mean(x, axis=axis)

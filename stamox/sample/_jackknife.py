@@ -10,7 +10,7 @@ from ..core import make_partial_pipe
 ReturnValue = TypeVar("ReturnValue")
 
 
-@make_partial_pipe(name="JackknifeSampler")
+@make_partial_pipe
 @filter_jit
 def jackknife_sample(data: ArrayLike):
     """Generates `num_samples` jackknife samples from `data` with replacement.
@@ -38,7 +38,7 @@ def jackknife_sample(data: ArrayLike):
     return samples
 
 
-@make_partial_pipe(name="Jackknife")
+@make_partial_pipe
 def jackknife(
     data: ArrayLike, call: Callable[..., ReturnValue]
 ) -> PyTree:

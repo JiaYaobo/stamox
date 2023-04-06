@@ -10,7 +10,7 @@ from ..core import make_partial_pipe
 ReturnValue = TypeVar("ReturnValue")
 
 
-@make_partial_pipe(name="BootstrapSampler")
+@make_partial_pipe
 def bootstrap_sample(
     data: ArrayLike, num_samples: int, *, key: jrandom.KeyArray = None
 ):
@@ -40,7 +40,7 @@ def bootstrap_sample(
     return samples
 
 
-@make_partial_pipe(name="Bootstrap")
+@make_partial_pipe
 def bootstrap(
     data: ArrayLike, call: Callable[..., ReturnValue], num_samples: int, *, key
 ) -> PyTree:

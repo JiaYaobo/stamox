@@ -1,4 +1,4 @@
-from functools import partial
+from functools import partial, wraps
 from typing import Any, Callable, Hashable, ParamSpec, TypeVar
 
 from equinox import filter_pmap, filter_vmap
@@ -30,6 +30,7 @@ def pipe_vmap(
     if name is None and func is not None:
         name = func.__name__
 
+    @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
@@ -40,12 +41,12 @@ def pipe_vmap(
             axis_name=axis_name,
             axis_size=axis_size,
         )
-        return Functional(name="vmapped_" + name, fn=fn)
+        @wraps(func)
+        def create_functional(*args):
+            return Functional(name=name, fn=fn)(*args)
+        return create_functional
 
-    if func is None:
-        return wrap
-
-    return wrap(func)
+    return wrap if func is None else wrap(func)
 
 
 def partial_pipe_vmap(
@@ -62,10 +63,12 @@ def partial_pipe_vmap(
             name = func.name
         name = func.__name__
 
+    @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
 
+        @wraps(func)
         def partial_fn(
             x: Any = None,
             *args,
@@ -87,12 +90,9 @@ def partial_pipe_vmap(
                 return fn(x, *args)
             return Functional(name=name, fn=fn)
 
-        return Functional(name="partial_vmapped_" + name, fn=partial_fn)
+        return partial_fn
 
-    if func is None:
-        return wrap
-
-    return wrap(func)
+    return wrap if func is None else wrap(func)
 
 
 def pipe_pmap(
@@ -115,6 +115,7 @@ def pipe_pmap(
     if name is None and func is not None:
         name = func.__name__
 
+    @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
@@ -125,12 +126,13 @@ def pipe_pmap(
             axis_name=axis_name,
             axis_size=axis_size,
         )
-        return Functional(name="pmapped_" + name, fn=fn)
 
-    if func is None:
-        return wrap
+        @wraps(func)
+        def create_functional(*args):
+            return Functional(name=name, fn=fn)(*args)
+        return create_functional
 
-    return wrap(func)
+    return wrap if func is None else wrap(func)
 
 
 def partial_pipe_pmap(
@@ -145,10 +147,12 @@ def partial_pipe_pmap(
     if name is None and func is not None:
         name = func.__name__
 
+    @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
 
+        @wraps(func)
         def partial_fn(
             x: Any = None,
             *args,
@@ -170,9 +174,6 @@ def partial_pipe_pmap(
                 return fn(x, *args, **kwargs)
             return Functional(name=name, fn=fn, is_partial=True)
 
-        return Functional(name="partial_pmapped_" + name, fn=partial_fn)
+        return partial_fn
 
-    if func is None:
-        return wrap
-
-    return wrap(func)
+    return wrap if func is None else wrap(func)

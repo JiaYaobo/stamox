@@ -28,8 +28,8 @@ class PipeJitTest(jtest.JaxTestCase):
             num_traces += 1
             return x + 1
 
-        assert pipe_jit(g)(jnp.array(1)) == 2
-        assert pipe_jit(g)(jnp.array(2)) == 3
+        assert g(jnp.array(1)) == 2
+        assert g(jnp.array(2)) == 3
         assert num_traces == 2
 
     def test_jit_grad(self):
@@ -122,8 +122,8 @@ class PipeJitTest(jtest.JaxTestCase):
         self.assertAllClose(out, jnp.array([2, 3]))
         assert num_traces == 1
 
-        out = partial_pipe_jit(partial_pipe_vmap(f)(y=2))(z=0)(jnp.array([2, 3]))
-        self.assertAllClose(out, jnp.array([3, 4]))
+        out = partial_pipe_jit(partial_pipe_vmap(f)(y=2, z=0))(jnp.array([2, 3]))
+        self.assertAllClose(out, jnp.array([5, 7]))
         assert num_traces == 2
 
 
