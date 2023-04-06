@@ -2,7 +2,7 @@
   
 ::: stamox.distribution.pnorm
 
---- 
+---
 
 ::: stamox.distribution.qnorm
 

@@ -10,6 +10,6 @@
 
 ::: stamox.distribution.dF
 
---- 
+---
 
 ::: stamox.distribution.rF
