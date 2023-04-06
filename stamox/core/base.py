@@ -1,4 +1,4 @@
-from typing import Callable, Optional, ParamSpec, TypeVar, Union
+from typing import Callable, Optional, ParamSpec, TypeVar
 
 import equinox as eqx
 

@@ -34,7 +34,7 @@ class OLSTest(jtest.JaxTestCase):
         y = 3 * X[:, 0] + 2 * X[:, 1]  + 1.
         y = y.reshape((-1,1))
         ols = OLS(key=key)
-        h = Pipeable([X, y]) >> ols
+        h = Pipeable(X, y) >> ols
         state = h()
         self.assertAllClose(state.params[0].ravel(), np.array([3., 2.]) , atol=1e-5)
         self.assertAllClose(state.params[1], np.array([1.]),  atol=1e-5)
@@ -45,7 +45,7 @@ class OLSTest(jtest.JaxTestCase):
         y = 3 * X[:, 0] + 2 * X[:, 1]
         y = y.reshape((-1,1))
         ols = OLS(use_intercept=False, key=key)
-        h = Pipeable([X, y]) >> ols
+        h = Pipeable(X, y) >> ols
         state = h()
         self.assertAllClose(state.params.ravel(), np.array([3., 2.]) , atol=1e-5)
 

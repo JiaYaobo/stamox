@@ -1,4 +1,3 @@
-import weakref
 from functools import partial
 from typing import (
     Any,
@@ -137,9 +136,9 @@ class Pipeable(Functional):
         value (Any): The value to be piped.
     """
 
-    _data_ref: Any
+    value: Any
 
-    def __init__(self, data):
+    def __init__(self, *args, **kwargs):
         super().__init__(name="PipeableData", fn=None)
         """Initialize the Pipeable object.
 
@@ -147,19 +146,7 @@ class Pipeable(Functional):
             value (Any): The value to be piped.
         """
         # make weakref for large scale data
-        self._data_ref = weakref.ref(data, self._on_delete)
-
-    def _on_delete(self, ref):
-        """Callback for when the value is deleted.
-
-        Args:
-            ref (Any): The weak reference to the value.
-        """
-        return None
-    
-    @property
-    def value(self):
-        return self._data_ref()
+        self.value = args
 
     def __call__(self, *args, **kwargs):
         """Pipe the value through the function.
