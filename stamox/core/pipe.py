@@ -213,7 +213,7 @@ def make_partial_pipe(
             fn = partial(func, **kwargs)
             return Functional(name=name, fn=fn)
 
-        return Functional(name="partial_" + name, fn=partial_fn)
+        return Functional(name=name, fn=partial_fn)
 
     if func is None:
         return wrap
