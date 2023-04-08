@@ -21,13 +21,14 @@ def _pnorm(
     return ndtr(scaled)
 
 
-@make_partial_pipe(name='pnorm')
+@make_partial_pipe(name="pnorm")
 def pnorm(
     q: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Calculate the cumulative distribution function (CDF) of the normal distribution.
 
@@ -41,6 +42,7 @@ def pnorm(
             Defaults to True.
         log_prob (bool, optional): If True, return the log of the CDF instead of the actual value.
             Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: The CDF of the normal distribution evaluated at x.
@@ -53,7 +55,7 @@ def pnorm(
         >>> pnorm([1.5, 2.0, 2.5], mean=2.0, sd=0.5, lower_tail=False)
         Array([0.8413447 , 0.5       , 0.15865529], dtype=float32)
     """
-    q = jnp.asarray(q)
+    q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pnorm)(q, mean, sd)
     if not lower_tail:
@@ -66,13 +68,14 @@ def pnorm(
 _dnorm = filter_jit(filter_grad(_pnorm))
 
 
-@make_partial_pipe(name='dnorm')
+@make_partial_pipe(name="dnorm")
 def dnorm(
     x: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """
     Probability density function (PDF) for Normal distribution.
@@ -83,6 +86,7 @@ def dnorm(
         sd (Union[Float, ArrayLike], optional): The standard deviation of the normal distribution. Defaults to 1.0.
         lower_tail (bool, optional): If True (default), returns the cumulative distribution function (CDF) from negative infinity up to x. Otherwise, returns the CDF from x to positive infinity.
         log_prob (bool, optional): If True, returns the log-probability instead of the probability.
+        dtype (jnp.dtype, optional): The dtype of the output. Default is `jnp.float32`.
 
     Returns:
         ArrayLike: The probability density function evaluated at point(s) x.
@@ -93,7 +97,7 @@ def dnorm(
         >>> dnorm(x)
         Array([0.35206532, 0.24197075, 0.12951761], dtype=float32)
     """
-    x = jnp.asarray(x)
+    x = jnp.asarray(x, dtype=dtype)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dnorm)(x, mean, sd)
     if not lower_tail:
@@ -113,13 +117,14 @@ def _qnorm(
     return x * sd + mean
 
 
-@make_partial_pipe(name='qnorm')
+@make_partial_pipe(name="qnorm")
 def qnorm(
     p: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """
     Calculates the quantile function of the normal distribution for a given probability.
@@ -130,6 +135,7 @@ def qnorm(
         sd (float or jnp.ndarray, optional): Standard deviation of the normal distribution. Default is 1.0.
         lower_tail (bool, optional): If `True`, returns P(X ≤ x). If `False`, returns P(X > x). Default is `True`.
         log_prob (bool, optional): If `True`, returns the logarithm of the quantile function. Default is `False`.
+        dtype (jnp.dtype, optional): The dtype of the output. Default is `jnp.float32`.
 
     Returns:
         ArrayLike: The inverse cumulative density function of the normal distribution evaluated at `q`.
@@ -141,7 +147,7 @@ def qnorm(
         >>> qnorm([0.25, 0.75], mean=3, sd=2)
         Array([1.6510204, 4.3489795], dtype=float32)
     """
-    p = jnp.asarray(p)
+    p = jnp.asarray(p, dtype=dtype)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -152,15 +158,15 @@ def qnorm(
 
 
 @filter_jit
-def _rnorm(key, mean, sd, sample_shape):
+def _rnorm(key, mean, sd, sample_shape, dtype):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(mean), jnp.shape(sd))
     mean = jnp.broadcast_to(mean, sample_shape)
     sd = jnp.broadcast_to(sd, sample_shape)
-    return jrand.normal(key, sample_shape) * sd + mean
+    return jrand.normal(key, sample_shape, dtype=dtype) * sd + mean
 
 
-@make_partial_pipe(name='rnorm')
+@make_partial_pipe(name="rnorm")
 def rnorm(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,
@@ -168,6 +174,7 @@ def rnorm(
     sd: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Generates random variables from a normal distribution.
 
@@ -177,10 +184,13 @@ def rnorm(
         output array. Defaults to an empty tuple.
         mean: The mean of the normal distribution. Defaults to 0.0.
         sd: The standard deviation of the normal distribution. Defaults to 1.0.
+        lower_tail: If True (default), returns the cumulative distribution function (CDF) from negative infinity up to x. Otherwise, returns the CDF from x to positive infinity.
+        log_prob: If True, returns the log-probability instead of the probability.
+        dtype: The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: Random samples from a normal distribution.
-    
+
     Example:
         >>> import jax.numpy as jnp
         >>> from jax import random
@@ -191,7 +201,7 @@ def rnorm(
                 [ 0.24447003, -0.11744965]], dtype=float32)
 
     """
-    rvs = _rnorm(key, mean, sd, sample_shape)
+    rvs = _rnorm(key, mean, sd, sample_shape, dtype=dtype)
     if not lower_tail:
         rvs = 1 - rvs
 

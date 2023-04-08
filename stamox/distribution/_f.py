@@ -26,6 +26,7 @@ def pF(
     dfd: Union[Float, ArrayLike],
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Calculates the cumulative distribution function of the F-distribution.
 
@@ -35,6 +36,7 @@ def pF(
         dfd (Union[Float, ArrayLike]): The denominator degrees of freedom.
         lower_tail (bool, optional): If True (default), the lower tail probability is returned.
         log_prob (bool, optional): If True, the logarithm of the probability is returned.
+        dtype (jnp.dtype, optional): The dtype of the output (default is float32).
 
     Returns:
         ArrayLike: The cumulative distribution function evaluated at `q`.
@@ -43,7 +45,7 @@ def pF(
         >>> pF(1.0, 1.0, 1.0)
         Array([0.5000001], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q)
+    q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pf)(q, dfn, dfd)
     if not lower_tail:
@@ -63,6 +65,7 @@ def dF(
     dfd: Union[Float, ArrayLike],
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Calculates the gradient of the cumulative distribution function for a given x, dfn and dfd.
 
@@ -72,6 +75,7 @@ def dF(
         dfd (Union[Float, ArrayLike]): The denominator degrees of freedom.
         lower_tail (bool, optional): Whether to calculate the lower tail of the cumulative distribution function. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to float32.
 
     Returns:
         ArrayLike: The gradient of the cumulative distribution function.
@@ -80,7 +84,7 @@ def dF(
         >>> dF(1.0, 1.0, 1.0)
         Array([0.1591549], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x)
+    x = jnp.asarray(x, dtype=dtype)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_df)(x, dfn, dfd)
     if not lower_tail:
@@ -106,6 +110,7 @@ def qF(
     dfd: Union[Float, ArrayLike],
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Calculates the quantile function of a given distribution.
 
@@ -123,7 +128,7 @@ def qF(
         >>> qF(0.5, 1.0, 1.0)
         Array([0.99999714], dtype=float32)
     """
-    p = jnp.asarray(p)
+    p = jnp.asarray(p, dtype=dtype)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -138,12 +143,13 @@ def _rf(
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    dtype = jnp.float32,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(dfn), jnp.shape(dfd))
     dfn = jnp.broadcast_to(dfn, sample_shape)
     dfd = jnp.broadcast_to(dfd, sample_shape)
-    return jrand.f(key, dfn, dfd, shape=sample_shape)
+    return jrand.f(key, dfn, dfd, shape=sample_shape, dtype=dtype)
 
 
 @make_partial_pipe
@@ -154,6 +160,7 @@ def rF(
     dfd: Union[Float, ArrayLike] = None,
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype = jnp.float32,
 ):
     """Generate random variates from F-distribution.
 
@@ -164,6 +171,7 @@ def rF(
         dfd (Union[Float, ArrayLike]): Degrees of freedom in denominator.
         lower_tail (bool, optional): Whether to calculate the lower tail probability. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to float32.
 
     Returns:
         ArrayLike : Random variates from F-distribution.
@@ -173,7 +181,7 @@ def rF(
         Array(40.787617, dtype=float32)
 
     """
-    rvs = _rf(key, dfn, dfd, sample_shape)
+    rvs = _rf(key, dfn, dfd, sample_shape, dtype=dtype)
     if not lower_tail:
         rvs = 1 - rvs
     if log_prob:

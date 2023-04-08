@@ -27,6 +27,7 @@ def pcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Calculates the cumulative denisty probability c function of the Cauchy distribution.
 
@@ -36,6 +37,7 @@ def pcauchy(
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Cauchy distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: The cumulative density function of the Cauchy distribution.
@@ -44,7 +46,7 @@ def pcauchy(
         >>> pcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
         Array([0.75], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q)
+    q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pcauchy)(q, loc, scale)
     if not lower_tail:
@@ -64,6 +66,7 @@ def dcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Computes the pdf of the Cauchy distribution.
 
@@ -73,6 +76,7 @@ def dcauchy(
         scale (Union[Float, ArrayLike], optional): The scale parameter. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to compute the lower tail. Defaults to True.
         log_prob (Bool, optional): Whether to compute the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: The pdf of the Cauchy distribution.
@@ -81,7 +85,7 @@ def dcauchy(
         >>> dcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
         Array([0.15915494], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x)
+    x = jnp.asarray(x, dtype=dtype)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dcauchy)(x, loc, scale)
     if not lower_tail:
@@ -107,6 +111,7 @@ def qcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Computes the quantile of the Cauchy distribution.
 
@@ -116,6 +121,7 @@ def qcauchy(
         scale (Union[float, array-like], optional): Scale parameter. Defaults to 1.0.
         lower_tail (bool, optional): Whether to compute the lower tail. Defaults to True.
         log_prob (bool, optional): Whether to compute the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: The quantiles of the Cauchy distribution.
@@ -124,7 +130,7 @@ def qcauchy(
         >>> qcauchy(0.5, loc=1.0, scale=2.0, lower_tail=True, log_prob=False)
         Array([1.], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q)
+    q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
     if not lower_tail:
         q = 1 - q
@@ -138,12 +144,13 @@ def _rcauchy(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
+    dtype = jnp.float32,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(loc), jnp.shape(scale))
     loc = jnp.broadcast_to(loc, sample_shape)
     scale = jnp.broadcast_to(scale, sample_shape)
-    return jrand.cauchy(key, sample_shape) * scale + loc
+    return jrand.cauchy(key, sample_shape, dtype=dtype) * scale + loc
 
 
 @make_partial_pipe
@@ -154,6 +161,7 @@ def rcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Generates random samples from the Cauchy distribution.
 
@@ -164,6 +172,7 @@ def rcauchy(
         scale: The scale parameter of the Cauchy distribution.
         lower_tail: Whether to return the lower tail probability.
         log_prob: Whether to return the log probability.
+        dtype: The dtype of the output.
 
     Returns:
         ArrayLike: An array of samples from the Cauchy distribution.
@@ -174,7 +183,7 @@ def rcauchy(
         Array([[ 0.23841971, -3.0880406 ,  0.9507532 ],
                 [ 2.8963416 ,  0.31303588, -0.14792857]], dtype=float32)
     """
-    rvs = _rcauchy(key, loc, scale, sample_shape)
+    rvs = _rcauchy(key, loc, scale, sample_shape, dtype)
     if not lower_tail:
         rvs = 1 - rvs
     if log_prob:

@@ -25,6 +25,7 @@ def pgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Computes the cumulative distribution function of the gamma distribution.
 
@@ -34,6 +35,7 @@ def pgamma(
         rate: A float or array-like object representing the rate parameter of the gamma function.
         lower_tail: A boolean indicating whether to compute the lower tail of the gamma function.
         log_prob: A boolean indicating whether to compute the logarithm of the probability density function.
+        dtype: The dtype of the output. Defaults to float32.
 
     Returns:
         ArrayLike: The CDF value of the given value or array of values.
@@ -42,7 +44,7 @@ def pgamma(
         >>> pgamma(1.0, 0.5, 0.5)
         Array([0.6826893], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q)
+    q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pgamma)(q, shape, rate)
     if not lower_tail:
@@ -62,6 +64,7 @@ def dgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Compute density of gamma distribution.
 
@@ -76,6 +79,7 @@ def dgamma(
             gamma distribution. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability.
             Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to
 
     Returns:
         ArrayLike: The density of the gamma distribution evaluated
@@ -85,7 +89,7 @@ def dgamma(
         >>> dgamma(1.0, 0.5, 0.5)
         Array([0.24197064], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x)
+    x = jnp.asarray(x, dtype=dtype)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dgamma)(x, shape, rate)
     if not lower_tail:
@@ -111,6 +115,7 @@ def qgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Computes the quantile of the gamma distribution.
 
@@ -120,6 +125,7 @@ def qgamma(
         rate: A float or array-like object representing the rate parameter of the gamma distribution.
         lower_tail: A boolean indicating whether to compute the lower tail (default) or upper tail.
         log_prob: A boolean indicating whether to compute the log probability (default False).
+        dtype: The dtype of the output. Defaults to float32.
 
     Returns:
         ArrayLike: The quantile of the gamma distribution.
@@ -128,7 +134,7 @@ def qgamma(
         >>> qgamma(0.5, 0.5, 0.5)
         Array([0.45493677], dtype=float32)
     """
-    p = jnp.asarray(p)
+    p = jnp.asarray(p, dtype=dtype)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -146,6 +152,7 @@ def rgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Generates random gamma values.
 
@@ -156,6 +163,7 @@ def rgamma(
         rate: The rate parameter of the gamma distribution.
         lower_tail: Whether to return the lower tail of the distribution.
         log_prob: Whether to return the log probability of the result.
+        dtype: The dtype of the output. Defaults to float32.
 
     Returns:
         ArrayLike: A random gamma value or an array of random gamma values.
@@ -164,7 +172,7 @@ def rgamma(
         >>> rgamma(key, shape=0.5, rate=0.5)
         Array(0.3384059, dtype=float32)
     """
-    rvs = _rgamma(key, shape, rate, sample_shape)
+    rvs = _rgamma(key, shape, rate, sample_shape, dtype=dtype)
     if not lower_tail:
         rvs = 1 - rvs
     if log_prob:
@@ -178,9 +186,10 @@ def _rgamma(
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
+    dtype=jnp.float32,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(shape), jnp.shape(rate))
     shape = jnp.broadcast_to(shape, sample_shape)
     rate = jnp.broadcast_to(rate, sample_shape)
-    return jrand.gamma(key, shape, sample_shape) / rate
+    return jrand.gamma(key, shape, sample_shape, dtype) / rate

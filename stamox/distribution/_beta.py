@@ -25,6 +25,7 @@ def pbeta(
     b: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Computes the cumulative distribution function of the beta distribution.
 
@@ -34,6 +35,7 @@ def pbeta(
         b (Union[Float, ArrayLike]): Shape parameter.
         lower_tail (bool, optional): If True (default), probabilities are P[X ≤ x], otherwise, P[X > x].
         log_prob (bool, optional): If True, probabilities are given as log(P).
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: The probability or log of the probability for each quantile.
@@ -45,7 +47,7 @@ def pbeta(
         >>> pbeta(q, a, b)
         Array([0.05230004, 0.68749976, 0.9963    ], dtype=float32)
     """
-    q = jnp.asarray(q)
+    q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pbeta)(q, a, b)
     if not lower_tail:
@@ -65,6 +67,7 @@ def dbeta(
     b: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Calculates the probability density function of the beta distribution.
 
@@ -74,6 +77,7 @@ def dbeta(
       b: A float or array-like object representing the scale parameter of the beta distribution.
       lower_tail: A boolean indicating whether to calculate the lower tail (default True).
       log_prob: A boolean indicating whether to return the logarithm of the PDF (default False).
+      dtype: The dtype of the output. Defaults to jnp.float32.
 
     Returns:
       ArrayLike: The probability density function of the beta distribution evaluated at x.
@@ -82,7 +86,7 @@ def dbeta(
         >>> dbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
         Array([1.4999996], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x)
+    x = jnp.asarray(x, dtype=dtype)
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dbeta)(x, a, b)
     if not lower_tail:
@@ -106,26 +110,28 @@ def qbeta(
     b: Union[Float, ArrayLike],
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Computes the quantile of beta distribution function.
 
     Args:
-      p: A float or array-like object representing the quantile.
-      a: A float or array-like object representing the alpha parameter.
-      b: A float or array-like object representing the beta parameter.
-      lower_tail: A boolean indicating whether to compute the lower tail of the
+        p: A float or array-like object representing the quantile.
+        a: A float or array-like object representing the alpha parameter.
+        b: A float or array-like object representing the beta parameter.
+        lower_tail: A boolean indicating whether to compute the lower tail of the
         distribution (defaults to True).
-      log_prob: A boolean indicating whether to compute the log probability
+        log_prob: A boolean indicating whether to compute the log probability
         (defaults to False).
+        dtype: The dtype of the output. Defaults to jnp.float32.
 
     Returns:
-      ArrayLike: The value of the beta distribution at the given quantile.
+        ArrayLike: The value of the beta distribution at the given quantile.
 
     Example:
         >>> qbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
         Array([0.38572744], dtype=float32)
     """
-    p = jnp.asarray(p)
+    p = jnp.asarray(p, dtype=dtype)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -143,6 +149,7 @@ def rbeta(
     b: Union[Float, ArrayLike] = None,
     lower_tail: bool = True,
     log_prob: bool = False,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     """Generates random numbers from the Beta distribution.
 
@@ -153,6 +160,7 @@ def rbeta(
         b: The scale parameter of the Beta distribution. Can be either a float or an array-like object.
         lower_tail: Whether to return the lower tail probability (defaults to True).
         log_prob: Whether to return the log probability (defaults to False).
+        dtype: The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: Random numbers from the Beta distribution.
@@ -176,9 +184,10 @@ def _rbeta(
     a: Union[Float, ArrayLike],
     b: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
+    dtype = jnp.float32,
 ) -> ArrayLike:
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(a), jnp.shape(b))
     a = jnp.broadcast_to(a, sample_shape)
     b = jnp.broadcast_to(b, sample_shape)
-    return jrand.beta(key, a, b, sample_shape)
+    return jrand.beta(key, a, b, sample_shape, dtype=dtype)

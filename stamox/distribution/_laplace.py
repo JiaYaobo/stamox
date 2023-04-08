@@ -15,7 +15,7 @@ def _plaplace(
     x: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
-) :
+):
     scaled = (x - loc) / scale
     return 0.5 - 0.5 * jnp.sign(scaled) * jnp.expm1(-jnp.abs(scaled))
 
@@ -27,6 +27,7 @@ def plaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Calculates the Laplace cumulative density function.
 
@@ -44,7 +45,7 @@ def plaplace(
         >>> plaplace(1.0, 1.0, 1.0)
         Array([0.5], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q)
+    q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_plaplace)(q, loc, scale)
     if not lower_tail:
@@ -64,6 +65,7 @@ def dlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Calculates the Laplace probability density function for a given x, location and scale.
 
@@ -73,6 +75,7 @@ def dlaplace(
         scale (Union[Float, ArrayLike], optional): The scale parameter. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail of the distribution. Defaults to True.
         log_prob (Bool, optional): Whether to return the logarithm of the probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: The probability density at the given x.
@@ -81,7 +84,7 @@ def dlaplace(
         >>> dlaplace(1.0, 1.0, 1.0)
         Array([0.], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x)
+    x = jnp.asarray(x, dtype=dtype)
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dlaplace)(x, loc, scale)
     if not lower_tail:
@@ -108,6 +111,7 @@ def qlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Computes the quantile of the Laplace distribution.
 
@@ -117,6 +121,7 @@ def qlaplace(
         scale (Union[Float, ArrayLike], optional): Scale parameter. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to compute the lower tail. Defaults to True.
         log_prob (Bool, optional): Whether to compute the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: The quantiles of the Laplace distribution.
@@ -125,7 +130,7 @@ def qlaplace(
         >>> qlaplace(0.5, 1.0, 1.0)
         Array([1.], dtype=float32, weak_type=True)
     """
-    p = jnp.asarray(p)
+    p = jnp.asarray(p, dtype=dtype)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -140,12 +145,13 @@ def _rlaplace(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
+    dtype=jnp.float32,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(loc), jnp.shape(scale))
     loc = jnp.broadcast_to(loc, sample_shape)
     scale = jnp.broadcast_to(scale, sample_shape)
-    return jrand.laplace(key, sample_shape) * scale + loc
+    return jrand.laplace(key, sample_shape, dtype=dtype) * scale + loc
 
 
 @make_partial_pipe
@@ -156,6 +162,7 @@ def rlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Generates random Laplace samples from a given key.
 
@@ -166,6 +173,7 @@ def rlaplace(
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Laplace distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
 
     Returns:
         ArrayLike: An array containing the random Laplace samples.
@@ -174,9 +182,9 @@ def rlaplace(
         >>> rlaplace(key, (2, 3))
         Array([[-0.16134426,  1.6125823 , -0.6615164 ],
                 [-1.5528525 , -0.21459664,  0.09816013]], dtype=float32)
-        
+
     """
-    rvs = _rlaplace(key, loc, scale, sample_shape)
+    rvs = _rlaplace(key, loc, scale, sample_shape, dtype=dtype)
     if not lower_tail:
         rvs = 1 - rvs
     if log_prob:
