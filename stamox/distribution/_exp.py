@@ -36,6 +36,7 @@ def pexp(
         >>> pexp(1.0, 0.5)
         Array([0.39346933], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pexp)(q, rate)
     if not lower_tail:
@@ -72,6 +73,7 @@ def qexp(
         >>> qexp(0.5, 1.0)
         Array([0.6931472], dtype=float32, weak_type=True)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -106,6 +108,7 @@ def dexp(
         >>> dexp(1.0, 0.5, lower_tail=True, log_prob=False)
         Array([0.30326533], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dexp)(x, rate)
     if not lower_tail:

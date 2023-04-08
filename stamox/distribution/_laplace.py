@@ -44,6 +44,7 @@ def plaplace(
         >>> plaplace(1.0, 1.0, 1.0)
         Array([0.5], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_plaplace)(q, loc, scale)
     if not lower_tail:
@@ -80,6 +81,7 @@ def dlaplace(
         >>> dlaplace(1.0, 1.0, 1.0)
         Array([0.], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dlaplace)(x, loc, scale)
     if not lower_tail:
@@ -123,6 +125,7 @@ def qlaplace(
         >>> qlaplace(0.5, 1.0, 1.0)
         Array([1.], dtype=float32, weak_type=True)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p

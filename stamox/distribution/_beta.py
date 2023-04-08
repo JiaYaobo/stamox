@@ -45,6 +45,7 @@ def pbeta(
         >>> pbeta(q, a, b)
         Array([0.05230004, 0.68749976, 0.9963    ], dtype=float32)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pbeta)(q, a, b)
     if not lower_tail:
@@ -81,6 +82,7 @@ def dbeta(
         >>> dbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
         Array([1.4999996], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dbeta)(x, a, b)
     if not lower_tail:
@@ -123,6 +125,7 @@ def qbeta(
         >>> qbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
         Array([0.38572744], dtype=float32)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -159,12 +162,12 @@ def rbeta(
         >>> rbeta(key, sample_shape=(3,), a=2, b=3)
         Array([0.02809353, 0.13760717, 0.49360353], dtype=float32)
     """
-    probs = _rbeta(key, a, b, sample_shape)
+    rvs = _rbeta(key, a, b, sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs
 
 
 @filter_jit

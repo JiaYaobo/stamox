@@ -42,6 +42,7 @@ def pgamma(
         >>> pgamma(1.0, 0.5, 0.5)
         Array([0.6826893], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pgamma)(q, shape, rate)
     if not lower_tail:
@@ -84,6 +85,7 @@ def dgamma(
         >>> dgamma(1.0, 0.5, 0.5)
         Array([0.24197064], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dgamma)(x, shape, rate)
     if not lower_tail:
@@ -126,6 +128,7 @@ def qgamma(
         >>> qgamma(0.5, 0.5, 0.5)
         Array([0.45493677], dtype=float32)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -161,12 +164,12 @@ def rgamma(
         >>> rgamma(key, shape=0.5, rate=0.5)
         Array(0.3384059, dtype=float32)
     """
-    rv = _rgamma(key, shape, rate, sample_shape)
+    rvs = _rgamma(key, shape, rate, sample_shape)
     if not lower_tail:
-        rv = 1 - rv
+        rvs = 1 - rvs
     if log_prob:
-        rv = jnp.log(rv)
-    return rv
+        rvs = jnp.log(rvs)
+    return rvs
 
 
 @filter_jit

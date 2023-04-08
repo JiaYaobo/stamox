@@ -38,6 +38,7 @@ def pweibull(
     Returns:
         Array: The cumulative distribution function of the Weibull distribution evaluated at `q`.
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pweibull)(q, concentration, scale)
     if not lower_tail:
@@ -66,6 +67,7 @@ def dweibull(
     Returns:
         Array: The probability density function of the Weibull distribution evaluated at `x`.
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dweibull)(x, concentration, scale)
     if not lower_tail:
@@ -105,6 +107,7 @@ def qweibull(
     Returns:
         Array: The computed quantiles.
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
@@ -144,7 +147,7 @@ def rweibull(
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        rvs (float): Probability of the Weibull distribution.
+        rvs (ArrayLike): Probability of the Weibull distribution.
     """
     rvs = _rweibull(key, concentration, scale, sample_shape)
     if not lower_tail:
