@@ -53,6 +53,7 @@ def pt(
         >>> pt(1.0, 1.0)
         Array([0.74999994], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pt)(q, df, loc, scale)
     if not lower_tail:
@@ -93,6 +94,7 @@ def dt(
         >>> dt(1.0, 1.0)
         Array([0.1591549], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dt)(x, df, loc, scale)
     if not lower_tail:
@@ -141,6 +143,7 @@ def qt(
         >>> qt(0.5, 1.0)
         Array([0.], dtype=float32, weak_type=True)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p

@@ -44,6 +44,7 @@ def punif(
         >>> punif(0.5)
         Array([0.5], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_punif)(q, mini, maxi)
     if not lower_tail:
@@ -80,6 +81,7 @@ def dunif(
         >>> dunif(0.5)
         Array([1.], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dunif)(x, mini, maxi)
     if not lower_tail:
@@ -125,6 +127,7 @@ def qunif(
         >>> qunif(0.5)
         Array([0.5], dtype=float32, weak_type=True)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p

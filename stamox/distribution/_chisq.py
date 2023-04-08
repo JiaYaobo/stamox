@@ -32,6 +32,7 @@ def dchisq(
       >>> dchisq(2.0, 3, lower_tail=True, log_prob=False)
       Array([0.20755368], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dgamma)(x, df / 2, 1 / 2)
     if not lower_tail:
@@ -63,6 +64,7 @@ def pchisq(
         >>> pchisq(2.0, 3, lower_tail=True, log_prob=False)
         Array([0.42759317], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pgamma)(q, df / 2, 1 / 2)
     if not lower_tail:
@@ -94,6 +96,7 @@ def qchisq(
         >>> qchisq(0.95, 10)
         Array([18.307034], dtype=float32)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p

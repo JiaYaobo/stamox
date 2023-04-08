@@ -34,8 +34,9 @@ def ppoisson(
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
 
     Returns:
-        Array: The cumulative distribution function of the Poisson distribution evaluated at `q`.
+        ArrayLike: The cumulative distribution function of the Poisson distribution evaluated at `q`.
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_ppoisson)(q, rate)
     if not lower_tail:
@@ -71,6 +72,7 @@ def dpoisson(
     Returns:
         Array: The probability density function of the Poisson distribution evaluated at `x`.
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dpoisson)(x, rate)
     if not lower_tail:

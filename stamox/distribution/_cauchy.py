@@ -44,6 +44,7 @@ def pcauchy(
         >>> pcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
         Array([0.75], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pcauchy)(q, loc, scale)
     if not lower_tail:
@@ -80,6 +81,7 @@ def dcauchy(
         >>> dcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
         Array([0.15915494], dtype=float32, weak_type=True)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dcauchy)(x, loc, scale)
     if not lower_tail:
@@ -122,6 +124,7 @@ def qcauchy(
         >>> qcauchy(0.5, loc=1.0, scale=2.0, lower_tail=True, log_prob=False)
         Array([1.], dtype=float32, weak_type=True)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     if not lower_tail:
         q = 1 - q
@@ -171,9 +174,9 @@ def rcauchy(
         Array([[ 0.23841971, -3.0880406 ,  0.9507532 ],
                 [ 2.8963416 ,  0.31303588, -0.14792857]], dtype=float32)
     """
-    probs = _rcauchy(key, loc, scale, sample_shape)
+    rvs = _rcauchy(key, loc, scale, sample_shape)
     if not lower_tail:
-        probs = 1 - probs
+        rvs = 1 - rvs
     if log_prob:
-        probs = jnp.log(probs)
-    return probs
+        rvs = jnp.log(rvs)
+    return rvs

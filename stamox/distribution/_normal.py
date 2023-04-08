@@ -53,6 +53,7 @@ def pnorm(
         >>> pnorm([1.5, 2.0, 2.5], mean=2.0, sd=0.5, lower_tail=False)
         Array([0.8413447 , 0.5       , 0.15865529], dtype=float32)
     """
+    q = jnp.asarray(q)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pnorm)(q, mean, sd)
     if not lower_tail:
@@ -92,6 +93,7 @@ def dnorm(
         >>> dnorm(x)
         Array([0.35206532, 0.24197075, 0.12951761], dtype=float32)
     """
+    x = jnp.asarray(x)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dnorm)(x, mean, sd)
     if not lower_tail:
@@ -139,6 +141,7 @@ def qnorm(
         >>> qnorm([0.25, 0.75], mean=3, sd=2)
         Array([1.6510204, 4.3489795], dtype=float32)
     """
+    p = jnp.asarray(p)
     p = jnp.atleast_1d(p)
     if not lower_tail:
         p = 1 - p
