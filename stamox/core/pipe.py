@@ -46,11 +46,10 @@ class Pipe(eqx.Module):
             x = fn(x, *args, **kwargs)
         return x
 
-    def __call__(self, x: Any = None, *args, **kwargs):
+    def __call__(self, *args, **kwargs):
         """Call the Pipe object.
 
         Args:
-            x (Any): The input to the Pipe object.
             *args: Variable length argument list.
             **kwargs: Arbitrary keyword arguments.
 
@@ -61,7 +60,7 @@ class Pipe(eqx.Module):
             if fn._is_fully_partial:
                 x = fn()
                 continue
-            x = fn(x, *args, **kwargs)
+            x = fn(*args, **kwargs)
         return x
 
     def __getitem__(self, i: Union[int, slice, str]) -> Functional:
@@ -173,6 +172,14 @@ def make_pipe(
 
     Returns:
         Callable: The wrapped function.
+
+    Examples:
+        >>> @make_pipe
+        ... def add(x):
+        ...     return x + 1
+        >>> h = add >> add >> add
+        >>> h(1)
+        4
     """
 
     if name is None and func is not None:
@@ -182,13 +189,15 @@ def make_pipe(
     def wrap(func: Callable[P, T]):
         if isinstance(func, Functional):
             func = func.func
-        
+
         @wraps(func)
         def create_functional(*args, **kwargs):
             return Functional(name=name, fn=func)(*args, **kwargs)
+
         return create_functional
 
     return wrap(func) if func is not None else wrap
+
 
 def make_partial_pipe(
     func: Optional[Callable[P, T]] = None, name: str = None
@@ -202,10 +211,17 @@ def make_partial_pipe(
 
     Returns:
         Callable: A partial function pipe.
+
+    Examples:
+        >>> @make_partial_pipe
+        ... def add(x, y):
+        ...     return x + y
+        >>> h = add(y=1) >> add(y=2) >> add(y=3)
+        >>> h(1)
+        7
     """
     if name is None and func is not None:
         name = func.__name__
-        
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -213,13 +229,12 @@ def make_partial_pipe(
             func = func.func
 
         @wraps(func)
-        def partial_fn(x: Any = None, *args, **kwargs):
-            if x is not None:
-                return func(x, *args, **kwargs)
+        def partial_fn(*args, **kwargs):
+            if len(args) != 0:
+                return func(*args, **kwargs)
             fn = partial(func, **kwargs)
             return Functional(name=name, fn=fn)
 
         return partial_fn
-    
+
     return wrap if func is None else wrap(func)
-    

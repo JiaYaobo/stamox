@@ -64,6 +64,8 @@ def bootstrap(
     Args:
         data (array-like): The original data.
         call (Callable[..., ReturnValue]): The function to call on each bootstrap sample.
+        num_samples (int): The number of bootstrap samples to generate.
+        key (jrandom.KeyArray, optional): A random key array. Defaults to None.
 
     Returns:
         PyTree: The return value of `call` on each bootstrap sample.
