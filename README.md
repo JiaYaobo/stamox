@@ -46,7 +46,7 @@ dnorm(x)
 
 ```python
 from stamox.core import make_pipe
-from stamox.regression import OLS
+from stamox.regression import lm
 from stamox.distribution import rnorm
 from stamox.basic import scale
 from equinox import filter_jit
@@ -57,8 +57,8 @@ key = jrandom.PRNGKey(20010813)
 @make_pipe
 @filter_jit
 def f(x):
-    return [x, 3 * x[:, 0] + 2 * x[:, 1] - x[:, 2]]
-pipe = rnorm(sample_shape=(1000, 3)) >> scale >> f >> OLS(use_intercept=False, key=key)
+    return [3 * x[:, 0] + 2 * x[:, 1] - x[:, 2], x]
+pipe = rnorm(sample_shape=(1000, 3)) >> f >> lm
 state = pipe(key)
 print(state.params)
 ```

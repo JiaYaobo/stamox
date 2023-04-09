@@ -46,7 +46,7 @@ class Pipe(eqx.Module):
             x = fn(x, *args, **kwargs)
         return x
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, x: Any = None, *args, **kwargs):
         """Call the Pipe object.
 
         Args:
@@ -57,10 +57,7 @@ class Pipe(eqx.Module):
             Any: The output of the Pipe object.
         """
         for fn in self.funcs:
-            if fn._is_fully_partial:
-                x = fn()
-                continue
-            x = fn(*args, **kwargs)
+            x = fn(x, *args, **kwargs)
         return x
 
     def __getitem__(self, i: Union[int, slice, str]) -> Functional:
