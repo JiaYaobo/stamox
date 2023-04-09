@@ -22,6 +22,7 @@ def get_design_matrices(
     eval_env=0,
     NA_action="drop",
     return_type="matrix",
+    dtype=jnp.float32,
 ) -> Matrices:
     """Get design matrices from a formula and data.
 
@@ -39,8 +40,8 @@ def get_design_matrices(
         formula, data, eval_env=eval_env, NA_action=NA_action, return_type=return_type
     )
     return Matrices(
-        jnp.asarray(y),
-        jnp.asarray(X),
+        jnp.asarray(y, dtype=dtype),
+        jnp.asarray(X, dtype=dtype),
         y.design_info.column_names,
         X.design_info.column_names,
     )

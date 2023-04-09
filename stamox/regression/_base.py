@@ -1,36 +1,108 @@
-from equinox.nn import Linear
-from jaxtyping import Bool, Float, Int
+import jax.numpy as jnp
+from jaxtyping import ArrayLike
 
 from ..core import StateFunc
 
 
 class RegState(StateFunc):
-    linear: Linear
-    in_features: Int
-    out_features: Int
-    use_intercept: Bool
-    df_model: Float
-    df_residul: Float
+    in_features: int
+    out_features: int
+    _coefs: ArrayLike
+    _df_resid: int
+    _df_model: int
+    _n_obs: int
+    _resid: ArrayLike
+    _fitted_values: ArrayLike
+    _rank: int
+    _dtype: jnp.dtype
 
-    def __init__(self, in_features, out_features, use_intercept, *, key):
-        super().__init__(name="RegState", fn=None)
+    def __init__(
+        self,
+        in_features,
+        out_features,
+        coefs = None,
+        df_resid = None,
+        df_model = None,
+        n_obs = None,
+        resid = None,
+        fitted_values = None,
+        rank = None,
+        dtype = jnp.float32,
+        name = "RegState"
+    ):
+        super().__init__(name=name, fn=None)
         self.in_features = in_features
         self.out_features = out_features
-        self.use_intercept = use_intercept
-        self.linear = Linear(
-            in_features=in_features,
-            out_features=out_features,
-            use_bias=use_intercept,
-            key=key,
-        )
-        self.df_model = 0.0
-        self.df_residul = 0.0
+        if coefs is None:
+            coefs = jnp.zeros((in_features, out_features))
+        self._coefs = coefs
+        self._df_resid = df_resid
+        self._df_model = df_model
+        self._n_obs = n_obs
+        self._resid = resid
+        self._fitted_values = fitted_values
+        self._rank = rank
+        self._dtype = dtype
 
     @property
     def params(self):
-        if self.use_intercept is True:
-            return self.linear.weight, self.linear.bias
-        return self.linear.weight
+        return self._coefs
+    
+    @property
+    def coefs(self):
+        return self._coefs
 
-    def __call__(self, X, *args, **kwargs):
-        return self.linear(X)
+    @property
+    def coefs_X(self):
+        return self.params[1:, :]
+
+    @property
+    def intercept(self):
+        return self.params[0, :].reshape(-1, 1)
+
+    @property
+    def df_resid(self):
+        return self._df_resid
+
+    @property
+    def df_model(self):
+        return self._df_model
+    
+    @property
+    def n_obs(self):
+        return self._n_obs
+
+    @property
+    def resid(self):
+        return self._resid
+
+    @property
+    def fitted_values(self):
+        return self._fitted_values
+    
+    @property
+    def rank(self):
+        return self._rank
+    
+    @property
+    def dtype(self):
+        return self._dtype
+
+    def __call__(self, X):
+        if X.shape[1] == self.in_features:
+            return jnp.matmul(X, self.params)
+        else:
+            return jnp.matmul(X, self.coefs_X) + self.intercept
+
+    def _summary(self):
+        summary = f"""
+        Model: {self.name}
+        Number of observations: {self.df_resid + self.df_model}
+        Degrees of freedom: {self.df_resid} (residuals) / {self.df_model} (model)
+        Rank: {self._rank}
+        Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+        """
+        return summary
+        
+
+        
