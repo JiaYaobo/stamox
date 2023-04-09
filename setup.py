@@ -5,13 +5,13 @@ from setuptools import find_packages, setup
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 PACKAGE_NAME = "stamox"
 AUTHOR = "Jia Yaobo"
 URL = "https://github.com/jiayaobo/stamox"
 
 LICENSE = "Apache 2.0"
-DESCRIPTION = "High Performance Statistics Library"
+DESCRIPTION = "Accelerate Your Statistical Analysis with JAX."
 LONG_DESCRIPTION = (HERE / "README.md").read_text()
 LONG_DESC_TYPE = "text/markdown"
 
@@ -21,7 +21,9 @@ INSTALL_REQUIRES = [
     "typing_extensions>=4.5.0",
     "equinox>=0.10.1",
     "jaxopt>=0.6",
-    "tensorflow-probability>=0.19.0"
+    "pandas>=1.5.3",
+    "patsy>=0.5.3",
+    "tensorflow-probability>=0.19.0",
 ]
 TESTS_REQUIRES = ["pytest", "scipy", "numpy", "sklearn", "statsmodels"]
 

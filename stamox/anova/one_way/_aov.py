@@ -58,11 +58,11 @@ class OneWayAnovaTest(HypoTest):
                     Alternative Hypothesis (H1): "Groups are not equal."
 
                     ANOVA Table:
-                    | Source   | DF    | SS        | MS        | F       | P-value |
-                    |----------|-------|-----------|-----------|---------|---------|
-                    | Between  |{}     |{:.3f}     |{:.3f}     |{:.3f}   |{:.3f}   |
-                    | Within   |{}     |{:.3f}     |{:.3f}     |         |         |
-                    | Total    |{}     |{:.3f}     |           |         |         |  
+                     Source    DF     SS         MS         F        P-value 
+                    ---------------------------------------------------------
+                     Between  {}     {:.3f}     {:.3f}     {:.3f}   {:.3f}   
+                     Within   {}     {:.3f}     {:.3f}                       
+                     Total    {}     {:.3f}                                    
                     """
 
         return template.format(
