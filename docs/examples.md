@@ -15,7 +15,8 @@ std(x) # 0.0
 f = Pipeable(x) >> mean(axis=0) >> var
 f() # 0.0
 ```
----
+
+
 ## Distributions
 
 ```python
@@ -28,7 +29,7 @@ cdf = pnorm(x)
 q = qnorm(cdf)
 pdf = dnorm(q)
 ```
----
+
 ## Linear Model
 
 ```python
@@ -45,7 +46,7 @@ res = lm(data, "y ~ x1 + x2 + x3")
 # or
 res  = (Pipeable(data) >> lm("y ~ x1 + x2 + x3"))()
 ```
----
+
 ## KMeans Cluster
 
 ```python
