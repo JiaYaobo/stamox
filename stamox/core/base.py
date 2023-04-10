@@ -103,6 +103,10 @@ class StateFunc(Functional):
     def _summary(self):
         """Print a summary of the state function."""
         pass
+    
+    def _predict(self, *args, **kwargs):
+        """Predict """
+        pass
 
     def __call__(self, *args, **kwargs):
         """Call the state function."""

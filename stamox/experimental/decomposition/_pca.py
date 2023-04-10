@@ -3,7 +3,7 @@ from equinox import filter_jit
 from jax import vmap
 from jaxtyping import ArrayLike
 
-from ..core import Functional, StateFunc
+from ...core import Functional, StateFunc
 
 
 class PCAState(StateFunc):
@@ -16,9 +16,7 @@ class PCAState(StateFunc):
         self.n_components = n_components
         self.components = components
         self.mean = mean
-
-    def _summary(self) -> str:
-        return "PCA Summary"
+    
 
 
 class PCA(Functional):

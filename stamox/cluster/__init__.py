@@ -1,7 +1,7 @@
-from ._kmeans import KMeans, KMeansState
+from ._kmeans import kmeans, KMeansState
 
 
 __all__ = [
-    "KMeans",
+    "kmeans",
     "KMeansState",
 ]

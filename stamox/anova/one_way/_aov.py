@@ -79,9 +79,6 @@ class OneWayAnovaTest(HypoTest):
             self.ss_total,
         )
 
-    def __call__(self, *args, **kwargs):
-        return self
-
 
 @partial(jit, static_argnames=("axis"))
 def _square_of_sums(a, axis=0) -> Array:

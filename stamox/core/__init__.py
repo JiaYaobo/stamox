@@ -1,3 +1,4 @@
+from stamox.core._func_state import predict, summary
 from stamox.core.base import (
     Functional,
     StateFunc,
@@ -10,7 +11,6 @@ from stamox.core.pipe import (
     Pipe,
     Pipeable,
 )
-from stamox.core.summary import summary
 
 
 __all__ = [
@@ -25,6 +25,7 @@ __all__ = [
     "pipe_jit",
     "pipe_pmap",
     "pipe_vmap",
+    "predict",
     "StateFunc",
     "summary",
 ]

@@ -1,9 +1,9 @@
-from stamox.math.combination import choose
+from stamox.math.combination import combination
 from stamox.math.special import fdtr, fdtrc, fdtri
 
 
 __all__ = [
-    "choose",
+    "combination",
     "fdtri",
     "fdtr",
     "fdtrc",

@@ -16,7 +16,7 @@ std(x) # 0.0
 f = Pipeable(x) >> mean(axis=0) >> var
 f() # 0.0
 ```
-
+---
 ## Distributions
 
 ```python
@@ -29,7 +29,7 @@ cdf = pnorm(x)
 q = qnorm(cdf)
 pdf = dnorm(q)
 ```
-
+---
 ## Linear Model
 
 ```python
@@ -47,5 +47,23 @@ res = lm(data, "y ~ x1 + x2 + x3")
 # or
 res  = (Pipeable(data) >> lm("y ~ x1 + x2 + x3"))()
 ```
+---
+## KMeans Cluster
+
+```python
+import jax.numpy as jnp
+import jax.random as jrandom
+import pandas as pd
+from stamox.cluster import kmeans
+from stamox.core import Pipeable
+from stamox.distribution import runif
+
+key = jrandom.PRNGKey(20010813)
+k1, k2 = jrandom.split(key)
+data = runif(k1, sample_shape=(1000, 3))
+
+res = kmeans(data, 3, key=k2)
+# or
+res = (Pipeable(data) >> kmeans(n_cluster=3, key=k2))()
 ```
 

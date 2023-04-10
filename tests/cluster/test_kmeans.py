@@ -2,11 +2,10 @@
 import jax.numpy as jnp
 import jax.random
 from absl.testing import absltest
-from equinox import filter_jit
 from jax._src import test_util as jtest
 
-from stamox.cluster import KMeans
-from stamox.core import Pipeable
+from stamox.cluster import kmeans
+from stamox.core import Pipeable, predict
 
 
 class KMeansTest(jtest.JaxTestCase):
@@ -24,9 +23,8 @@ class KMeansTest(jtest.JaxTestCase):
             ]
         )
 
-        kms = KMeans(3, key=k4)
-        state = kms(points)
-        self.assertEqual(state.centers.shape, (3, 2))
+        kms = kmeans(points, 3, key=k4)
+        self.assertEqual(kms.centers.shape, (3, 2))
 
     def test_pipe_kmeans(self):
         k1, k2, k3, k4 = jax.random.split(jax.random.PRNGKey(20010218), 4)
@@ -42,11 +40,11 @@ class KMeansTest(jtest.JaxTestCase):
             ]
         )
 
-        kms = KMeans(3, key=k4)
+        kms = kmeans(n_cluster=3, key=k4)
         state = (Pipeable(points) >> kms)()
         self.assertEqual(state.centers.shape, (3, 2))
-
-    def test_pipe_kmeans_jit(self):
+    
+    def test_predict(self):
         k1, k2, k3, k4 = jax.random.split(jax.random.PRNGKey(20010218), 4)
 
         points = jnp.concatenate(
@@ -60,9 +58,10 @@ class KMeansTest(jtest.JaxTestCase):
             ]
         )
 
-        kms = KMeans(3, key=k4)
-        state = filter_jit(Pipeable(points) >> kms)()
+        kms = kmeans(n_cluster=3, key=k4)
+        state = (Pipeable(points) >> kms)()
         self.assertEqual(state.centers.shape, (3, 2))
+        self.assertEqual(predict(state, points).shape, (800,))
 
 
 if __name__ == "__main__":

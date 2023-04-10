@@ -1,12 +1,34 @@
 <h1 align='center'>Stamox</h1>
 
-# Stamox: A Thin Wrapper of `JAX` and `Equinox` for Statistics
+[![PyPI version](https://badge.fury.io/py/stamox.svg)](https://badge.fury.io/py/stamox)
+[![PyPI - License](https://img.shields.io/pypi/l/stamox)](https://pypi.org/project/stamox/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/stamox)](https://pypi.org/project/stamox/)
+[![GitHub stars](https://img.shields.io/github/stars/jiayaobo/stamox)]()
 
-Just out of curiosity of Fucntional Programming, I wrote this package. It is a thin wrapper of `JAX` and `Equinox` for statistics. It is not a complete package, and in heavy development.
+# Hello Stamox, Why Another Wheel?
 
-Inspired by many packages from Python and R, I hope to fuse different features of them into one package, like `%>%` in `dplyr`, or apis from statsmodels and scipy etc. And another important thing is that `JAX` is *really* fast, here's a easy benchmark:
 
-![benchmar](./benchmark/benchmark1.png)
+# Why Another Wheel?
+
+What stamox does is really simple, just make it possible, it aims to provide a statistic interface for `JAX`. But nowadays, we have so many statistic packages around the world varying from languages, for python, `statsmodels` just works great, for `R`, `tidyverse` derived packages are so delicate and easy to use. So **why build another wheel**?
+
+Three reasons I think:
+
+* Personal interest, as a student of statistics, I want to learn more about statistics and machine learning, proficient knowledge comes from books but more from practice, write down the code behind the theory is a good way to learn.
+
+* Speed, `JAX` is really fast, and `Equinox` is a good tool to make `JAX` more convenient, backend of `JAX` is `XLA`, which makes it possible to compile the code to GPU or TPU, and it is really fast.
+
+* Easy of Use, `%>%` is delicate operation in `R`, it combines the functions to a pipe and make the code more readable, and `stamox` is inspired by it, and I want to take a try to make it convenient in python with `>>`.
+
+And here're few benchmarks:
+
+*generate random variables*
+
+![benchmark](./benchmark/benchmark1.png)
+
+*calculate cdf*
+
+![benchmark](./benchmark/benchmark2.png)
 
 ## Installation
 
@@ -16,7 +38,7 @@ pip install stamox
 
 ## Documentation
 
-Not yet.
+More comprehensive introduction and examples can be found in the [documentation](https://jiayaobo.github.io/stamox/).
 
 ## Quick Start
 
@@ -40,30 +62,26 @@ dnorm(x)
 
 ### Fearless Pipeable
 
-`>>` is the pipe operator, which is the similar to `|>` in `F#` and `Elixir` or `%>%` in `R`. But `>>` focus on the composition of functions not the data. You must call pipeable functions with `()`.
+`>>` is the pipe operator, which is the similar to `|>` in `F#` and `Elixir` or `%>%` in `R`.
 
 * Internal Functions Pipeable
 
 ```python
-from stamox.core import make_pipe
-from stamox.regression import lm
-from stamox.distribution import rnorm
-from stamox.basic import scale
-from equinox import filter_jit
 import jax.random as jrandom
+from stamox.basic import scale
+from stamox.core import pipe_jit
+from stamox.distribution import rnorm
+from stamox.regression import lm
 
 key = jrandom.PRNGKey(20010813)
 
-@make_pipe
-@filter_jit
+@pipe_jit
 def f(x):
-    return [3 * x[:, 0] + 2 * x[:, 1] - x[:, 2], x]
+    return [3 * x[:, 0] + 2 * x[:, 1] - x[:, 2], x] # [y, X]
 pipe = rnorm(sample_shape=(1000, 3)) >> f >> lm
 state = pipe(key)
 print(state.params)
 ```
-
-
 
 * Custom Functions Pipeable
 
@@ -90,6 +108,8 @@ print(h())
 
 * Compatible With `JAX` and `Equinox`
 
+You can use autograd features from `JAX` and `Equinox` with `Stamox` easily.
+
 ```python
 from stamox.core import make_pipe, make_partial_pipe, Pipeable
 import jax.numpy as jnp
@@ -102,12 +122,25 @@ from equinox import filter_jit, filter_vmap, filter_grad
 def f(x, y):
     return y * x ** 3
        
-print(f(y=3.)(jnp.array([1., 2., 3.])))
+f(y=3.)(jnp.array([1., 2., 3.]))
+```
+
+Or vmap, pmap, jit features integrated with `Stamox`:
+
+```python
+from stamox.core import pipe_vmap, pipe_jit
+
+@pipe_vmap
+@pipe_jit
+def f(x):
+    return x ** 2
+
+f(jnp.array([1., 2., 3.]))
 ```
 
 ## Acceleration Support
 
-`JAX` can be accelerated by `GPU` and `TPU`. `Stamox` is compatible with them.
+`JAX` can be accelerated by `GPU` and `TPU`. So, `Stamox` is compatible with them.
 
 ## See More
 
