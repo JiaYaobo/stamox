@@ -301,25 +301,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#import-jaxnumpy-as-jnp-from-stamoxbasic-import-mean-var-std-from-stamoxcore-import-pipeable-x-jnpones3-4-meanx-10-varx-00-stdx-00-pipeable-f-pipeablex-meanaxis0-var-f-00" class="md-nav__link">
-    import jax.numpy as jnp
-from stamox.basic import mean, var, std
-from stamox.core import Pipeable
-
-x = jnp.ones((3, 4))
-mean(x) # 1.0
-var(x) # 0.0
-std(x) # 0.0
-
-# Pipeable
-f = Pipeable(x) &gt;&gt; mean(axis=0) &gt;&gt; var
-f() # 0.0
-
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#distributions" class="md-nav__link">
     Distributions
   </a>
@@ -327,43 +308,8 @@ f() # 0.0
 </li>
       
         <li class="md-nav__item">
-  <a href="#import-jaxrandom-as-jrandom-from-stamoxdistribution-import-pnorm-rnorm-qnorm-dnorm-key-jrandomprngkey20010813-x-rnormkey-sample_shape8-100000-cdf-pnormx-q-qnormcdf-pdf-dnormq" class="md-nav__link">
-    import jax.random as jrandom
-from stamox.distribution import pnorm, rnorm, qnorm, dnorm
-
-key = jrandom.PRNGKey(20010813)
-x = rnorm(key, sample_shape=(8, 100000))
-cdf = pnorm(x)
-q = qnorm(cdf)
-pdf = dnorm(q)
-
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#linear-model" class="md-nav__link">
     Linear Model
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#import-jaxnumpy-as-jnp-from-stamoxregression-import-lm-x-nprandomuniformsize1000-3-y-3-x-0-2-x-1-7-x-2-10-data-pddataframe-npconcatenatex-yreshape-1-1-axis1-columnsx1-x2-x3-y-res-lmdata-y-x1-x2-x3-or-res-pipeabledata-lmy-x1-x2-x3" class="md-nav__link">
-    import jax.numpy as jnp
-from stamox.regression import lm
-
-X = np.random.uniform(size=(1000, 3))
-y = 3 * X[:, 0] + 2 * X[:, 1] - 7 * X[:, 2] + 1.0
-data = pd.DataFrame(
-    np.concatenate([X, y.reshape((-1, 1))], axis=1),
-    columns=[&quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;, &quot;y&quot;],
-)
-
-res = lm(data, &quot;y ~ x1 + x2 + x3&quot;)
-# or
-res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
-
   </a>
   
 </li>
@@ -1019,25 +965,6 @@ res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
 </li>
       
         <li class="md-nav__item">
-  <a href="#import-jaxnumpy-as-jnp-from-stamoxbasic-import-mean-var-std-from-stamoxcore-import-pipeable-x-jnpones3-4-meanx-10-varx-00-stdx-00-pipeable-f-pipeablex-meanaxis0-var-f-00" class="md-nav__link">
-    import jax.numpy as jnp
-from stamox.basic import mean, var, std
-from stamox.core import Pipeable
-
-x = jnp.ones((3, 4))
-mean(x) # 1.0
-var(x) # 0.0
-std(x) # 0.0
-
-# Pipeable
-f = Pipeable(x) &gt;&gt; mean(axis=0) &gt;&gt; var
-f() # 0.0
-
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#distributions" class="md-nav__link">
     Distributions
   </a>
@@ -1045,43 +972,8 @@ f() # 0.0
 </li>
       
         <li class="md-nav__item">
-  <a href="#import-jaxrandom-as-jrandom-from-stamoxdistribution-import-pnorm-rnorm-qnorm-dnorm-key-jrandomprngkey20010813-x-rnormkey-sample_shape8-100000-cdf-pnormx-q-qnormcdf-pdf-dnormq" class="md-nav__link">
-    import jax.random as jrandom
-from stamox.distribution import pnorm, rnorm, qnorm, dnorm
-
-key = jrandom.PRNGKey(20010813)
-x = rnorm(key, sample_shape=(8, 100000))
-cdf = pnorm(x)
-q = qnorm(cdf)
-pdf = dnorm(q)
-
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#linear-model" class="md-nav__link">
     Linear Model
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#import-jaxnumpy-as-jnp-from-stamoxregression-import-lm-x-nprandomuniformsize1000-3-y-3-x-0-2-x-1-7-x-2-10-data-pddataframe-npconcatenatex-yreshape-1-1-axis1-columnsx1-x2-x3-y-res-lmdata-y-x1-x2-x3-or-res-pipeabledata-lmy-x1-x2-x3" class="md-nav__link">
-    import jax.numpy as jnp
-from stamox.regression import lm
-
-X = np.random.uniform(size=(1000, 3))
-y = 3 * X[:, 0] + 2 * X[:, 1] - 7 * X[:, 2] + 1.0
-data = pd.DataFrame(
-    np.concatenate([X, y.reshape((-1, 1))], axis=1),
-    columns=[&quot;x1&quot;, &quot;x2&quot;, &quot;x3&quot;, &quot;y&quot;],
-)
-
-res = lm(data, &quot;y ~ x1 + x2 + x3&quot;)
-# or
-res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
-
   </a>
   
 </li>
@@ -1112,7 +1004,7 @@ res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
                 
                 <h1 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">¤</a></h1>
 <h2 id="basic-fucntions">Basic Fucntions<a class="headerlink" href="#basic-fucntions" title="Permanent link">¤</a></h2>
-<h2 id="import-jaxnumpy-as-jnp-from-stamoxbasic-import-mean-var-std-from-stamoxcore-import-pipeable-x-jnpones3-4-meanx-10-varx-00-stdx-00-pipeable-f-pipeablex-meanaxis0-var-f-00"><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">stamox.basic</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">std</span>
 <span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">Pipeable</span>
 
@@ -1120,13 +1012,12 @@ res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
 <span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># 1.0</span>
 <span class="n">var</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># 0.0</span>
 <span class="n">std</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># 0.0</span>
-
 <span class="c1"># Pipeable</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">Pipeable</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">var</span>
 <span class="n">f</span><span class="p">()</span> <span class="c1"># 0.0</span>
-</code></pre></div><a class="headerlink" href="#import-jaxnumpy-as-jnp-from-stamoxbasic-import-mean-var-std-from-stamoxcore-import-pipeable-x-jnpones3-4-meanx-10-varx-00-stdx-00-pipeable-f-pipeablex-meanaxis0-var-f-00" title="Permanent link">¤</a></h2>
+</code></pre></div>
 <h2 id="distributions">Distributions<a class="headerlink" href="#distributions" title="Permanent link">¤</a></h2>
-<h2 id="import-jaxrandom-as-jrandom-from-stamoxdistribution-import-pnorm-rnorm-qnorm-dnorm-key-jrandomprngkey20010813-x-rnormkey-sample_shape8-100000-cdf-pnormx-q-qnormcdf-pdf-dnormq"><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jrandom</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jrandom</span>
 <span class="kn">from</span> <span class="nn">stamox.distribution</span> <span class="kn">import</span> <span class="n">pnorm</span><span class="p">,</span> <span class="n">rnorm</span><span class="p">,</span> <span class="n">qnorm</span><span class="p">,</span> <span class="n">dnorm</span>
 
 <span class="n">key</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">20010813</span><span class="p">)</span>
@@ -1134,9 +1025,9 @@ res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
 <span class="n">cdf</span> <span class="o">=</span> <span class="n">pnorm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">q</span> <span class="o">=</span> <span class="n">qnorm</span><span class="p">(</span><span class="n">cdf</span><span class="p">)</span>
 <span class="n">pdf</span> <span class="o">=</span> <span class="n">dnorm</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
-</code></pre></div><a class="headerlink" href="#import-jaxrandom-as-jrandom-from-stamoxdistribution-import-pnorm-rnorm-qnorm-dnorm-key-jrandomprngkey20010813-x-rnormkey-sample_shape8-100000-cdf-pnormx-q-qnormcdf-pdf-dnormq" title="Permanent link">¤</a></h2>
+</code></pre></div>
 <h2 id="linear-model">Linear Model<a class="headerlink" href="#linear-model" title="Permanent link">¤</a></h2>
-<h2 id="import-jaxnumpy-as-jnp-from-stamoxregression-import-lm-x-nprandomuniformsize1000-3-y-3-x-0-2-x-1-7-x-2-10-data-pddataframe-npconcatenatex-yreshape-1-1-axis1-columnsx1-x2-x3-y-res-lmdata-y-x1-x2-x3-or-res-pipeabledata-lmy-x1-x2-x3"><div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">from</span> <span class="nn">stamox.regression</span> <span class="kn">import</span> <span class="n">lm</span>
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
@@ -1145,11 +1036,10 @@ res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
     <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;x3&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">],</span>
 <span class="p">)</span>
-
 <span class="n">res</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;y ~ x1 + x2 + x3&quot;</span><span class="p">)</span>
 <span class="c1"># or</span>
 <span class="n">res</span>  <span class="o">=</span> <span class="p">(</span><span class="n">Pipeable</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">lm</span><span class="p">(</span><span class="s2">&quot;y ~ x1 + x2 + x3&quot;</span><span class="p">))()</span>
-</code></pre></div><a class="headerlink" href="#import-jaxnumpy-as-jnp-from-stamoxregression-import-lm-x-nprandomuniformsize1000-3-y-3-x-0-2-x-1-7-x-2-10-data-pddataframe-npconcatenatex-yreshape-1-1-axis1-columnsx1-x2-x3-y-res-lmdata-y-x1-x2-x3-or-res-pipeabledata-lmy-x1-x2-x3" title="Permanent link">¤</a></h2>
+</code></pre></div>
 <h2 id="kmeans-cluster">KMeans Cluster<a class="headerlink" href="#kmeans-cluster" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jrandom</span>
@@ -1161,7 +1051,6 @@ res  = (Pipeable(data) &gt;&gt; lm(&quot;y ~ x1 + x2 + x3&quot;))()
 <span class="n">key</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">20010813</span><span class="p">)</span>
 <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">runif</span><span class="p">(</span><span class="n">k1</span><span class="p">,</span> <span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-
 <span class="n">res</span> <span class="o">=</span> <span class="n">kmeans</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">k2</span><span class="p">)</span>
 <span class="c1"># or</span>
 <span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">Pipeable</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">kmeans</span><span class="p">(</span><span class="n">n_cluster</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">k2</span><span class="p">))()</span>
