@@ -42,5 +42,5 @@ setup(
         "complete": INSTALL_REQUIRES + TESTS_REQUIRES,
     },
     packages=find_packages(),
-    python_requires=">=3",
+    python_requires=">=3.8",
 )
