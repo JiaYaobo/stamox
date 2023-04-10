@@ -59,13 +59,17 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="amber">
   
     
     <script>function __prefix(e){return new URL(".",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+      <script>var palette=__get("__palette");if(null!==palette&&"object"==typeof palette.color)for(var key in palette.color)document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -111,6 +115,28 @@
         </div>
       </div>
     </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22z"/></svg>
+            </label>
+          
+        
+      </form>
     
     
     
@@ -887,13 +913,13 @@
                   </a>
                 
                 
-                <h1 id="hello-stamox">Hello Stamox</h1>
+                <h1 id="hello-stamox">Hello Stamox<a class="headerlink" href="#hello-stamox" title="Permanent link">¤</a></h1>
 <p><em>Make Your Statistics Reseatch Faster!</em></p>
 <p><a href="https://badge.fury.io/py/stamox"><img alt="PyPI version" src="https://badge.fury.io/py/stamox.svg" /></a>
 <a href="https://pypi.org/project/stamox/"><img alt="PyPI - License" src="https://img.shields.io/pypi/l/stamox" /></a>
 <a href="https://pypi.org/project/stamox/"><img alt="PyPI - Downloads" src="https://img.shields.io/pypi/dm/stamox" /></a>
 <a href=""><img alt="GitHub stars" src="https://img.shields.io/github/stars/jiayaobo/stamox" /></a></p>
-<h1 id="why-another-wheel">Why Another Wheel?</h1>
+<h1 id="why-another-wheel">Why Another Wheel?<a class="headerlink" href="#why-another-wheel" title="Permanent link">¤</a></h1>
 <p>What stamox does is really simple, just make it possible, it aims to provide a statistic interface for <code>JAX</code>. But nowadays, we have so many statistic packages around the world varying from languages, for python, <code>statsmodels</code> just works great, for <code>R</code>, <code>tidyverse</code> derived packages are so delicate and easy to use. So <strong>why build another wheel</strong>?</p>
 <p>Three reasons I think:</p>
 <ul>
@@ -907,104 +933,104 @@
 <p>Easy of Use, <code>%&gt;%</code> is delicate operation in <code>R</code>, it combines the functions to a pipe and make the code more readable, and <code>stamox</code> is inspired by it, and I want to take a try to make it convenient in python with <code>&gt;&gt;</code>.</p>
 </li>
 </ul>
-<h1 id="speed-at-a-glance">Speed, at a glance</h1>
+<h1 id="speed-at-a-glance">Speed, at a glance<a class="headerlink" href="#speed-at-a-glance" title="Permanent link">¤</a></h1>
 <p>With <code>jit</code> and 'vmap' in <code>JAX</code>, it's easy to write a high performance program than vanilla <code>numpy</code> or <code>R</code></p>
-<h2 id="scipy">Scipy</h2>
-<pre><code class="language-python">import scipy.stats as scp_stats
-import numpy as np
-x = np.random.uniform(size=(8, 100000))
-%timeit scp_stats.norm().cdf(x)
-</code></pre>
-<h2 id="stamox">Stamox</h2>
-<pre><code class="language-python">from stamox.distribution import pnorm, rnorm
-import jax.numpy as jnp
-import jax.random as jrandom
-key = jrandom.PRNGKey(20010813)
-x = rnorm(key, sample_shape=(8, 100000))
-%timeit jax.block_until_ready(pnorm(x))
-</code></pre>
-<h2 id="r">R</h2>
-<pre><code class="language-r">library(rbenchmark)
-x = matrix(runif(8 * 100000), nrow = 8)
-benchmark(pnorm(x), replications = 100)$elapsed / 100
-</code></pre>
+<h2 id="scipy">Scipy<a class="headerlink" href="#scipy" title="Permanent link">¤</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">scp_stats</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">100000</span><span class="p">))</span>
+<span class="o">%</span><span class="n">timeit</span> <span class="n">scp_stats</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="stamox">Stamox<a class="headerlink" href="#stamox" title="Permanent link">¤</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.distribution</span> <span class="kn">import</span> <span class="n">pnorm</span><span class="p">,</span> <span class="n">rnorm</span>
+<span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jrandom</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">20010813</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">rnorm</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">100000</span><span class="p">))</span>
+<span class="o">%</span><span class="n">timeit</span> <span class="n">jax</span><span class="o">.</span><span class="n">block_until_ready</span><span class="p">(</span><span class="n">pnorm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</code></pre></div>
+<h2 id="r">R<a class="headerlink" href="#r" title="Permanent link">¤</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nf">library</span><span class="p">(</span><span class="n">rbenchmark</span><span class="p">)</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">matrix</span><span class="p">(</span><span class="nf">runif</span><span class="p">(</span><span class="m">8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">100000</span><span class="p">),</span><span class="w"> </span><span class="n">nrow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8</span><span class="p">)</span>
+<span class="nf">benchmark</span><span class="p">(</span><span class="nf">pnorm</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="w"> </span><span class="n">replications</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">100</span><span class="p">)</span><span class="o">$</span><span class="n">elapsed</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">100</span>
+</code></pre></div>
 <p>And the mean elapsed time barplot is as follows:</p>
 <p><img alt="benchmark" src="asset/benchmark2.png" /></p>
-<h1 id="pipe-link-with">Pipe, link with <code>&gt;&gt;</code></h1>
-<h2 id="univariate-functions">Univariate Functions</h2>
+<h1 id="pipe-link-with">Pipe, link with <code>&gt;&gt;</code><a class="headerlink" href="#pipe-link-with" title="Permanent link">¤</a></h1>
+<h2 id="univariate-functions">Univariate Functions<a class="headerlink" href="#univariate-functions" title="Permanent link">¤</a></h2>
 <p>For univariate functions, <code>stamox</code> provides a decorator <code>make_pipe</code> to make it pipeable, for example:</p>
-<pre><code class="language-python">from stamox.core import make_pipe
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_pipe</span>
 
-@make_pipe
-def f(x):
-    return x + 1
+<span class="nd">@make_pipe</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
 
-f(1) # 2
-(f &gt;&gt; f &gt;&gt; f &gt;&gt; f)(1) # 5
-</code></pre>
-<h2 id="multi-variables-functions">Multi-variables Functions</h2>
+<span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 2</span>
+<span class="p">(</span><span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">)(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 5</span>
+</code></pre></div>
+<h2 id="multi-variables-functions">Multi-variables Functions<a class="headerlink" href="#multi-variables-functions" title="Permanent link">¤</a></h2>
 <p>For multi-variables functions, <code>stamox</code> provides a decorator <code>make_partial_pipe</code> to make it pipeable, for example:</p>
-<pre><code class="language-python">from stamox.core import make_partial_pipe
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
 
-@make_partial_pipe
-def g(x, y):
-    return x + y
+<span class="nd">@make_partial_pipe</span>
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
-# Must use kwargs to define partial part
-g(y=1)(1.) # 2.
-h = g(y=1)
-(h &gt;&gt; h &gt;&gt; h)(1.) # 4.
-</code></pre>
+<span class="c1"># Must use kwargs to define partial part</span>
+<span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="mf">1.</span><span class="p">)</span> <span class="c1"># 2.</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="n">h</span> <span class="o">&gt;&gt;</span> <span class="n">h</span> <span class="o">&gt;&gt;</span> <span class="n">h</span><span class="p">)(</span><span class="mf">1.</span><span class="p">)</span> <span class="c1"># 4.</span>
+</code></pre></div>
 <p>And <code>make_partial_pipe</code> can be used to make a function pipeable with <code>make_pipe</code>:</p>
-<pre><code class="language-python">from stamox.core import make_pipe, make_partial_pipe
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_pipe</span><span class="p">,</span> <span class="n">make_partial_pipe</span>
 
-@make_pipe
-def f(x):
-    return x + 1
+<span class="nd">@make_pipe</span>
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
 
-@make_partial_pipe
-def g(x, y):
-    return x * y
+<span class="nd">@make_partial_pipe</span>
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
 
 
-h = f &gt;&gt; g(y=2)
-h(1) # 4
-</code></pre>
+<span class="n">h</span> <span class="o">=</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">h</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 4</span>
+</code></pre></div>
 <p>In fact, these functions decorated with <code>make_pipe</code> or <code>make_partial_pipe</code> doesn't really return a function class, instead, they will return a <code>Functional</code> class with <code>__call__</code> method, so it can be used as a function, and it can be used as a pipeable function. And <code>Functional</code> class has a <code>__rshift__</code> method, so it can be used as a pipeable function. </p>
 <p>When we define <code>h = f&gt;&gt;g</code>, then <code>h</code> is a <code>Pipe</code> class, which also has a <code>__call__</code> method, so it can be used as a function, and it can also be used as a pipeable function. And <code>Pipe</code> class has a <code>__rshift__</code> method, so it can be used as a pipeable function.</p>
 <p>But next,  you may be confused with several conditions below:</p>
-<pre><code class="language-python">from statox.core import make_partial_pipe
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">statox.core</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
 
-@make_partial_pipe
-def g(x, y):
-    return x * y
+<span class="nd">@make_partial_pipe</span>
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
 
-g(1, 2) # 2
-g(1, y=2) # 2
-g(x=1, y=2) # Functional?
-g(x=1)(2) # Error!
-</code></pre>
+<span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 2</span>
+<span class="n">g</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># 2</span>
+<span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># Functional?</span>
+<span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># Error!</span>
+</code></pre></div>
 <p>For first two are intended features for <code>stamox</code>,  and last two conditions are compatible with <code>functools.partial</code>, for <code>g(x=1, y=2)</code>, where we may expect a value <code>2</code>, actually it's still a fucntion until we exectue it, so <code>g(x=1, y=2)()</code> returns <code>2</code> , which is similar to <code>partial(g, x=1, y=1)()</code>, and for <code>g(x=1)(2)</code>, it's a error because python isn't smart enough to recogonize that " oh we have already get <code>x</code>, so <code>2</code> refers to <code>y</code>.", like <code>partial(g, x=1)(2)</code>, which results in the same error, so you will need to use <code>g(x=1, y=2)()</code> or <code>g(x=1)(y=1)</code> instead.</p>
 <p>So always recommend not to partial first arguments until we provide a more elegant partial wrapper :).</p>
-<h1 id="compatibility-with-jax-and-equinox">Compatibility with <code>JAX</code> and <code>Equinox</code></h1>
+<h1 id="compatibility-with-jax-and-equinox">Compatibility with <code>JAX</code> and <code>Equinox</code><a class="headerlink" href="#compatibility-with-jax-and-equinox" title="Permanent link">¤</a></h1>
 <p>Just compatible with <code>jit</code>, <code>vmap</code>, <code>grad</code>, <code>pmap</code> and so on, for example:</p>
-<pre><code class="language-python">import jax.numpy as jnp
-from stamox.core import make_pipe
-from equinox import filter_jit, filter_vmap, filter_grad
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_pipe</span>
+<span class="kn">from</span> <span class="nn">equinox</span> <span class="kn">import</span> <span class="n">filter_jit</span><span class="p">,</span> <span class="n">filter_vmap</span><span class="p">,</span> <span class="n">filter_grad</span>
 
-@make_partial_pipe
-@filter_jit
-@filter_vmap
-@filter_grad 
-def f(x, y):
-    return y * x ** 3
+<span class="nd">@make_partial_pipe</span>
+<span class="nd">@filter_jit</span>
+<span class="nd">@filter_vmap</span>
+<span class="nd">@filter_grad</span> 
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">3</span>
 
-print(f(y=3.)(jnp.array([1., 2., 3.]))) # [ 9. 36. 81.]
-</code></pre>
-<h2 id="next">Next</h2>
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">3.</span><span class="p">)(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">])))</span> <span class="c1"># [ 9. 36. 81.]</span>
+</code></pre></div>
+<h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">¤</a></h2>
 <p>You've already know everything about <code>stamox</code>, since it's based on <code>JAX</code> and <code>Equinox</code>, I recommend you to get a knowledge of <code>JAX</code> and <code>Equinox</code> first to know more about <code>jit</code>, <code>vmap</code>, <code>grad</code> etc.</p>
 <p>For more apis, you can refer to <code>Api</code> section.</p>
-<h2 id="see-more">See More</h2>
+<h2 id="see-more">See More<a class="headerlink" href="#see-more" title="Permanent link">¤</a></h2>
 <p><a href="https://github.com/google/jax">JAX</a></p>
 <p><a href="https://github.com/patrick-kidger/equinox#readme">Equinox</a></p>
                 
