@@ -146,7 +146,7 @@ from equinox import filter_jit, filter_vmap, filter_grad
 def f(x, y):
     return y * x ** 3
 
-print(f(y=3.)(jnp.array([1., 2., 3.]))) # [ 9. 36. 81.]
+f(y=3.)(jnp.array([1., 2., 3.])) # [ 9. 36. 81.]
 ```
 
 ## Next

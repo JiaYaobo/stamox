@@ -14,7 +14,7 @@ def boxcox(x: ArrayLike, lmbda: ArrayLike) -> ArrayLike:
         lmbda: An array-like object containing the lambda values for the transformation.
 
     Returns:
-        The transformed array.
+        The boxcox transformed array.
 
     Example:
         >>> from stamox.transformation import boxcox

@@ -11,7 +11,6 @@ x = jnp.ones((3, 4))
 mean(x) # 1.0
 var(x) # 0.0
 std(x) # 0.0
-
 # Pipeable
 f = Pipeable(x) >> mean(axis=0) >> var
 f() # 0.0
@@ -42,7 +41,6 @@ data = pd.DataFrame(
     np.concatenate([X, y.reshape((-1, 1))], axis=1),
     columns=["x1", "x2", "x3", "y"],
 )
-
 res = lm(data, "y ~ x1 + x2 + x3")
 # or
 res  = (Pipeable(data) >> lm("y ~ x1 + x2 + x3"))()
@@ -61,7 +59,6 @@ from stamox.distribution import runif
 key = jrandom.PRNGKey(20010813)
 k1, k2 = jrandom.split(key)
 data = runif(k1, sample_shape=(1000, 3))
-
 res = kmeans(data, 3, key=k2)
 # or
 res = (Pipeable(data) >> kmeans(n_cluster=3, key=k2))()
