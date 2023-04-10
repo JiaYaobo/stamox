@@ -158,7 +158,7 @@ def lm(
                 3 * X[:, 0]
                 + 2 * X[:, 1]
                 - 7 * X[:, 2]
-                + np.random.standard_t(10, size=(1000,))
+                + 1.
             )
         >>> data = pd.DataFrame(
                 np.concatenate([X, y.reshape((-1, 1))], axis=1),
