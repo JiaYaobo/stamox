@@ -1,6 +1,7 @@
-from ._pca import PCA
+from ._pca import PCA, PCAState
 
 
 __all__ = [
     "PCA",
+    "PCAState",
 ]

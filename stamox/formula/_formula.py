@@ -35,6 +35,7 @@ def get_design_matrices(
 
     Returns:
         Matrices: A named tuple containing the design matrices for the response and predictors, as well as the names of the columns in each matrix.
+
     """
     y, X = patsy.dmatrices(
         formula, data, eval_env=eval_env, NA_action=NA_action, return_type=return_type

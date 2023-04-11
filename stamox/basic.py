@@ -19,6 +19,8 @@ cumprod = make_partial_pipe(jnp.cumprod)
 diff = make_partial_pipe(jnp.diff)
 cov = make_partial_pipe(jnp.cov)
 corrcoef = make_partial_pipe(jnp.corrcoef)
+arcsin = make_partial_pipe(jnp.arcsin)
+arccos = make_partial_pipe(jnp.arccos)
 
 
 @make_partial_pipe

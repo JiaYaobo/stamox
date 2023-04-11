@@ -1,4 +1,5 @@
 """Test Formula Wrapper"""
+import formulae
 import numpy as np
 import pandas as pd
 from absl.testing import absltest
