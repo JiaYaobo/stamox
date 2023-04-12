@@ -1,15 +1,12 @@
-from .base import Functional, StateFunc
+from .base import StateFunc
+from .pipe import make_partial_pipe, make_pipe
 
 
-class Predict(Functional):
-    def __call__(self, x: StateFunc, *args, **kwargs):
-        return x._predict(*args, **kwargs)
+@make_partial_pipe
+def predict(x, state: StateFunc):
+    return state._predict(x)
 
 
-class Summary(Functional):
-    def __call__(self, x: StateFunc, *args, **kwargs):
-        return print(x._summary(*args, **kwargs))
-
-
-summary = Summary()
-predict = Predict()
+@make_pipe
+def summary(state: StateFunc):
+    return state._summary()

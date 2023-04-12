@@ -20,15 +20,15 @@ class RegState(StateFunc):
         self,
         in_features,
         out_features,
-        coefs = None,
-        df_resid = None,
-        df_model = None,
-        n_obs = None,
-        resid = None,
-        fitted_values = None,
-        rank = None,
-        dtype = jnp.float32,
-        name = "RegState"
+        coefs=None,
+        df_resid=None,
+        df_model=None,
+        n_obs=None,
+        resid=None,
+        fitted_values=None,
+        rank=None,
+        dtype=jnp.float32,
+        name="RegState",
     ):
         super().__init__(name=name, fn=None)
         self.in_features = in_features
@@ -47,7 +47,7 @@ class RegState(StateFunc):
     @property
     def params(self):
         return self._coefs
-    
+
     @property
     def coefs(self):
         return self._coefs
@@ -67,7 +67,7 @@ class RegState(StateFunc):
     @property
     def df_model(self):
         return self._df_model
-    
+
     @property
     def n_obs(self):
         return self._n_obs
@@ -79,30 +79,25 @@ class RegState(StateFunc):
     @property
     def fitted_values(self):
         return self._fitted_values
-    
+
     @property
     def rank(self):
         return self._rank
-    
+
     @property
     def dtype(self):
         return self._dtype
-
-    def __call__(self, X):
+    
+    def _transform(self, X):
         if X.shape[1] == self.in_features:
             return jnp.matmul(X, self.params)
         else:
             return jnp.matmul(X, self.coefs_X) + self.intercept
 
-    def _summary(self):
-        summary = f"""
-        Model: {self.name}
-        Number of observations: {self.df_resid + self.df_model}
-        Degrees of freedom: {self.df_resid} (residuals) / {self.df_model} (model)
-        Rank: {self._rank}
-        Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-        """
-        return summary
-        
+    def _predict(self, X):
+        return self._transform(X)
 
-        
+    def _summary(self):
+        return "Not Implement Yet"
+
+

@@ -7,7 +7,7 @@ from absl.testing import absltest
 from jax import config
 from jax._src import test_util as jtest
 
-from stamox.core import Pipeable
+from stamox.core import Pipeable, predict
 from stamox.regression import lm, RegState
 
 
@@ -32,7 +32,7 @@ class RegStateTest(jtest.JaxTestCase):
         )
 
         res = lm(data, "y ~ x1 + x2 + x3", dtype=jnp.float64)
-        self.assertAllClose(res(X), y.reshape((-1, 1)), atol=1e-5)
+        self.assertAllClose(predict(X, res), y.reshape((-1, 1)), atol=1e-5)
         self.assertAllClose(
             np.sum(np.multiply(res.resid, X), axis=1), np.zeros(1000), atol=1e-4
         )
@@ -77,7 +77,7 @@ class RegStateTest(jtest.JaxTestCase):
         )
 
         model = (Pipeable(data) >> lm(formula="y ~ x1 + x2 + x3", dtype=jnp.float64))()
-        trans_X = (Pipeable(X) >> model)()
+        trans_X = (Pipeable(X) >> predict(state=model))()
         self.assertAllClose(trans_X, y.reshape((-1, 1)), atol=1e-5)
 
 
