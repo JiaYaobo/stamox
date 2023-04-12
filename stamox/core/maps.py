@@ -11,7 +11,7 @@ T = TypeVar("T")
 
 
 def pipe_vmap(
-    func: Callable[P, T],
+    func: Callable[P, T] = None,
     *,
     in_axes=0,
     out_axes=0,
@@ -65,7 +65,9 @@ def pipe_vmap(
     return wrap if func is None else wrap(func)
 
 
-def partial_pipe_vmap(func: Callable[P, T], *, name: str = None) -> Callable[P, T]:
+def partial_pipe_vmap(
+    func: Callable[P, T] = None, *, name: str = None
+) -> Callable[P, T]:
     """Partially apply a function to a vmap.
 
     Args:
@@ -110,7 +112,7 @@ def partial_pipe_vmap(func: Callable[P, T], *, name: str = None) -> Callable[P, 
                 axis_name=axis_name,
                 axis_size=axis_size,
             )
-            if len(args) !=0:
+            if len(args) != 0:
                 return fn(*args)
             return Functional(name=name, fn=fn)
 
@@ -120,7 +122,7 @@ def partial_pipe_vmap(func: Callable[P, T], *, name: str = None) -> Callable[P, 
 
 
 def pipe_pmap(
-    func: Callable[P, T],
+    func: Callable[P, T] = None,
     *,
     in_axes=0,
     out_axes=0,
@@ -173,7 +175,9 @@ def pipe_pmap(
     return wrap if func is None else wrap(func)
 
 
-def partial_pipe_pmap(func: Callable[P, T], *, name: str = None) -> Callable[P, T]:
+def partial_pipe_pmap(
+    func: Callable[P, T] = None, *, name: str = None
+) -> Callable[P, T]:
     """Partially apply a function to a pipe.
 
     Args:
