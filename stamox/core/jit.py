@@ -11,7 +11,7 @@ T = TypeVar("T")
 
 
 def pipe_jit(
-    func: Callable[P, T], *, donate: str = "none", name: str = None
+    func: Callable[P, T] = None, *, donate: str = "none", name: str = None
 ) -> Callable[P, T]:
     """Creates a pipeable jitted functional from a given function.
 
@@ -47,7 +47,9 @@ def pipe_jit(
     return wrap if func is None else wrap(func)
 
 
-def partial_pipe_jit(func: Callable[P, T], *, name: str = None) -> Callable[P, T]:
+def partial_pipe_jit(
+    func: Callable[P, T] = None, *, name: str = None
+) -> Callable[P, T]:
     """Creates a partial pipeable jitted functional from a given function.
 
     Args:
