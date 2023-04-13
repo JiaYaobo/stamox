@@ -129,11 +129,8 @@ def rpoisson(
 
 @filter_jit
 def _qpoisson(q, rate, dtype):
-    shape = jnp.broadcast_shapes(jnp.shape(q), jnp.shape(rate))
-    q = jnp.broadcast_to(q, shape)
-    rate = jnp.broadcast_to(rate, shape)
-    result_shape_type = ShapeDtypeStruct(shape, dtype)
-    _scp_poisson_ppf = lambda q, rate: poisson.ppf(q, rate).astype(dtype)
+    result_shape_type = ShapeDtypeStruct(jnp.shape(q), dtype)
+    _scp_poisson_ppf = lambda q, rate: poisson(rate).ppf(q).astype(dtype)
     p = pure_callback(_scp_poisson_ppf, result_shape_type, q, rate)
     return p
 

@@ -96,8 +96,8 @@ def dbinom(
 
 @filter_jit
 def _qbinom(p, size, prob, dtype) -> ArrayLike:
-    result_shape_type = ShapeDtypeStruct(p.shape, dtype)
-    _scp_binom_ppf = lambda q: binom(size, prob).ppf(q).astype(np.int32)
+    result_shape_type = ShapeDtypeStruct(jnp.shape(p), dtype)
+    _scp_binom_ppf = lambda x: binom(size, prob).ppf(x).astype(np.int32)
     q = pure_callback(_scp_binom_ppf, result_shape_type, p)
     return q
 
