@@ -4,6 +4,10 @@
 
 ---
 
+::: stamox.distribution.qpoisson
+
+---
+
 ::: stamox.distribution.dpoisson
 
 ---

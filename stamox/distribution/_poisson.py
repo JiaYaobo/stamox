@@ -3,10 +3,12 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_jit, filter_vmap
+from jax import pure_callback, ShapeDtypeStruct
 from jax._src.random import Shape
 from jax.random import KeyArray
 from jax.scipy.special import gammainc, gammaln
 from jaxtyping import Array, ArrayLike, Bool, Float
+from scipy.stats import poisson
 
 from ..core import make_partial_pipe
 
@@ -126,34 +128,41 @@ def rpoisson(
 
 
 @filter_jit
-def _qpoisson(q, rate):
-    """
-    Computes the p-th quantile of a Poisson distribution with mean rate use approximate
-    """
-    pass
+def _qpoisson(q, rate, dtype):
+    shape = jnp.broadcast_shapes(jnp.shape(q), jnp.shape(rate))
+    q = jnp.broadcast_to(q, shape)
+    rate = jnp.broadcast_to(rate, shape)
+    result_shape_type = ShapeDtypeStruct(shape, dtype)
+    _scp_poisson_ppf = lambda q, rate: poisson.ppf(q, rate).astype(dtype)
+    p = pure_callback(_scp_poisson_ppf, result_shape_type, q, rate)
+    return p
 
 
 @make_partial_pipe
 def qpoisson(
-    q: Union[Float, ArrayLike],
+    p: Union[Float, ArrayLike],
     rate: Union[Float, ArrayLike],
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype=jnp.int32,
 ) -> ArrayLike:
     """Computes the quantile function of the Poisson distribution.
 
     Args:
-        q (Union[Float, ArrayLike]): The quantile at which to evaluate the quantile function.
+        p (Union[Float, ArrayLike]): The probability at which to evaluate the quantile function.
         rate (Union[Float, ArrayLike]): The rate parameter of the Poisson distribution.
+        lower_tail (bool, optional): Whether to compute the lower tail of the quantile function. Defaults to True.
+        log_prob (bool, optional): Whether to return the log probability. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.int32.
 
     Returns:
-        Array: The quantile function of the Poisson distribution evaluated at `q`.
+        ArrayLike: The quantile function of the Poisson distribution evaluated at `p`.
     """
-    ImportWarning("qpoisson is not yet well tested.")
-    raise NotImplementedError("Not Implemented Yet!")
-    q = jnp.atleast_1d(q)
+    p = jnp.asarray(p)
+    p = jnp.atleast_1d(p)
     if not lower_tail:
-        q = 1 - q
+        p = 1 - p
     if log_prob:
-        q = jnp.exp(q)
-    return filter_vmap(_qpoisson)(q, rate)
+        p = jnp.exp(p)
+    q = filter_vmap(_qpoisson)(p, rate, dtype)
+    return q

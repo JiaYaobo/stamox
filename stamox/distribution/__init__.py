@@ -9,7 +9,7 @@ from stamox.distribution._gamma import dgamma, pgamma, qgamma, rgamma
 from stamox.distribution._laplace import dlaplace, plaplace, qlaplace, rlaplace
 from stamox.distribution._normal import dnorm, pnorm, qnorm, rnorm
 from stamox.distribution._pareto import dpareto, ppareto, qpareto, rpareto
-from stamox.distribution._poisson import dpoisson, ppoisson, rpoisson
+from stamox.distribution._poisson import dpoisson, ppoisson, qpoisson, rpoisson
 from stamox.distribution._t import dt, pt, qt, rt
 from stamox.distribution._uniform import dunif, punif, qunif, runif
 
@@ -48,6 +48,7 @@ __all__ = [
     "rpareto",
     "dpareto",
     "ppoisson",
+    "qpoisson",
     "rpoisson",
     "dpoisson",
     "pF",
