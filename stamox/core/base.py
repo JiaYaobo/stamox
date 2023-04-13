@@ -33,7 +33,8 @@ class Functional(eqx.Module):
         self._fn = fn
         self._is_partial = is_partial
         self._is_fully_partial = is_fully_partial
-
+    
+    
     @property
     def name(self):
         """Get the name of the function."""

@@ -32,19 +32,22 @@ def pipe_jit(
         4
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
         fn = filter_jit(func, donate=donate)
 
         @wraps(func)
-        def create_functional(*args, **kwargs):
-            return Functional(name=name, fn=fn)(*args, **kwargs)
+        def create_functional():
+            return Functional(name=name, fn=fn)
 
         return create_functional
 
-    return wrap if func is None else wrap(func)
+    return wrap if func is None else wrap(func)()
 
 
 def partial_pipe_jit(
@@ -68,7 +71,10 @@ def partial_pipe_jit(
         7
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:

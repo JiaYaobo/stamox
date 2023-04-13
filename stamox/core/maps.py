@@ -42,7 +42,10 @@ def pipe_vmap(
         Array([4, 5, 6], dtype=int32)
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -57,12 +60,12 @@ def pipe_vmap(
         )
 
         @wraps(func)
-        def create_functional(*args):
-            return Functional(name=name, fn=fn)(*args)
+        def create_functional():
+            return Functional(name=name, fn=fn)
 
         return create_functional
 
-    return wrap if func is None else wrap(func)
+    return wrap if func is None else wrap(func)()
 
 
 def partial_pipe_vmap(
@@ -86,9 +89,10 @@ def partial_pipe_vmap(
         Array([7, 8, 9], dtype=int32)
     """
     if name is None and func is not None:
-        if isinstance(func, Functional):
+        if hasattr(func, "name"):
             name = func.name
-        name = func.__name__
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -152,7 +156,10 @@ def pipe_pmap(
         Array([4, 5, 6], dtype=int32)
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -167,12 +174,12 @@ def pipe_pmap(
         )
 
         @wraps(func)
-        def create_functional(*args):
-            return Functional(name=name, fn=fn)(*args)
+        def create_functional():
+            return Functional(name=name, fn=fn)
 
         return create_functional
 
-    return wrap if func is None else wrap(func)
+    return wrap if func is None else wrap(func)()
 
 
 def partial_pipe_pmap(
@@ -196,7 +203,10 @@ def partial_pipe_pmap(
         Array([7, 8, 9], dtype=int32)
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:

@@ -41,6 +41,7 @@ class PipeTest(jtest.JaxTestCase):
         self.assertEqual(pipe[1].func, g)
 
     def test_slice_pipe_class(self):
+        
         @make_pipe
         def f(x):
             return x + 1

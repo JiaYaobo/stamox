@@ -83,7 +83,6 @@ class PipeMapTest(jtest.JaxTestCase):
         f = lambda x, y: x + y
         h = partial_pipe_pmap(f)
         g = partial_pipe_pmap(f)
-        f = g >> h
         m = g(y=1.) >> h(y=2.)
         z = X[:,0:] + 3
         self.assertAllClose(m(X), z)
