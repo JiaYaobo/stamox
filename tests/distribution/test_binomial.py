@@ -1,12 +1,11 @@
 """Test for Binomial Distribution."""
 import jax.numpy as jnp
 import jax.random as jrand
-import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import binom
 
-from stamox.distribution import dbinom, pbinom, rbinom
+from stamox.distribution import dbinom, pbinom, qbinom, rbinom
 
 
 class TestBinom(jtest.JaxTestCase):
@@ -38,6 +37,16 @@ class TestBinom(jtest.JaxTestCase):
         expected = binom.pmf(x, n, p)
         actual = dbinom(x, n, p)
         self.assertAllClose(actual, expected)
+
+    def test_qbinom(self):
+        """Test qbinom."""
+        p = jnp.array([0.1, 0.5, 0.9])
+        n = 5
+        prob = 0.5
+        expected = binom.ppf(p, n, prob)
+        actual = qbinom(p, n, prob)
+        self.assertAllClose(actual, expected.astype(actual.dtype))
+    
 
 
 if __name__ == "__main__":

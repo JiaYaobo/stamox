@@ -24,6 +24,7 @@ INSTALL_REQUIRES = [
     "pandas>=1.5.3",
     "patsy>=0.5.3",
     "tensorflow-probability>=0.19.0",
+    "scipy"
 ]
 TESTS_REQUIRES = ["pytest", "scipy", "numpy", "sklearn", "statsmodels"]
 

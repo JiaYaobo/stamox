@@ -4,6 +4,10 @@
 
 ---
 
+::: stamox.distribution.qbinom
+
+---
+
 ::: stamox.distribution.dbinom
 
 ---

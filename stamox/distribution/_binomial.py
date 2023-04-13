@@ -1,9 +1,12 @@
 from typing import Optional
 
 import jax.numpy as jnp
+import numpy as np
 from equinox import filter_jit, filter_vmap
+from jax import pure_callback, ShapeDtypeStruct
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Bool
+from scipy.stats import binom
 from tensorflow_probability.substrates.jax.distributions import Binomial as tfp_Binomial
 
 from ..core import make_partial_pipe
@@ -91,6 +94,14 @@ def dbinom(
     return p
 
 
+@filter_jit
+def _qbinom(p, size, prob, dtype) -> ArrayLike:
+    result_shape_type = ShapeDtypeStruct(p.shape, dtype)
+    _scp_binom_ppf = lambda q: binom(size, prob).ppf(q).astype(np.int32)
+    q = pure_callback(_scp_binom_ppf, result_shape_type, p)
+    return q
+
+
 @make_partial_pipe
 def qbinom(
     p: ArrayLike,
@@ -98,8 +109,30 @@ def qbinom(
     prob: ArrayLike,
     lower_tail: Bool = True,
     log_prob: Bool = False,
+    dtype=jnp.int32,
 ) -> ArrayLike:
-    raise NotImplementedError("qbinom is not implemented yet.")
+    """Computes the quantile of a binomial distribution.
+
+    Args:
+        p (ArrayLike): The probability of success.
+        size (ArrayLike): The number of trials.
+        prob (ArrayLike): The probability of success in each trial.
+        lower_tail (Bool, optional): Whether to compute the lower tail or not. Defaults to True.
+        log_prob (Bool, optional): Whether to compute the log probability or not. Defaults to False.
+        dtype (jnp.int32, optional): The data type of the output array. Defaults to jnp.int32.
+
+    Returns:
+        ArrayLike: The quantile of the binomial distribution.
+    """
+    p = jnp.asarray(p)
+    p = jnp.atleast_1d(p)
+    if not lower_tail:
+        p = 1 - p
+    if log_prob:
+        p = jnp.exp(p)
+
+    q = filter_vmap(_qbinom)(p, size, prob, dtype)
+    return q
 
 
 @filter_jit
