@@ -1,9 +1,6 @@
 """Test Formula Wrapper"""
-import formulae
-import numpy as np
 import pandas as pd
 from absl.testing import absltest
-from equinox import filter_jit
 from jax._src import test_util as jtest
 
 from stamox.core import Pipeable
