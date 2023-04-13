@@ -1,4 +1,5 @@
 from stamox.distribution._beta import dbeta, pbeta, qbeta, rbeta
+from stamox.distribution._binomial import dbinom, pbinom, rbinom
 from stamox.distribution._cauchy import dcauchy, pcauchy, qcauchy, rcauchy
 from stamox.distribution._chisq import dchisq, pchisq, qchisq, rchisq
 from stamox.distribution._ecdf import ecdf, step_fun
@@ -17,6 +18,9 @@ __all__ = [
     "qt",
     "rt",
     "dt",
+    "pbinom",
+    "rbinom",
+    "dbinom",
     "pnorm",
     "qnorm",
     "rnorm",
