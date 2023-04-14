@@ -42,7 +42,10 @@ def pipe_vmap(
         Array([4, 5, 6], dtype=int32)
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -81,7 +84,10 @@ def partial_pipe_vmap(
         Array([7, 8, 9], dtype=int32)
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
