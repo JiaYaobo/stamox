@@ -3,6 +3,7 @@ import jax.random as jrand
 import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
+from scipy.stats import beta
 
 from stamox.distribution import dbeta, pbeta, qbeta, rbeta
 
@@ -20,23 +21,23 @@ class BetaTest(jtest.JaxTestCase):
         self.assertAllClose(var, a * b / (((a + b) ** 2) * (a + b + 1)), atol=1e-2)
 
     def test_pbeta(self):
-        x = np.array([0.0, 1.0, 0.2, 0.3, 0.4, 0.5])
+        x = np.random.uniform(0, 1, 1000)
         a = 2.0
         b = 2.0
         p = pbeta(x, a, b)
-        true_p = np.array([0.000, 1.000, 0.104, 0.216, 0.352, 0.500])
+        true_p = beta.cdf(x, a, b)
         self.assertArraysAllClose(p, true_p)
 
     def test_qbeta(self):
-        q = np.array([0.000, 1.000, 0.104, 0.216, 0.352, 0.500])
+        q = np.random.uniform(0, 1, 1000)
         x = qbeta(q, 2.0, 2.0)
-        true_x = np.array([0.0, 1.0, 0.2, 0.3, 0.4, 0.5])
+        true_x = beta.ppf(q, 2.0, 2.0)
         self.assertArraysAllClose(x, true_x)
 
     def test_dbeta(self):
-        x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+        x = np.random.uniform(0, 1, 1000)
         grads = dbeta(x, 2, 2)
-        true_grads = np.array([0.54, 0.96, 1.26, 1.44, 1.50])
+        true_grads = beta.pdf(x, 2, 2)
         self.assertArraysAllClose(grads, true_grads)
      
     def test_partial_pbeta(self):

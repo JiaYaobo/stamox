@@ -150,6 +150,8 @@ def _rcauchy(
         sample_shape = jnp.broadcast_shapes(jnp.shape(loc), jnp.shape(scale))
     loc = jnp.broadcast_to(loc, sample_shape)
     scale = jnp.broadcast_to(scale, sample_shape)
+    loc = jnp.asarray(loc, dtype=dtype)
+    scale = jnp.asarray(scale, dtype=dtype)
     return jrand.cauchy(key, sample_shape, dtype=dtype) * scale + loc
 
 
