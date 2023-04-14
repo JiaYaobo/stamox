@@ -5,7 +5,6 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 
 from stamox.anova import one_way
-from stamox.core import summary
 
 
 class OneWayAOVTest(jtest.JaxTestCase):

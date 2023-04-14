@@ -12,8 +12,7 @@ from typing import (
 
 import equinox as eqx
 
-from .base import Functional, StateFunc
-from ..experimental import better_partial
+from .base import Functional
 
 
 P = ParamSpec("P")
@@ -181,20 +180,20 @@ def make_pipe(
     """
 
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable[P, T]:
         if isinstance(func, Functional):
             func = func.func
 
-        @wraps(func)
-        def create_functional():
-            return Functional(name=name, fn=func)
+        functional = Functional(name=name, fn=func)
+        return functional
 
-        return create_functional
-
-    return wrap(func)() if func is not None else wrap
+    return wrap if func is None else wrap(func)
 
 
 def make_partial_pipe(
@@ -219,7 +218,10 @@ def make_partial_pipe(
         7
     """
     if name is None and func is not None:
-        name = func.__name__
+        if hasattr(func, "name"):
+            name = func.name
+        else:
+            name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -230,7 +232,7 @@ def make_partial_pipe(
         def partial_fn(*args, **kwargs):
             if len(args) != 0:
                 return func(*args, **kwargs)
-            fn = better_partial(func, **kwargs)
+            fn = partial(func, **kwargs)
             return Functional(name=name, fn=fn)
 
         return partial_fn

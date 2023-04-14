@@ -1,9 +1,4 @@
-"""
-In statistics, Bartlett's test, named after Maurice Stevenson Bartlett, is used to test homoscedasticity, 
-that is, if multiple samples are from populations with equal variances.Some statistical tests, 
-such as the analysis of variance, assume that variances are equal across groups or samples, 
-which can be verified with Bartlett's test.
-"""
+# ::: stamox/hypothesis/_bartlett.py ::: 1 of 1 (100%)
 
 from functools import partial
 from typing import Sequence
@@ -13,7 +8,6 @@ from equinox import filter_jit
 from jax import vmap
 from jaxtyping import ArrayLike
 
-from ..core import make_pipe
 from ..distribution import pchisq
 from ._base import HypoTest
 
@@ -28,6 +22,7 @@ class BartlettTest(HypoTest):
         parameters (int): The degrees of freedom.
         p_value (float): The p-value of the test.
     """
+
     def __init__(
         self,
         statistic=None,
@@ -55,8 +50,7 @@ class BartlettTest(HypoTest):
         return self.parameters
 
 
-@make_pipe
-def bartlett_test(*samples: Sequence[ArrayLike]) -> BartlettTest:
+def bartlett_test_fun(*samples: Sequence[ArrayLike]) -> BartlettTest:
     """Calculates the Bartlett test statistic for multiple samples.
 
     Args:
@@ -76,17 +70,8 @@ def bartlett_test(*samples: Sequence[ArrayLike]) -> BartlettTest:
 
 @filter_jit
 def _bartlett(samples):
-    """Calculates the Bartlett test statistic for multiple samples.
-
-    Args:
-        samples (array_like): A 2-D array, each row containing a sample of
-            scores. All samples must have the same length.
-
-    Returns:
-        float: The Bartlett test statistic.
-    """
     k = samples.shape[0]
-    Ni = jnp.asarray(vmap(jnp.size, in_axes=(0,))(samples), dtype=jnp.float32)
+    Ni = jnp.asarray(vmap(jnp.size, in_axes=(0,))(samples), dtype=samples.dtype)
     ssq = vmap(partial(jnp.var, ddof=1), in_axes=(0,))(samples)
     Ntot = jnp.sum(Ni, axis=0)
     spsq = jnp.sum((Ni - 1) * ssq, axis=0) / (1.0 * (Ntot - k))

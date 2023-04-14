@@ -4,14 +4,13 @@ import jax.numpy as jnp
 from equinox import filter_jit, filter_vmap
 from jaxtyping import ArrayLike, PyTree
 
-from ..core import make_partial_pipe, partial_pipe_jit
+from ..core import make_partial_pipe
 
 
 ReturnValue = TypeVar("ReturnValue")
 
 
-@partial_pipe_jit(name="jackknife_sample")
-def jackknife_sample(data: ArrayLike) -> ArrayLike:
+def jackknife_sample_fun(data: ArrayLike) -> ArrayLike:
     """Generates `num_samples` jackknife samples from `data` with replacement.
 
     Args:
@@ -61,5 +60,5 @@ def jackknife(data: ArrayLike, call: Callable[..., ReturnValue]) -> PyTree:
         >>> jackknife(data, lambda x: jnp.mean(x))
         Array([1.5, 1. , 0.5], dtype=float32)
     """
-    samples = jackknife_sample(data)
+    samples = jackknife_sample_fun(data)
     return filter_jit(filter_vmap(lambda x: call(x)))(samples)

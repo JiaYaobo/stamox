@@ -9,7 +9,6 @@ T = TypeVar("T")
 
 class Functional(eqx.Module):
     """General Function"""
-
     _name: str
     _fn: Callable[P, T]
     _is_partial: bool

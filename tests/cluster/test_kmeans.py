@@ -61,7 +61,7 @@ class KMeansTest(jtest.JaxTestCase):
         kms = kmeans(n_cluster=3, key=k4)
         state = (Pipeable(points) >> kms)()
         self.assertEqual(state.centers.shape, (3, 2))
-        self.assertEqual(predict(state, points).shape, (800,))
+        self.assertEqual(predict(points, state).shape, (800,))
 
 
 if __name__ == "__main__":

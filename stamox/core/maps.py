@@ -42,10 +42,7 @@ def pipe_vmap(
         Array([4, 5, 6], dtype=int32)
     """
     if name is None and func is not None:
-        if hasattr(func, "name"):
-            name = func.name
-        else:
-            name = func.__name__
+        name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -58,14 +55,9 @@ def pipe_vmap(
             axis_name=axis_name,
             axis_size=axis_size,
         )
+        return Functional(name=name, fn=fn)
 
-        @wraps(func)
-        def create_functional():
-            return Functional(name=name, fn=fn)
-
-        return create_functional
-
-    return wrap if func is None else wrap(func)()
+    return wrap if func is None else wrap(func)
 
 
 def partial_pipe_vmap(
@@ -89,10 +81,7 @@ def partial_pipe_vmap(
         Array([7, 8, 9], dtype=int32)
     """
     if name is None and func is not None:
-        if hasattr(func, "name"):
-            name = func.name
-        else:
-            name = func.__name__
+        name = func.__name__
 
     @wraps(func)
     def wrap(func: Callable[P, T]) -> Callable:
@@ -173,13 +162,9 @@ def pipe_pmap(
             axis_size=axis_size,
         )
 
-        @wraps(func)
-        def create_functional():
-            return Functional(name=name, fn=fn)
+        return Functional(name=name, fn=fn)
 
-        return create_functional
-
-    return wrap if func is None else wrap(func)()
+    return wrap if func is None else wrap(func)
 
 
 def partial_pipe_pmap(

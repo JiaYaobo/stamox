@@ -41,13 +41,9 @@ def pipe_jit(
     def wrap(func: Callable[P, T]) -> Callable:
         fn = filter_jit(func, donate=donate)
 
-        @wraps(func)
-        def create_functional():
-            return Functional(name=name, fn=fn)
+        return Functional(name=name, fn=fn)
 
-        return create_functional
-
-    return wrap if func is None else wrap(func)()
+    return wrap if func is None else wrap(func)
 
 
 def partial_pipe_jit(

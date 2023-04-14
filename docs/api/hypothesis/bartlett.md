@@ -1,6 +1,7 @@
 # Bartlett Test
 
-::: stamox.hypothesis.bartlett_test
+::: stamox.hypothesis.bartlett_test_fun
+    
 
 ---
 

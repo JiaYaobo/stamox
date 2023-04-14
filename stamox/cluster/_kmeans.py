@@ -50,7 +50,7 @@ class KMeansState(StateFunc):
         return vq(x, self.centers)[0]
 
 
-@make_partial_pipe
+@make_partial_pipe(name="kmeans")
 def kmeans(
     x: ArrayLike,
     n_cluster: int,
