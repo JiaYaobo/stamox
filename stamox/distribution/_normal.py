@@ -3,6 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import Shape
 from jax.random import KeyArray
 from jax.scipy.special import ndtr, ndtri
@@ -17,7 +18,7 @@ def _pnorm(
     mean: Union[Float, ArrayLike] = 0.0,
     sd: Union[Float, ArrayLike] = 1.0,
 ):
-    scaled = (x - mean) / sd
+    scaled = lax.div(lax.sub(x, mean), sd)
     return ndtr(scaled)
 
 
@@ -114,7 +115,7 @@ def _qnorm(
     sd: Union[Float, ArrayLike] = 1.0,
 ):
     x = ndtri(p)
-    return x * sd + mean
+    return lax.add(lax.mul(x, sd), mean)
 
 
 @make_partial_pipe(name="qnorm")

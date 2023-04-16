@@ -3,6 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float
 
@@ -50,7 +51,7 @@ def pexp(
 
 @filter_jit
 def _qexp(q: Union[float, ArrayLike], rate: float) -> Float:
-    return -jnp.log1p(-q) / rate
+    return -lax.div(lax.log1p(-q), rate)
 
 
 @make_partial_pipe

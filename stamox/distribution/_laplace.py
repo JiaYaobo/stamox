@@ -3,6 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import Shape
 from jax.random import KeyArray
 from jaxtyping import ArrayLike, Bool, Float
@@ -16,8 +17,9 @@ def _plaplace(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
-    scaled = (x - loc) / scale
-    return 0.5 - 0.5 * jnp.sign(scaled) * jnp.expm1(-jnp.abs(scaled))
+    scaled = lax.div(lax.sub(x, loc), scale)
+    subtrahend = 0.5 * lax.mul(jnp.sign(scaled), lax.expm1(-lax.abs(scaled)))
+    return lax.sub(0.5, subtrahend)
 
 
 @make_partial_pipe
@@ -86,12 +88,12 @@ def dlaplace(
     """
     x = jnp.asarray(x, dtype=dtype)
     x = jnp.atleast_1d(x)
-    p = filter_vmap(_dlaplace)(x, loc, scale)
+    grads = filter_vmap(_dlaplace)(x, loc, scale)
     if not lower_tail:
-        p = -p
+        grads = 1 - grads
     if log_prob:
-        p = jnp.log(p)
-    return p
+        grads = jnp.log(grads)
+    return grads
 
 
 @filter_jit
@@ -100,7 +102,7 @@ def _qlaplace(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
-    a = q - 0.5
+    a = lax.sub(0.5, q)
     return loc - scale * jnp.sign(a) * jnp.log1p(-2 * jnp.abs(a))
 
 

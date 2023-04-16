@@ -12,6 +12,7 @@ from stamox.distribution._pareto import dpareto, ppareto, qpareto, rpareto
 from stamox.distribution._poisson import dpoisson, ppoisson, qpoisson, rpoisson
 from stamox.distribution._t import dt, pt, qt, rt
 from stamox.distribution._uniform import dunif, punif, qunif, runif
+from stamox.distribution._weibull import dweibull, pweibull, qweibull, rweibull
 
 
 __all__ = [
@@ -69,4 +70,8 @@ __all__ = [
     "rlaplace",
     "ecdf",
     "step_fun",
+    "pweibull",
+    "qweibull",
+    "dweibull",
+    "rweibull",
 ]

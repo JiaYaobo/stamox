@@ -3,6 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import Shape
 from jax.random import KeyArray
 from jaxtyping import ArrayLike, Bool, Float
@@ -27,7 +28,7 @@ def pcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype = jnp.float32,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Calculates the cumulative denisty probability c function of the Cauchy distribution.
 
@@ -66,7 +67,7 @@ def dcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype = jnp.float32,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Computes the pdf of the Cauchy distribution.
 
@@ -101,7 +102,7 @@ def _qcauchy(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
-    return loc + scale * jnp.tan(jnp.pi * (q - 0.5))
+    return lax.add(loc, lax.mul(scale, lax.tan(lax.mul(jnp.pi, lax.sub(q, 0.5)))))
 
 
 @make_partial_pipe
@@ -111,7 +112,7 @@ def qcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype = jnp.float32,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Computes the quantile of the Cauchy distribution.
 
@@ -144,7 +145,7 @@ def _rcauchy(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
-    dtype = jnp.float32,
+    dtype=jnp.float32,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(loc), jnp.shape(scale))
@@ -163,7 +164,7 @@ def rcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype = jnp.float32,
+    dtype=jnp.float32,
 ) -> ArrayLike:
     """Generates random samples from the Cauchy distribution.
 

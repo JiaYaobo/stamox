@@ -3,6 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Bool, Float
 
@@ -15,7 +16,9 @@ def _punif(
     mini: Union[Float, ArrayLike] = 0.0,
     maxi: Union[Float, ArrayLike] = 1.0,
 ):
-    p = (x - mini) / (maxi - mini)
+    mini = lax.convert_element_type(mini, x.dtype)
+    maxi = lax.convert_element_type(maxi, x.dtype)
+    p = lax.div(lax.sub(x, mini), lax.sub(maxi, mini))
     p = jnp.clip(p, a_min=mini, a_max=maxi)
     return p
 

@@ -3,6 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float
 
@@ -15,7 +16,11 @@ def _pweibull(
     concentration: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
-    return 1 - jnp.exp(-((x / scale) ** concentration))
+    concentration = lax.convert_element_type(concentration, x.dtype)
+    scale = lax.convert_element_type(scale, x.dtype)
+    scaled_x = lax.div(x, scale)
+    powered = jnp.float_power(scaled_x, concentration)
+    return 1 - jnp.exp(-powered)
 
 
 @make_partial_pipe
@@ -83,7 +88,13 @@ def _qweibull(
     concentration: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ) -> ArrayLike:
-    x = jnp.float_power(-jnp.log(1 - q), 1 / concentration) * scale
+    concentration = lax.convert_element_type(concentration, q.dtype)
+    scale = lax.convert_element_type(scale, q.dtype)
+    one = lax.convert_element_type(1, q.dtype)
+    nlog_q = -lax.log(lax.sub(one, q))
+    inv_concentration = lax.div(one, concentration)
+    powerd = jnp.float_power(nlog_q, inv_concentration)
+    x = lax.mul(powerd, scale)
     return x
 
 

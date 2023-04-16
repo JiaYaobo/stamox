@@ -3,6 +3,7 @@ import jax.random as jrand
 import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
+from scipy.stats import laplace
 
 from stamox.distribution import dlaplace, plaplace, qlaplace, rlaplace
 
@@ -18,11 +19,11 @@ class LaplaceTest(jtest.JaxTestCase):
         self.assertAllClose(var, 2 * 1.0**2, atol=1e-2, rtol=1e-4)
 
     def test_plaplace(self):
-        x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+        x = np.random.laplace(0.0, 1.0, 1000)
         loc = 0.0
         scale = 1.0
         p = plaplace(x, loc, scale)
-        true_p = np.array([0.5475813, 0.5906346, 0.6295909, 0.6648400, 0.6967347])
+        true_p = laplace(loc=loc, scale=scale).cdf(x)
         self.assertArraysAllClose(p, true_p)
 
     def test_qlaplace(self):

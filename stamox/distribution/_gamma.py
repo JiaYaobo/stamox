@@ -4,6 +4,7 @@ import jax.numpy as jnp
 import jax.random as jrand
 import tensorflow_probability.substrates.jax.math as tfp_math
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import KeyArray, Shape
 from jax.scipy.special import gammainc
 from jaxtyping import ArrayLike, Float
@@ -105,7 +106,7 @@ def _qgamma(
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
 ):
-    return tfp_math.igammainv(shape, q) / rate
+    return lax.div(tfp_math.igammainv(shape, q), rate)
 
 
 @make_partial_pipe

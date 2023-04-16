@@ -27,10 +27,10 @@ class FTest(jtest.JaxTestCase):
         dfd = 5.0
         p = pF(x, dfn, dfd)
         true_p = f.cdf(x, dfn, dfd)
-        self.assertArraysAllClose(p, true_p, atol=1e-4)
+        self.assertArraysAllClose(p, true_p, atol=1e-5)
 
     def test_qF(self):
-        q = np.random.uniform(0, 0.999, 1000)
+        q = np.random.uniform(0, 1., 1000)
         dfn = 5.0
         dfd = 5.0
         x = qF(q, dfn, dfd)

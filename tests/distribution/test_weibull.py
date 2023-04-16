@@ -3,8 +3,12 @@ import jax.random as jrand
 import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
+from scipy.stats import weibull_min
 
 from stamox.distribution import dweibull, pweibull, qweibull, rweibull
+
+
+np.random.seed(1)
 
 
 class WeiBullTest(jtest.JaxTestCase):
@@ -20,23 +24,23 @@ class WeiBullTest(jtest.JaxTestCase):
         self.assertAllClose(var, 1.0, atol=1e-2)
 
     def test_pweibull(self):
-        x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+        x = np.random.uniform(0, 1, 10000)
         a = 1.0
         b = 1.0
         p = pweibull(x, a, b)
-        true_p = np.array([0.09516258, 0.18126925, 0.25918178, 0.32967995, 0.39346934])
+        true_p = weibull_min.cdf(x, a, scale=b)
         self.assertArraysAllClose(p, true_p)
 
     def test_qweibull(self):
-        q = np.array([0.09516258, 0.18126925, 0.25918178, 0.32967995, 0.39346934])
+        q = np.random.uniform(0, 0.9999, 10000)
         x = qweibull(q, 1.0, 1.0)
-        true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
-        self.assertArraysAllClose(x, true_x)
+        true_x = weibull_min.ppf(q, 1.0, scale=1.0)
+        self.assertArraysAllClose(x, true_x, atol=1e-4)
 
     def test_dweibull(self):
-        x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+        x = np.random.weibull(1.0, 10000)
         grads = dweibull(x, 1.0, 1.0)
-        true_grads = np.array([0.9048374, 0.8187308, 0.7408182, 0.6703200, 0.6065307])
+        true_grads = weibull_min.pdf(x, 1.0, scale=1.0)
         self.assertArraysAllClose(grads, true_grads)
 
     def test_partial_pweibull(self):
@@ -68,9 +72,9 @@ class WeiBullTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         a = 1.0
         b = 1.0
-        ts = rweibull(concentration=a, scale=b, sample_shape=sample_shape)(key)
-        avg = ts.mean()
-        var = ts.var(ddof=1)
+        rvs = rweibull(concentration=a, scale=b, sample_shape=sample_shape)(key)
+        avg = rvs.mean()
+        var = rvs.var(ddof=1)
         self.assertAllClose(avg, 1.0, atol=1e-2)
         self.assertAllClose(var, 1.0, atol=1e-2)
 

@@ -36,7 +36,7 @@ class CauchyTest(jtest.JaxTestCase):
         scale = 1.0
         x = qcauchy(q, loc, scale, dtype=jnp.float64)
         true_x = cauchy.ppf(q, loc, scale)
-        self.assertArraysAllClose(x, true_x, atol=1e-7)
+        self.assertArraysAllClose(x, true_x, atol=1e-9)
 
     def test_dcauchy(self):
         x = np.random.uniform(0, 1, 10000)

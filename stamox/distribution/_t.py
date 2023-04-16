@@ -3,6 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 from equinox import filter_grad, filter_jit, filter_vmap
+from jax import lax
 from jax._src.random import Shape
 from jax.random import KeyArray
 from jax.scipy.special import betainc
@@ -19,11 +20,14 @@ def _pt(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
-    scaled = (x - loc) / scale
-    scaled_squared = scaled * scaled
-    beta_value = df / (df + scaled_squared)
+    df = lax.convert_element_type(df, x.dtype)
+    loc = lax.convert_element_type(loc, x.dtype)
+    scale = lax.convert_element_type(scale, x.dtype)
+    scaled = lax.div(lax.sub(x, loc), scale)
+    scaled_squared = lax.integer_pow(scaled, 2)
+    beta_value = lax.div(df, lax.add(df, scaled_squared))
     return 0.5 * (
-        1 + jnp.sign(scaled) - jnp.sign(scaled) * betainc(0.5 * df, 0.5, beta_value)
+        1. + jnp.sign(scaled) - jnp.sign(scaled) * betainc(0.5 * df, 0.5, beta_value)
     )
 
 
@@ -115,8 +119,12 @@ def _qt(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
+    df = lax.convert_element_type(df, q.dtype)
+    loc = lax.convert_element_type(loc, q.dtype)
+    scale = lax.convert_element_type(scale, q.dtype)
+    one = lax.convert_element_type(1, q.dtype)
     beta_value = tfp_special.betaincinv(0.5 * df, 0.5, 1 - jnp.abs(1 - 2 * q))
-    scaled_squared = df * (1 / beta_value - 1)
+    scaled_squared = df * (one / beta_value - one)
     scaled = jnp.sign(q - 0.5) * jnp.sqrt(scaled_squared)
     return scaled * scale + loc
 
