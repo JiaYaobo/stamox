@@ -17,17 +17,23 @@ class better_partial:
         if hasattr(func, "func"):
             keywords = {**func.keywords, **keywords}
             func = func.func
-
         self = super(better_partial, cls).__new__(cls)
         # get all args name
         args_name = inspect.getfullargspec(func).args
+        keywords_default = {}
         self.args_name = args_name
         self.func = func
         unassign_argsname = [arg for arg in args_name if arg not in keywords]
+        # get default argnames and value
+        sig = inspect.signature(func)
+        for param in sig.parameters.values():
+            if param.default != inspect.Parameter.empty:
+                keywords_default[param.name] = param.default
         for i, arg in enumerate(unassign_argsname):
             if i < len(args):
                 keywords[arg] = args[i]
-        self.keywords = keywords
+        self.keywords = keywords_default
+        self.keywords.update(keywords)
 
         return self
 
@@ -37,7 +43,6 @@ class better_partial:
         for i, arg in enumerate(unassign_argsname):
             if i < len(args):
                 keywords[arg] = args[i]
-            else:
-                raise TypeError(f"missing required argument {arg}")
-
         return self.func(**keywords)
+
+
