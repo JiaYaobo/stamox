@@ -1,5 +1,3 @@
-# ::: stamox/hypothesis/_bartlett.py ::: 1 of 1 (100%)
-
 from functools import partial
 from typing import Sequence
 
