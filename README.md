@@ -83,6 +83,22 @@ state = pipe(key)
 print(state.params)
 ```
 
+### Linear Regression with Formula
+
+```python
+import pandas as pd
+import numpy as np
+from stamox.regression import lm
+
+
+x = np.random.uniform(size=(1000, 3))
+y = 2 * x[:,0] + 3 * x[:,1] + 4 * x[:,2] + np.random.normal(size=1000)
+df = pd.DataFrame(x, columns=['x1', 'x2', 'x3'])
+df['y'] = y
+
+lm(df, 'y~x1+x2+x3').params
+```
+
 * Custom Functions Pipeable
 
 ```python
