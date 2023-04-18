@@ -7,6 +7,7 @@ from jaxtyping import ArrayLike
 from ..core import make_partial_pipe
 
 
+@make_partial_pipe
 def step_fun(x, y, ival=0.0, sorted=False, side="left", dtype=jnp.float32):
     """Returns a function that evaluates a step function at given points.
 
