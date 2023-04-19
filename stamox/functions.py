@@ -1,5 +1,15 @@
 from .anova import one_way
 from .cluster import kmeans
+from .core import (
+    make_partial_pipe,
+    make_pipe,
+    partial_pipe_jit,
+    partial_pipe_pmap,
+    partial_pipe_vmap,
+    pipe_jit,
+    pipe_pmap,
+    pipe_vmap,
+)
 from .correlation import cor, pearsonr, spearmanr
 from .distribution import (
     dbeta,
@@ -74,6 +84,14 @@ from .transformation import boxcox, z_fisher
 __all__ = [
     "one_way",
     "kmeans",
+    "make_partial_pipe",
+    "make_pipe",
+    "partial_pipe_jit",
+    "partial_pipe_pmap",
+    "partial_pipe_vmap",
+    "pipe_jit",
+    "pipe_pmap",
+    "pipe_vmap",
     "spearmanr",
     "pearsonr",
     "cor",
