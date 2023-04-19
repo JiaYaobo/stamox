@@ -6,7 +6,7 @@ from jax._src.random import KeyArray
 from jax.scipy.cluster.vq import vq
 from jaxtyping import ArrayLike
 
-from ..core import make_partial_pipe, StateFunc
+from ..core import StateFunc
 
 
 class KMeansState(StateFunc):
@@ -50,7 +50,6 @@ class KMeansState(StateFunc):
         return vq(x, self.centers)[0]
 
 
-@make_partial_pipe(name="kmeans")
 def kmeans(
     x: ArrayLike,
     n_cluster: int,

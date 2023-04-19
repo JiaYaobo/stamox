@@ -1,9 +1,11 @@
+from .cluster import kmeans
 from .core import make_partial_pipe, make_pipe
 from .correlation import cor, pearsonr, spearmanr
 from .sample import bootstrap, bootstrap_sample, jackknife, jackknife_sample
 from .transformation import boxcox, z_fisher
 
 
+kmeans = make_partial_pipe(kmeans, name="kmeans")
 spearmanr = make_partial_pipe(spearmanr, name="spearmanr")
 pearsonr = make_partial_pipe(pearsonr, name="pearsonr")
 cor = make_partial_pipe(cor, name="cor")
@@ -16,6 +18,7 @@ z_fisher = make_pipe(z_fisher, name="z_fisher")
 
 
 __all__ = [
+    "kmeans",
     "spearmanr",
     "pearsonr",
     "cor",

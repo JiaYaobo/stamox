@@ -11,13 +11,13 @@ from stamox import (
     distribution,
     experimental,
     formula,
+    functions,
     hypothesis,
     math,
+    pipe_functions,
     regression,
     sample,
     transformation,
-    functions,
-    pipe_functions,
 )
 
 
@@ -38,8 +38,10 @@ __all__ = [
     "distribution",
     "experimental",
     "formula",
+    "functions",
     "hypothesis",
     "math",
+    "pipe_functions",
     "regression",
     "sample",
     "transformation",

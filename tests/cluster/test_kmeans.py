@@ -4,6 +4,7 @@ import jax.random
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
+import stamox.pipe_functions as PF
 from stamox.cluster import kmeans
 from stamox.core import Pipeable, predict
 
@@ -40,10 +41,10 @@ class KMeansTest(jtest.JaxTestCase):
             ]
         )
 
-        kms = kmeans(n_cluster=3, key=k4)
+        kms = PF.kmeans(n_cluster=3, key=k4)
         state = (Pipeable(points) >> kms)()
         self.assertEqual(state.centers.shape, (3, 2))
-    
+
     def test_predict(self):
         k1, k2, k3, k4 = jax.random.split(jax.random.PRNGKey(20010218), 4)
 
@@ -58,7 +59,7 @@ class KMeansTest(jtest.JaxTestCase):
             ]
         )
 
-        kms = kmeans(n_cluster=3, key=k4)
+        kms = PF.kmeans(n_cluster=3, key=k4)
         state = (Pipeable(points) >> kms)()
         self.assertEqual(state.centers.shape, (3, 2))
         self.assertEqual(predict(points, state).shape, (800,))
