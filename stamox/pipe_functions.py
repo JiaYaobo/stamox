@@ -1,3 +1,4 @@
+from .anova import one_way
 from .cluster import kmeans
 from .core import make_partial_pipe, make_pipe
 from .correlation import cor, pearsonr, spearmanr
@@ -71,6 +72,7 @@ from .sample import bootstrap, bootstrap_sample, jackknife, jackknife_sample
 from .transformation import boxcox, z_fisher
 
 
+one_way = make_partial_pipe(one_way, name="one_way")
 kmeans = make_partial_pipe(kmeans, name="kmeans")
 spearmanr = make_partial_pipe(spearmanr, name="spearmanr")
 pearsonr = make_partial_pipe(pearsonr, name="pearsonr")
@@ -146,6 +148,7 @@ rweibull = make_partial_pipe(rweibull, name="rweibull")
 
 
 __all__ = [
+    "one_way",
     "kmeans",
     "spearmanr",
     "pearsonr",

@@ -5,7 +5,6 @@ import jax.tree_util as jtu
 from equinox import filter_jit
 from jax import Array, jit
 
-from ...core import make_partial_pipe
 from ...distribution import pF
 from ...hypothesis import HypoTest
 
@@ -91,7 +90,6 @@ def _sum_of_squares(a, axis=0) -> Array:
     return jnp.sum(a * a, axis=axis, keepdims=True)
 
 
-@make_partial_pipe
 def one_way(*samples, axis=0) -> OneWayAnovaTest:
     """Performs a one-way ANOVA test.
 

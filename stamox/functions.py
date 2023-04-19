@@ -1,3 +1,4 @@
+from .anova import one_way
 from .cluster import kmeans
 from .correlation import cor, pearsonr, spearmanr
 from .distribution import (
@@ -71,6 +72,7 @@ from .transformation import boxcox, z_fisher
 
 
 __all__ = [
+    "one_way",
     "kmeans",
     "spearmanr",
     "pearsonr",
