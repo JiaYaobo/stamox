@@ -4,13 +4,10 @@ import jax.random as jrandom
 from equinox import filter_jit, filter_vmap
 from jaxtyping import ArrayLike, PyTree
 
-from ..core import make_partial_pipe
-
 
 ReturnValue = TypeVar("ReturnValue")
 
 
-@make_partial_pipe(name="bootstrap_sample")
 def bootstrap_sample(
     data: ArrayLike, num_samples: int, *, key: jrandom.KeyArray = None
 ) -> ArrayLike:
@@ -51,7 +48,6 @@ def bootstrap_sample(
     return samples
 
 
-@make_partial_pipe(name="bootstrap")
 def bootstrap(
     data: ArrayLike,
     call: Callable[..., ReturnValue],

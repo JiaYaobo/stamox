@@ -16,6 +16,8 @@ from stamox import (
     regression,
     sample,
     transformation,
+    functions,
+    pipe_functions,
 )
 
 
