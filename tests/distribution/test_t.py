@@ -5,6 +5,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import t
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dt, pt, qt, rt
 
 
@@ -42,19 +43,19 @@ class TTest(jtest.JaxTestCase):
 
     def test_partial_pt(self):
         x = np.array([1.0, 1.645, 1.96, 2.65, 3.74])
-        p = pt(df=6)(x)
+        p = PF.pt(df=6)(x)
         true_p = np.array([0.8220412, 0.9244638, 0.9511524, 0.9809857, 0.9951888])
         self.assertArraysAllClose(p, true_p)
 
     def test_partial_qt(self):
         q = np.array([0.8220412, 0.9244638, 0.9511524, 0.9809857, 0.9951888])
-        x = qt(df=6)(q)
+        x = PF.qt(df=6)(q)
         true_x = np.array([1.0, 1.645, 1.96, 2.65, 3.74])
         self.assertArraysAllClose(x, true_x)
 
     def test_partial_dt(self):
         x = np.array([1.0, 1.645, 1.96, 2.65, 3.74])
-        grads = dt(df=6)(x)
+        grads = PF.dt(df=6)(x)
         true_grads = np.array(
             [0.223142291, 0.104005269, 0.067716584, 0.025409420, 0.005672347]
         )
@@ -63,7 +64,7 @@ class TTest(jtest.JaxTestCase):
     def test_partial_rt(self):
         key = jrand.PRNGKey(19751002)
         sample_shape = (1000000,)
-        rvs = rt(df=6, loc=0.0, scale=1.0, sample_shape=sample_shape)(key)
+        rvs = PF.rt(df=6, loc=0.0, scale=1.0, sample_shape=sample_shape)(key)
         avg = rvs.mean()
         var = rvs.var(ddof=1)
         self.assertAllClose(avg, 0.0, atol=1e-2)

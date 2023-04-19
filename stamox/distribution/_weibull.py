@@ -7,8 +7,6 @@ from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pweibull(
@@ -23,7 +21,6 @@ def _pweibull(
     return 1 - jnp.exp(-powered)
 
 
-@make_partial_pipe
 def pweibull(
     q: Union[Float, ArrayLike],
     concentration: Union[Float, ArrayLike] = 0.0,
@@ -56,7 +53,6 @@ def pweibull(
 _dweibull = filter_grad(filter_jit(_pweibull))
 
 
-@make_partial_pipe
 def dweibull(
     x, concentration=0.0, scale=1.0, lower_tail=True, log_prob=False
 ) -> ArrayLike:
@@ -98,7 +94,6 @@ def _qweibull(
     return x
 
 
-@make_partial_pipe
 def qweibull(
     p: Union[Float, ArrayLike],
     concentration: Union[Float, ArrayLike] = 0.0,
@@ -138,7 +133,6 @@ def _rweibull(
     return jrand.weibull_min(key, scale, concentration, sample_shape)
 
 
-@make_partial_pipe
 def rweibull(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

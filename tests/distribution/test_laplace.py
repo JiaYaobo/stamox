@@ -5,6 +5,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import laplace
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dlaplace, plaplace, qlaplace, rlaplace
 
 
@@ -41,35 +42,35 @@ class LaplaceTest(jtest.JaxTestCase):
         grads = dlaplace(x, loc, scale)
         true_grads = np.array([0.4524187, 0.4093654, 0.3704091, 0.3351600, 0.3032653])
         self.assertArraysAllClose(grads, true_grads)
-    
+
     def test_partial_plaplace(self):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         loc = 0.0
         scale = 1.0
-        p = plaplace(loc=loc, scale=scale)(x)
+        p = PF.plaplace(loc=loc, scale=scale)(x)
         true_p = np.array([0.5475813, 0.5906346, 0.6295909, 0.6648400, 0.6967347])
         self.assertArraysAllClose(p, true_p)
-    
+
     def test_partial_qlaplace(self):
         q = np.array([0.5475813, 0.5906346, 0.6295909, 0.6648400, 0.6967347])
         loc = 0.0
         scale = 1.0
-        x = qlaplace(loc=loc, scale=scale)(q)
+        x = PF.qlaplace(loc=loc, scale=scale)(q)
         true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
-    
+
     def test_partial_dlaplace(self):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         loc = 0.0
         scale = 1.0
-        grads = dlaplace(loc=loc, scale=scale)(x)
+        grads = PF.dlaplace(loc=loc, scale=scale)(x)
         true_grads = np.array([0.4524187, 0.4093654, 0.3704091, 0.3351600, 0.3032653])
         self.assertArraysAllClose(grads, true_grads)
-    
+
     def test_partial_rlaplace(self):
         key = jrand.PRNGKey(19751002)
         sample_shape = (100000000,)
-        laplaces = rlaplace(sample_shape=sample_shape)(key)
+        laplaces = PF.rlaplace(sample_shape=sample_shape)(key)
         mean = laplaces.mean()
         var = laplaces.var(ddof=1)
         self.assertAllClose(mean, 0.0, atol=1e-2, rtol=1e-4)

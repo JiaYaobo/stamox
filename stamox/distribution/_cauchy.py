@@ -8,8 +8,6 @@ from jax._src.random import Shape
 from jax.random import KeyArray
 from jaxtyping import ArrayLike, Bool, Float
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pcauchy(
@@ -21,7 +19,6 @@ def _pcauchy(
     return jnp.arctan(scaled) / jnp.pi + 0.5
 
 
-@make_partial_pipe
 def pcauchy(
     q: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
@@ -60,7 +57,6 @@ def pcauchy(
 _dcauchy = filter_grad(filter_jit(_pcauchy))
 
 
-@make_partial_pipe
 def dcauchy(
     x: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
@@ -105,7 +101,6 @@ def _qcauchy(
     return lax.add(loc, lax.mul(scale, lax.tan(lax.mul(jnp.pi, lax.sub(q, 0.5)))))
 
 
-@make_partial_pipe
 def qcauchy(
     q: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
@@ -140,6 +135,7 @@ def qcauchy(
     return filter_vmap(_qcauchy)(q, loc, scale)
 
 
+@filter_jit
 def _rcauchy(
     key: KeyArray,
     loc: Union[Float, ArrayLike] = 0.0,
@@ -156,7 +152,6 @@ def _rcauchy(
     return jrand.cauchy(key, sample_shape, dtype=dtype) * scale + loc
 
 
-@make_partial_pipe
 def rcauchy(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

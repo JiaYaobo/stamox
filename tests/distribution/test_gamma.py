@@ -5,6 +5,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import gamma
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dgamma, pgamma, qgamma, rgamma
 
 
@@ -48,7 +49,7 @@ class GammaTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         shape = 2.0
         rate = 2.0
-        p = pgamma(shape=shape, rate=rate)(x)
+        p = PF.pgamma(shape=shape, rate=rate)(x)
         true_p = np.array([0.01752310, 0.06155194, 0.12190138, 0.19120786, 0.26424112])
         self.assertArraysAllClose(p, true_p)
 
@@ -56,7 +57,7 @@ class GammaTest(jtest.JaxTestCase):
         q = np.array([0.01752310, 0.06155194, 0.12190138, 0.19120786, 0.26424112])
         shape = 2.0
         rate = 2.0
-        x = qgamma(shape=shape, rate=rate)(q)
+        x = PF.qgamma(shape=shape, rate=rate)(q)
         true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
 
@@ -64,7 +65,7 @@ class GammaTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         shape = 2.0
         rate = 2.0
-        grads = dgamma(shape=shape, rate=rate)(x)
+        grads = PF.dgamma(shape=shape, rate=rate)(x)
         true_grads = np.array([0.3274923, 0.5362560, 0.6585740, 0.7189263, 0.7357589])
         self.assertArraysAllClose(grads, true_grads)
 
@@ -73,7 +74,7 @@ class GammaTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         shape = 2.0
         rate = 2.0
-        gammas = rgamma(shape=shape, rate=rate, sample_shape=sample_shape)(key)
+        gammas = PF.rgamma(shape=shape, rate=rate, sample_shape=sample_shape)(key)
         avg = gammas.mean()
         var = gammas.var(ddof=1)
         self.assertAllClose(avg, shape / rate, atol=1e-2)

@@ -4,6 +4,7 @@ import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dpareto, ppareto, qpareto, rpareto
 
 
@@ -45,19 +46,19 @@ class ParetoTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         scale = 0.1
         alpha = 2.0
-        p = ppareto(scale=scale, alpha=alpha)(x)
+        p = PF.ppareto(scale=scale, alpha=alpha)(x)
         true_p = np.array([0.0000000, 0.7500000, 0.8888889, 0.9375000, 0.9600000])
         self.assertArraysAllClose(p, true_p)
 
     def test_partial_qpareto(self):
         q = np.array([0.0000000, 0.7500000, 0.8888889, 0.9375000, 0.9600000])
-        x = qpareto(scale=0.1, alpha=2.0)(q)
+        x = PF.qpareto(scale=0.1, alpha=2.0)(q)
         true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
 
     def test_partial_dpareto(self):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
-        grads = dpareto(scale=0.1, alpha=2.0)(x)
+        grads = PF.dpareto(scale=0.1, alpha=2.0)(x)
         true_grads = np.array([20.0000000, 2.5000000, 0.7407407, 0.3125000, 0.1600000])
         self.assertArraysAllClose(grads, true_grads)
 
@@ -66,7 +67,7 @@ class ParetoTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         scale = 0.1
         alpha = 3.0
-        ts = rpareto(scale=scale, alpha=alpha, sample_shape=sample_shape)(key)
+        ts = PF.rpareto(scale=scale, alpha=alpha, sample_shape=sample_shape)(key)
         avg = ts.mean()
         var = ts.var(ddof=1)
         self.assertAllClose(avg, alpha * scale / (alpha - 1), atol=1e-2)

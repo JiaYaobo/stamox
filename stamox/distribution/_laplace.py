@@ -8,8 +8,6 @@ from jax._src.random import Shape
 from jax.random import KeyArray
 from jaxtyping import ArrayLike, Bool, Float
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _plaplace(
@@ -22,7 +20,6 @@ def _plaplace(
     return lax.sub(0.5, subtrahend)
 
 
-@make_partial_pipe
 def plaplace(
     q: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
@@ -60,7 +57,6 @@ def plaplace(
 _dlaplace = filter_grad(filter_jit(_plaplace))
 
 
-@make_partial_pipe
 def dlaplace(
     x: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
@@ -103,10 +99,9 @@ def _qlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
 ):
     a = lax.sub(0.5, q)
-    return loc - scale * jnp.sign(a) * jnp.log1p(-2 * jnp.abs(a))
+    return scale * jnp.sign(a) * jnp.log1p(-2 * jnp.abs(a)) - loc
 
 
-@make_partial_pipe
 def qlaplace(
     p: Union[Float, ArrayLike],
     loc: Union[Float, ArrayLike] = 0.0,
@@ -156,7 +151,6 @@ def _rlaplace(
     return jrand.laplace(key, sample_shape, dtype=dtype) * scale + loc
 
 
-@make_partial_pipe
 def rlaplace(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

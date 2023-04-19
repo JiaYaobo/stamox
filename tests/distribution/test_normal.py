@@ -5,10 +5,12 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import norm
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dnorm, pnorm, qnorm, rnorm
 
 
 np.random.seed(1)
+
 
 class NormalTest(jtest.JaxTestCase):
     def test_rnorm(self):
@@ -46,7 +48,7 @@ class NormalTest(jtest.JaxTestCase):
         x = np.array([-1.96, -1.645, -1.0, 0, 1.0, 1.645, 1.96])
         mean = 0.0
         sd = 1.0
-        p = pnorm(mean=mean, sd=sd)(x)
+        p = PF.pnorm(mean=mean, sd=sd)(x)
         true_p = np.array(
             [0.02499789, 0.04998492, 0.15865527, 0.5, 0.8413447, 0.95001507, 0.9750021]
         )
@@ -56,13 +58,13 @@ class NormalTest(jtest.JaxTestCase):
         q = np.array(
             [0.02499789, 0.04998492, 0.15865527, 0.5, 0.8413447, 0.95001507, 0.9750021]
         )
-        x = qnorm(mean=0.0, sd=1.0)(q)
+        x = PF.qnorm(mean=0.0, sd=1.0)(q)
         true_x = np.array([-1.96, -1.645, -1.0, 0, 1.0, 1.645, 1.96])
         self.assertArraysAllClose(x, true_x)
 
     def test_partial_dnorm(self):
         x = np.array([-1.96, -1.645, -1.0, 0, 1.0, 1.645, 1.96])
-        grads = dnorm(mean=0.0, sd=1.0)(x)
+        grads = PF.dnorm(mean=0.0, sd=1.0)(x)
         true_grads = np.array(
             [
                 0.05844094,
@@ -81,7 +83,7 @@ class NormalTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         mean = 0.5
         sd = 2.0
-        norms = rnorm(mean=mean, sd=sd, sample_shape=sample_shape)(key)
+        norms = PF.rnorm(mean=mean, sd=sd, sample_shape=sample_shape)(key)
         avg = norms.mean()
         var = norms.var(ddof=1)
         self.assertAllClose(avg, mean, atol=1e-2)

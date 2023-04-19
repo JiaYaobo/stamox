@@ -39,10 +39,12 @@ class better_partial:
 
     def __call__(self, *args, **keywords) -> _T:
         keywords = {**self.keywords, **keywords}
-        unassign_argsname = [arg for arg in self.args_name if arg not in keywords]
-        for i, arg in enumerate(unassign_argsname):
+        unassign_or_none_argsname = [
+            arg
+            for arg in self.args_name
+            if arg not in keywords or keywords[arg] is None
+        ]
+        for i, arg in enumerate(unassign_or_none_argsname):
             if i < len(args):
                 keywords[arg] = args[i]
         return self.func(**keywords)
-
-

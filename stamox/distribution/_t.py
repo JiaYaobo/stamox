@@ -10,8 +10,6 @@ from jax.scipy.special import betainc
 from jaxtyping import ArrayLike, Float, Int
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pt(
@@ -30,8 +28,6 @@ def _pt(
         1. + jnp.sign(scaled) - jnp.sign(scaled) * betainc(0.5 * df, 0.5, beta_value)
     )
 
-
-@make_partial_pipe
 def pt(
     q: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -72,8 +68,6 @@ def pt(
 
 _dt = filter_jit(filter_grad(_pt))
 
-
-@make_partial_pipe
 def dt(
     x: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -128,8 +122,6 @@ def _qt(
     scaled = jnp.sign(q - 0.5) * jnp.sqrt(scaled_squared)
     return scaled * scale + loc
 
-
-@make_partial_pipe
 def qt(
     p: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -184,8 +176,6 @@ def _rt(
     loc = jnp.broadcast_to(loc, sample_shape)
     return jrand.t(key, df, sample_shape, dtype=dtype) * scale + loc
 
-
-@make_partial_pipe
 def rt(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

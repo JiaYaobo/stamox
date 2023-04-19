@@ -5,6 +5,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import weibull_min
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dweibull, pweibull, qweibull, rweibull
 
 
@@ -47,7 +48,7 @@ class WeiBullTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         a = 1.0
         b = 1.0
-        p = pweibull(concentration=a, scale=b)(x)
+        p = PF.pweibull(concentration=a, scale=b)(x)
         true_p = np.array([0.09516258, 0.18126925, 0.25918178, 0.32967995, 0.39346934])
         self.assertArraysAllClose(p, true_p)
 
@@ -55,7 +56,7 @@ class WeiBullTest(jtest.JaxTestCase):
         q = np.array([0.09516258, 0.18126925, 0.25918178, 0.32967995, 0.39346934])
         a = 1.0
         b = 1.0
-        x = qweibull(concentration=a, scale=b)(q)
+        x = PF.qweibull(concentration=a, scale=b)(q)
         true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
 
@@ -63,7 +64,7 @@ class WeiBullTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         a = 1.0
         b = 1.0
-        grads = dweibull(concentration=a, scale=b)(x)
+        grads = PF.dweibull(concentration=a, scale=b)(x)
         true_grads = np.array([0.9048374, 0.8187308, 0.7408182, 0.6703200, 0.6065307])
         self.assertArraysAllClose(grads, true_grads)
 
@@ -72,7 +73,7 @@ class WeiBullTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         a = 1.0
         b = 1.0
-        rvs = rweibull(concentration=a, scale=b, sample_shape=sample_shape)(key)
+        rvs = PF.rweibull(concentration=a, scale=b, sample_shape=sample_shape)(key)
         avg = rvs.mean()
         var = rvs.var(ddof=1)
         self.assertAllClose(avg, 1.0, atol=1e-2)

@@ -6,7 +6,6 @@ from equinox import filter_grad, filter_jit, filter_vmap
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float
 
-from ..core import make_partial_pipe
 from ..math.special import fdtr, fdtri
 
 
@@ -19,7 +18,6 @@ def _pf(
     return fdtr(dfn, dfd, x)
 
 
-@make_partial_pipe
 def pF(
     q: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
@@ -58,7 +56,6 @@ def pF(
 _df = filter_jit(filter_grad(_pf))
 
 
-@make_partial_pipe
 def dF(
     x: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
@@ -103,7 +100,6 @@ def _qf(
     return fdtri(dfn, dfd, q)
 
 
-@make_partial_pipe
 def qF(
     p: Union[Float, ArrayLike],
     dfn: Union[Float, ArrayLike],
@@ -143,7 +139,7 @@ def _rf(
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
-    dtype = jnp.float32,
+    dtype=jnp.float32,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(dfn), jnp.shape(dfd))
@@ -152,7 +148,6 @@ def _rf(
     return jrand.f(key, dfn, dfd, shape=sample_shape, dtype=dtype)
 
 
-@make_partial_pipe
 def rF(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,
@@ -160,7 +155,7 @@ def rF(
     dfd: Union[Float, ArrayLike] = None,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype = jnp.float32,
+    dtype=jnp.float32,
 ):
     """Generate random variates from F-distribution.
 

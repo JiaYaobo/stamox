@@ -32,6 +32,13 @@ class BetterPartialTest(jtest.JaxTestCase):
         self.assertEqual(g(1, 2), 8)
 
     def test_better_partial4(self):
+        def f(a, b=None, c=None, d=None):
+            return a * b + c * d
+
+        g = better_partial(f, b=2, c=3)
+        self.assertEqual(g(1, 2), 8)
+
+    def test_better_partial5(self):
         def f(a, b, c, d):
             return a * b + c * d
 

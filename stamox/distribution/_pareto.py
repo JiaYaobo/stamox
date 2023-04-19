@@ -7,7 +7,6 @@ from jax._src.random import Shape
 from jax.random import KeyArray
 from jaxtyping import ArrayLike, Bool, Float
 
-from ..core import make_partial_pipe
 
 
 @filter_jit
@@ -19,7 +18,7 @@ def _ppareto(
     return 1 - jnp.power(scale / x, alpha)
 
 
-@make_partial_pipe
+
 def ppareto(
     q: Union[Float, ArrayLike],
     scale: Union[Float, ArrayLike],
@@ -58,7 +57,7 @@ def ppareto(
 _dpareto = filter_grad(filter_jit(_ppareto))
 
 
-@make_partial_pipe
+
 def dpareto(
     x: Union[Float, ArrayLike],
     scale: Union[Float, ArrayLike],
@@ -103,7 +102,7 @@ def _qpareto(
     return scale / jnp.power(1 - q, 1 / alpha)
 
 
-@make_partial_pipe
+
 def qpareto(
     p: Union[Float, ArrayLike],
     scale: Union[Float, ArrayLike],
@@ -153,7 +152,7 @@ def _rpareto(
     return jrand.pareto(key, alpha, shape=sample_shape, dtype=dtype) * scale
 
 
-@make_partial_pipe
+
 def rpareto(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

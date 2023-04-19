@@ -8,8 +8,6 @@ from jax.scipy.special import betainc
 from jaxtyping import ArrayLike, Float
 from tensorflow_probability.substrates.jax.math import special as tfp_special
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pbeta(
@@ -18,7 +16,6 @@ def _pbeta(
     return betainc(a, b, x)
 
 
-@make_partial_pipe
 def pbeta(
     q: Union[Float, ArrayLike],
     a: Union[Float, ArrayLike],
@@ -60,7 +57,6 @@ def pbeta(
 _dbeta = filter_jit(filter_grad(_pbeta))
 
 
-@make_partial_pipe
 def dbeta(
     x: Union[Float, ArrayLike],
     a: Union[Float, ArrayLike],
@@ -103,7 +99,6 @@ def _qbeta(
     return tfp_special.betaincinv(a, b, p)
 
 
-@make_partial_pipe
 def qbeta(
     p: Union[Float, ArrayLike],
     a: Union[Float, ArrayLike],
@@ -141,7 +136,6 @@ def qbeta(
     return x
 
 
-@make_partial_pipe
 def rbeta(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

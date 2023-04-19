@@ -9,8 +9,6 @@ from jax.random import KeyArray
 from jax.scipy.special import ndtr, ndtri
 from jaxtyping import ArrayLike, Bool, Float
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pnorm(
@@ -22,7 +20,6 @@ def _pnorm(
     return ndtr(scaled)
 
 
-@make_partial_pipe(name="pnorm")
 def pnorm(
     q: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
@@ -69,7 +66,6 @@ def pnorm(
 _dnorm = filter_jit(filter_grad(_pnorm))
 
 
-@make_partial_pipe(name="dnorm")
 def dnorm(
     x: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
@@ -118,7 +114,6 @@ def _qnorm(
     return lax.add(lax.mul(x, sd), mean)
 
 
-@make_partial_pipe(name="qnorm")
 def qnorm(
     p: Union[Float, ArrayLike],
     mean: Union[Float, ArrayLike] = 0.0,
@@ -167,7 +162,6 @@ def _rnorm(key, mean, sd, sample_shape, dtype):
     return jrand.normal(key, sample_shape, dtype=dtype) * sd + mean
 
 
-@make_partial_pipe(name="rnorm")
 def rnorm(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

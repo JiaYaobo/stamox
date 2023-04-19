@@ -7,15 +7,12 @@ from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pexp(x: Union[float, ArrayLike], rate: float) -> Float:
     return -jnp.expm1(-rate * x)
 
 
-@make_partial_pipe
 def pexp(
     q: Union[Float, ArrayLike],
     rate: Union[Float, ArrayLike],
@@ -54,7 +51,6 @@ def _qexp(q: Union[float, ArrayLike], rate: float) -> Float:
     return -lax.div(lax.log1p(-q), rate)
 
 
-@make_partial_pipe
 def qexp(
     p: Union[float, ArrayLike],
     rate: Union[float, ArrayLike],
@@ -91,7 +87,6 @@ def qexp(
 _dexp = filter_jit(filter_grad(_pexp))
 
 
-@make_partial_pipe
 def dexp(
     x: Union[Float, ArrayLike],
     rate: Union[Float, ArrayLike],
@@ -138,7 +133,6 @@ def _rexp(
     return jrand.exponential(key, shape=sample_shape, dtype=dtype) / rate
 
 
-@make_partial_pipe
 def rexp(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

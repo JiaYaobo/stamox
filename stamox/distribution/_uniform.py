@@ -7,8 +7,6 @@ from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Bool, Float
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _punif(
@@ -22,8 +20,6 @@ def _punif(
     p = jnp.clip(p, a_min=mini, a_max=maxi)
     return p
 
-
-@make_partial_pipe
 def punif(
     q: Union[Float, ArrayLike],
     mini: Union[Float, ArrayLike] = 0.0,
@@ -61,8 +57,6 @@ def punif(
 
 _dunif = filter_grad(filter_jit(_punif))
 
-
-@make_partial_pipe
 def dunif(
     x: Union[Float, ArrayLike],
     mini: Union[Float, ArrayLike] = 0.0,
@@ -108,8 +102,6 @@ def _qunif(
     x = jnp.clip(x, a_min=mini, a_max=maxi)
     return x
 
-
-@make_partial_pipe
 def qunif(
     p: Union[Float, ArrayLike],
     mini: Union[Float, ArrayLike] = 0.0,
@@ -156,8 +148,6 @@ def _runif(
 ):
     return jrand.uniform(key, sample_shape, minval=mini, maxval=maxi, dtype=dtype)
 
-
-@make_partial_pipe
 def runif(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

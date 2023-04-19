@@ -7,6 +7,7 @@ from jax import config
 from jax._src import test_util as jtest
 from scipy.stats import cauchy
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dcauchy, pcauchy, qcauchy, rcauchy
 
 
@@ -50,7 +51,7 @@ class CauchyTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         loc = 0.0
         scale = 1.0
-        p = pcauchy(loc=loc, scale=scale, dtype=jnp.float64)(x)
+        p = PF.pcauchy(loc=loc, scale=scale, dtype=jnp.float64)(x)
         true_p = cauchy.cdf(x, loc, scale)
         self.assertArraysAllClose(p, true_p)
 
@@ -58,7 +59,7 @@ class CauchyTest(jtest.JaxTestCase):
         q = np.array([0.5317255, 0.5628330, 0.5927736, 0.6211189, 0.6475836])
         loc = 0.0
         scale = 1.0
-        x = qcauchy(loc=loc, scale=scale, dtype=jnp.float64)(q)
+        x = PF.qcauchy(loc=loc, scale=scale, dtype=jnp.float64)(q)
         true_x = cauchy.ppf(q, loc, scale)
         self.assertArraysAllClose(x, true_x)
 
@@ -66,14 +67,14 @@ class CauchyTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         loc = 0.0
         scale = 1.0
-        grads = dcauchy(loc=loc, scale=scale, dtype=jnp.float64)(x)
+        grads = PF.dcauchy(loc=loc, scale=scale, dtype=jnp.float64)(x)
         true_grads = cauchy.pdf(x, loc, scale)
         self.assertArraysAllClose(grads, true_grads)
 
     def test_partial_rcauchy(self):
         key = jrand.PRNGKey(19751002)
         sample_shape = (1000000,)
-        cauchys = rcauchy(loc=0.0, scale=1.0, dtype=jnp.float64)(
+        cauchys = PF.rcauchy(loc=0.0, scale=1.0, dtype=jnp.float64)(
             key, sample_shape=sample_shape
         )
         median = jnp.median(cauchys)

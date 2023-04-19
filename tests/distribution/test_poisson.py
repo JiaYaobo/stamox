@@ -5,6 +5,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import poisson
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dpoisson, ppoisson, qpoisson, rpoisson
 
 
@@ -38,7 +39,7 @@ class PoissonTest(jtest.JaxTestCase):
     def test_partial_ppoisson(self):
         x = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
         rate = 2.5
-        p = ppoisson(rate=rate, lower_tail=False)(x)
+        p = PF.ppoisson(rate=rate, lower_tail=False)(x)
         true_p = np.array([0.7127025, 0.4561869, 0.2424239, 0.1088220, 0.0420210])
         self.assertArraysAllClose(p, true_p)
 
@@ -52,7 +53,7 @@ class PoissonTest(jtest.JaxTestCase):
     def test_partial_dpoisson(self):
         x = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
         rate = 2.5
-        grads = dpoisson(rate=rate)(x)
+        grads = PF.dpoisson(rate=rate)(x)
         true_grads = np.array(
             [0.20521250, 0.25651562, 0.21376302, 0.13360189, 0.06680094]
         )
@@ -62,7 +63,7 @@ class PoissonTest(jtest.JaxTestCase):
         key = jrand.PRNGKey(19751002)
         sample_shape = (1000000,)
         rate = 2.5
-        ts = rpoisson(rate=rate)(key, sample_shape=sample_shape)
+        ts = PF.rpoisson(rate=rate)(key, sample_shape=sample_shape)
         avg = ts.mean()
         var = ts.var(ddof=1)
         self.assertAllClose(avg, rate, atol=1e-2)

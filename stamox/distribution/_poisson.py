@@ -10,8 +10,6 @@ from jax.scipy.special import gammainc, gammaln
 from jaxtyping import Array, ArrayLike, Bool, Float
 from scipy.stats import poisson
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _ppoisson(x: Union[Float, ArrayLike], rate: Union[Float, ArrayLike]) -> Array:
@@ -19,7 +17,6 @@ def _ppoisson(x: Union[Float, ArrayLike], rate: Union[Float, ArrayLike]) -> Arra
     return 1 - gammainc(k, rate)
 
 
-@make_partial_pipe
 def ppoisson(
     q: Union[Float, ArrayLike],
     rate: Union[Float, ArrayLike],
@@ -57,7 +54,6 @@ def _dpoisson(x, rate):
     return (numerator / denominator) * e
 
 
-@make_partial_pipe
 def dpoisson(
     x: Union[Float, ArrayLike],
     rate: Union[Float, ArrayLike],
@@ -97,7 +93,6 @@ def _rpoisson(
     return jrand.poisson(key, rate, shape=sample_shape, dtype=dtype)
 
 
-@make_partial_pipe
 def rpoisson(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,
@@ -135,7 +130,6 @@ def _qpoisson(q, rate, dtype):
     return p
 
 
-@make_partial_pipe
 def qpoisson(
     p: Union[Float, ArrayLike],
     rate: Union[Float, ArrayLike],

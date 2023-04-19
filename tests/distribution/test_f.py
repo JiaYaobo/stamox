@@ -5,6 +5,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import f
 
+import stamox.pipe_functions as PF
 from stamox.distribution import dF, pF, qF, rF
 
 
@@ -30,7 +31,7 @@ class FTest(jtest.JaxTestCase):
         self.assertArraysAllClose(p, true_p, atol=1e-5)
 
     def test_qF(self):
-        q = np.random.uniform(0, 1., 1000)
+        q = np.random.uniform(0, 1.0, 1000)
         dfn = 5.0
         dfd = 5.0
         x = qF(q, dfn, dfd)
@@ -49,7 +50,7 @@ class FTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         dfn = 5.0
         dfd = 5.0
-        p = pF(dfn=dfn, dfd=dfd)(x)
+        p = PF.pF(dfn=dfn, dfd=dfd)(x)
         true_p = np.array([0.01224192, 0.05096974, 0.10620910, 0.16868416, 0.23251132])
         self.assertArraysAllClose(p, true_p)
 
@@ -57,7 +58,7 @@ class FTest(jtest.JaxTestCase):
         x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         dfn = 5.0
         dfd = 5.0
-        grads = dF(dfn=dfn, dfd=dfd)(x)
+        grads = PF.dF(dfn=dfn, dfd=dfd)(x)
         true_grads = np.array([0.2666708, 0.4881773, 0.6010408, 0.6388349, 0.6323209])
         self.assertArraysAllClose(grads, true_grads)
 
@@ -65,7 +66,7 @@ class FTest(jtest.JaxTestCase):
         q = np.array([0.01224192, 0.05096974, 0.10620910, 0.16868416, 0.23251132])
         dfn = 5.0
         dfd = 5.0
-        x = qF(dfn=dfn, dfd=dfd)(q)
+        x = PF.qF(dfn=dfn, dfd=dfd)(q)
         true_x = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
         self.assertArraysAllClose(x, true_x)
 
@@ -74,7 +75,7 @@ class FTest(jtest.JaxTestCase):
         sample_shape = (1000000,)
         dfn = 5.0
         dfd = 5.0
-        rvs = rF(dfn=dfn, dfd=dfd, sample_shape=sample_shape)(key)
+        rvs = PF.rF(dfn=dfn, dfd=dfd, sample_shape=sample_shape)(key)
         avg = rvs.mean()
         self.assertAllClose(avg, dfd / (dfd - 2), atol=1e-2)
 

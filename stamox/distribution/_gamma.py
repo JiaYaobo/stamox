@@ -9,8 +9,6 @@ from jax._src.random import KeyArray, Shape
 from jax.scipy.special import gammainc
 from jaxtyping import ArrayLike, Float
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pgamma(
@@ -19,7 +17,6 @@ def _pgamma(
     return gammainc(shape, q * rate)
 
 
-@make_partial_pipe
 def pgamma(
     q: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
@@ -58,7 +55,6 @@ def pgamma(
 _dgamma = filter_jit(filter_grad(_pgamma))
 
 
-@make_partial_pipe
 def dgamma(
     x: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
@@ -109,7 +105,6 @@ def _qgamma(
     return lax.div(tfp_math.igammainv(shape, q), rate)
 
 
-@make_partial_pipe
 def qgamma(
     p: Union[Float, ArrayLike],
     shape: Union[Float, ArrayLike] = 1.0,
@@ -145,7 +140,6 @@ def qgamma(
     return x
 
 
-@make_partial_pipe
 def rgamma(
     key,
     sample_shape: Optional[Shape] = None,

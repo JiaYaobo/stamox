@@ -6,11 +6,9 @@ from equinox import filter_jit, filter_vmap
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float, Int
 
-from ..core import make_partial_pipe
 from ._gamma import _dgamma, _pgamma, _qgamma
 
 
-@make_partial_pipe
 def dchisq(
     x: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -44,7 +42,6 @@ def dchisq(
     return grads
 
 
-@make_partial_pipe
 def pchisq(
     q: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -78,7 +75,6 @@ def pchisq(
     return p
 
 
-@make_partial_pipe
 def qchisq(
     p: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -125,7 +121,6 @@ def _rchisq(
     return jrand.chisquare(key, df, shape=sample_shape, dtype=dtype)
 
 
-@make_partial_pipe
 def rchisq(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,

@@ -9,8 +9,6 @@ from jaxtyping import ArrayLike, Bool
 from scipy.stats import binom
 from tensorflow_probability.substrates.jax.distributions import Binomial as tfp_Binomial
 
-from ..core import make_partial_pipe
-
 
 @filter_jit
 def _pbinom(q, size, prob) -> ArrayLike:
@@ -18,7 +16,6 @@ def _pbinom(q, size, prob) -> ArrayLike:
     return bino.cdf(q)
 
 
-@make_partial_pipe
 def pbinom(
     q: ArrayLike,
     size: ArrayLike,
@@ -62,7 +59,6 @@ def _dbinom(q, size, prob) -> ArrayLike:
     return bino.prob(q)
 
 
-@make_partial_pipe
 def dbinom(
     q: ArrayLike,
     size: ArrayLike,
@@ -102,7 +98,6 @@ def _qbinom(p, size, prob, dtype) -> ArrayLike:
     return q
 
 
-@make_partial_pipe
 def qbinom(
     p: ArrayLike,
     size: ArrayLike,
@@ -136,16 +131,15 @@ def qbinom(
 
 
 @filter_jit
-def _rbinom(key, n, prob, sample_shape, dtype) -> ArrayLike:
-    bino = tfp_Binomial(total_count=n, probs=prob)
+def _rbinom(key, size, prob, sample_shape, dtype) -> ArrayLike:
+    bino = tfp_Binomial(total_count=size, probs=prob)
     return bino.sample(sample_shape=sample_shape, seed=key).astype(dtype)
 
 
-@make_partial_pipe
 def rbinom(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,
-    n: ArrayLike = None,
+    size: ArrayLike = None,
     prob: ArrayLike = None,
     lower_tail: Bool = True,
     log_prob: Bool = False,
@@ -156,7 +150,7 @@ def rbinom(
     Args:
         key (KeyArray): A random number generator key.
         sample_shape (Optional[Shape], optional): The shape of the output array. Defaults to None.
-        n (ArrayLike, optional): The number of trials. Defaults to None.
+        size (ArrayLike, optional): The number of trials. Defaults to None.
         prob (ArrayLike, optional): The probability of success for each trial. Defaults to None.
         lower_tail (Bool, optional): Whether to return the lower tail of the distribution. Defaults to True.
         log_prob (Bool, optional): Whether to return the logarithm of the probability. Defaults to False.
@@ -165,7 +159,7 @@ def rbinom(
     Returns:
         ArrayLike: An array containing the random binomial samples.
     """
-    rvs = _rbinom(key, n, prob, sample_shape, dtype)
+    rvs = _rbinom(key, size, prob, sample_shape, dtype)
     if not lower_tail:
         rvs = 1 - rvs
     if log_prob:
