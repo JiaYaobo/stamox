@@ -36,16 +36,6 @@ class Pipe(eqx.Module):
         """
         self.funcs = tuple(funcs)
 
-    def _debug_call(self, x: Any = None, *args, **kwargs):
-        for fn in self.funcs:
-            if fn._is_fully_partial:
-                print(f"{fn.name} called, function info: {fn.desc()}")
-                x = fn()
-                continue
-            print(f"{fn.name} called, function info: {fn.desc()}")
-            x = fn(x, *args, **kwargs)
-        return x
-
     def __call__(self, x: Any = None, *args, **kwargs):
         """Call the Pipe object.
 
