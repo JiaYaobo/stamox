@@ -4,6 +4,7 @@ from absl.testing import absltest
 from equinox import filter_jit
 from jax._src import test_util as jtest
 
+import stamox.pipe_functions as PF
 from stamox.core import Pipeable
 from stamox.hypothesis import bartlett_test
 
@@ -38,7 +39,7 @@ class BartlettTest(jtest.JaxTestCase):
             [8.95, 9.12, 8.95, 8.85, 9.03, 8.84, 9.07, 8.98, 8.86, 8.98],
             dtype=np.float32,
         )
-        h = Pipeable([a, b, c]) >> bartlett_test
+        h = Pipeable([a, b, c]) >> PF.bartlett_test
         state = h()
         self.assertAllClose(state.p_value, np.array(1.1254782518834628e-05))
     
@@ -55,7 +56,7 @@ class BartlettTest(jtest.JaxTestCase):
             [8.95, 9.12, 8.95, 8.85, 9.03, 8.84, 9.07, 8.98, 8.86, 8.98],
             dtype=np.float32,
         )
-        h = Pipeable([a, b, c]) >> filter_jit(bartlett_test)
+        h = Pipeable([a, b, c]) >> filter_jit(PF.bartlett_test)
         state = h()
         self.assertAllClose(state.p_value, np.array(1.1254782518834628e-05))
 

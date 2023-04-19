@@ -48,7 +48,7 @@ class BartlettTest(HypoTest):
         return self.parameters
 
 
-def bartlett_test_fun(*samples: Sequence[ArrayLike]) -> BartlettTest:
+def bartlett_test(*samples: Sequence[ArrayLike]) -> BartlettTest:
     """Calculates the Bartlett test statistic for multiple samples.
 
     Args:

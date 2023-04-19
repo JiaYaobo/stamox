@@ -45,7 +45,7 @@ class ShapiroWilkTest(HypoTest):
         return f"{self.name}(statistic={self.statistic}, parameters={self.parameters}, p_value={self.p_value})"
 
 
-def shapiro_wilk_test_fun(x: ArrayLike) -> ShapiroWilkTest:
+def shapiro_wilk_test(x: ArrayLike) -> ShapiroWilkTest:
     """Computes the Shapiro-Wilk test for normality.
 
     Args:

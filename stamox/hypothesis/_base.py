@@ -1,17 +1,15 @@
-from typing import AnyStr
-
 from jaxtyping import ArrayLike
 
 from ..core import StateFunc
 
 
 class HypoTest(StateFunc):
-    statistic: ArrayLike
-    parameters: ArrayLike
-    p_value: ArrayLike
-    estimate: ArrayLike
-    null_value: ArrayLike
-    alternative: AnyStr
+    _statistic: ArrayLike
+    _parameters: ArrayLike
+    _p_value: ArrayLike
+    _estimate: ArrayLike
+    _null_value: ArrayLike
+    _alternative: str
 
     def __init__(
         self,
@@ -21,13 +19,24 @@ class HypoTest(StateFunc):
         estimate=None,
         null_value=None,
         alternative=None,
-        name='HTest'
+        name="HTest",
     ):
         super().__init__(name=name, fn=None)
-        self.statistic = statistic
-        self.parameters = parameters
-        self.p_value = p_value
-        self.estimate = estimate
-        self.null_value = null_value
-        self.alternative = alternative
-    
+        self._statistic = statistic
+        self._parameters = parameters
+        self._p_value = p_value
+        self._estimate = estimate
+        self._null_value = null_value
+        self._alternative = alternative
+
+    @property
+    def statistic(self):
+        return self._statistic
+
+    @property
+    def parameters(self):
+        return self._parameters
+
+    @property
+    def p_value(self):
+        return self._p_value

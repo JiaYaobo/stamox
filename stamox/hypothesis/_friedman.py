@@ -45,7 +45,7 @@ class FriedmanTest(HypoTest):
         return f"{self.name}(statistic={self.statistic}, parameters={self.parameters}, p_value={self.p_value})"
 
 
-def friedman_test_fun(*samples: Sequence[ArrayLike]) -> FriedmanTest:
+def friedman_test(*samples: Sequence[ArrayLike]) -> FriedmanTest:
     """Computes the Friedman statistic for a set of samples.
 
     Args:
