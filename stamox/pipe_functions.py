@@ -7,6 +7,7 @@ from .hypothesis import (
     friedman_test,
     shapiro_wilk_test,
 )
+from .regression import lm
 from .sample import bootstrap, bootstrap_sample, jackknife, jackknife_sample
 from .transformation import boxcox, z_fisher
 
@@ -25,6 +26,7 @@ jackknife = make_partial_pipe(jackknife, name="jackknife")
 jackknife_sample = make_pipe(jackknife_sample, name="jackknife_sample")
 boxcox = make_partial_pipe(boxcox, name="boxcox")
 z_fisher = make_pipe(z_fisher, name="z_fisher")
+lm = make_partial_pipe(lm, name="lm")
 
 
 __all__ = [
@@ -35,6 +37,7 @@ __all__ = [
     "bartlett_test",
     "durbin_watson_test",
     "friedman_test",
+    "lm",
     "shapiro_wilk_test",
     "bootstrap",
     "bootstrap_sample",

@@ -4,6 +4,7 @@ import pandas as pd
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
+import stamox.pipe_functions as PF
 from stamox.core import Pipeable
 from stamox.regression import lm
 
@@ -107,7 +108,7 @@ class LMTest(jtest.JaxTestCase):
             columns=["x1", "x2", "x3", "y"],
         )
 
-        res = (Pipeable(data) >> lm(formula="y ~ x1 + x2 + x3"))()
+        res = (Pipeable(data) >> PF.lm(formula="y ~ x1 + x2 + x3"))()
         self.assertAllClose(
             res.params.reshape(1, 4), np.array([[1.0, 3.0, 2.0, -7.0]]), atol=1e-5
         )

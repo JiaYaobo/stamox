@@ -5,7 +5,6 @@ import jax.numpy as jnp
 from jaxtyping import ArrayLike
 from pandas import DataFrame
 
-from ..core import make_partial_pipe
 from ..distribution import pF, pt
 from ..formula import get_design_matrices
 from ._base import RegState
@@ -124,7 +123,6 @@ class OLSState(RegState):
         return jnp.sqrt(self.SSE / self.df_resid)
 
 
-@make_partial_pipe
 def lm(
     data: Union[List, Tuple, DataFrame, ArrayLike],
     formula=None,
