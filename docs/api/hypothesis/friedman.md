@@ -1,6 +1,6 @@
 # Friedman Test
 
-::: stamox.hypothesis.friedman_test_fun
+::: stamox.hypothesis.friedman_test
 
 ---
 
