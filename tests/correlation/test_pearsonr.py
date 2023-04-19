@@ -4,6 +4,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import pearsonr as scp_pearsonr
 
+import stamox.pipe_functions as PF
 from stamox.correlation import pearsonr
 
 
@@ -30,8 +31,8 @@ class PearsonRTest(jtest.JaxTestCase):
         rng = np.random.default_rng()
         x2n = rng.standard_normal((100, 2))
         y2n = rng.standard_normal((100, 2))
-        f = pearsonr(y=y2n[:, 0], axis=0)
-        g = pearsonr(y=x2n[:, 0], axis=0)
+        f = PF.pearsonr(y=y2n[:, 0], axis=0)
+        g = PF.pearsonr(y=x2n[:, 0], axis=0)
         self.assertAllClose(f(y2n[:, 1]), pearsonr(y2n, axis=0))
         self.assertAllClose(g(x2n[:, 1]), pearsonr(x2n, axis=0))
 

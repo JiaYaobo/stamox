@@ -5,12 +5,9 @@ from equinox import filter_jit
 from jax.scipy.stats import rankdata
 from jaxtyping import ArrayLike
 
-from ..core import make_partial_pipe
 
-
-@make_partial_pipe
 def spearmanr(
-    x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0, dtype=jnp.float32
+    x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0, dtype=None
 ) -> ArrayLike:
     """Calculates a Spearman rank-order correlation coefficient and the p-value to test for non-correlation.
 
@@ -18,7 +15,7 @@ def spearmanr(
         x (ArrayLike): An array of values.
         y (Optional[ArrayLike], optional): An array of values. Defaults to None.
         axis (int, optional): The axis along which to calculate. Defaults to 0.
-        dtype (jnp.float32, optional): The data type of the array. Defaults to jnp.float32.
+        dtype (jnp.float32, optional): The data type of the array. Defaults to None
 
     Raises:
         ValueError: If the supplied axis argument is greater than 1 or if the number of dimensions of the array is greater than 2.
@@ -54,7 +51,7 @@ def spearmanr(
         if x.ndim < 2:
             raise ValueError("`spearmanr` needs at least 2 " "variables to compare")
     else:
-        y = jnp.asarray(y, dtype=dtype)
+        y = jnp.asarray(y, dtype=x.dtype)
         if axis is None:
             y = y.ravel()
         if axis_out == 0:

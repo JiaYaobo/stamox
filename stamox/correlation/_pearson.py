@@ -4,12 +4,9 @@ import jax.numpy as jnp
 from equinox import filter_jit
 from jaxtyping import ArrayLike
 
-from ..core import make_partial_pipe
 
-
-@make_partial_pipe
 def pearsonr(
-    x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0, dtype=jnp.float32
+    x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0, dtype=None
 ) -> ArrayLike:
     """Computes Pearson correlation coefficient for two arrays.
 
@@ -19,7 +16,7 @@ def pearsonr(
         provided, `x` is assumed to contain two sets of data.
         axis: The axis along which the correlation coefficient should be computed.
         Must be 0 or 1. Defaults to 0.
-        dtype: The data type of the input arrays. Defaults to jnp.float32.
+        dtype: The data type of the input arrays. Defaults to None.
 
     Returns:
         An array-like object containing the Pearson correlation coefficient.
@@ -52,7 +49,7 @@ def pearsonr(
         if x.ndim < 2:
             raise ValueError("`pearsonr` needs at least 2 " "variables to compare")
     else:
-        y = jnp.asarray(y, dtype=dtype)
+        y = jnp.asarray(y, dtype=x.dtype)
         if axis is None:
             y = y.ravel()
         if axis_out == 0:

@@ -4,6 +4,7 @@ from absl.testing import absltest
 from jax._src import test_util as jtest
 from scipy.stats import pearsonr as scp_pearsonr, spearmanr as scp_spearman
 
+import stamox.pipe_functions as PF
 from stamox.correlation import cor
 
 
@@ -52,10 +53,10 @@ class CorTest(jtest.JaxTestCase):
         rng = np.random.default_rng()
         x2n = rng.standard_normal((100, 2))
         y2n = rng.standard_normal((100, 2))
-        f = cor(y=y2n[:, 0], axis=0)
-        g = cor(y=x2n[:, 0], axis=0)
-        f1 = cor(y=y2n[:, 0], axis=0, method="spearman")
-        g1 = cor(y=x2n[:, 0], axis=0, method="spearman")
+        f = PF.cor(y=y2n[:, 0], axis=0)
+        g = PF.cor(y=x2n[:, 0], axis=0)
+        f1 = PF.cor(y=y2n[:, 0], axis=0, method="spearman")
+        g1 = PF.cor(y=x2n[:, 0], axis=0, method="spearman")
         self.assertAllClose(f(y2n[:, 1]), cor(y2n, axis=0))
         self.assertAllClose(g(x2n[:, 1]), cor(x2n, axis=0))
         self.assertAllClose(f1(y2n[:, 1]), cor(y2n, axis=0, method="spearman"))
