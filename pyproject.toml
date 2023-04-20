@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-addopts = "--jaxtyping-packages=stamox,beartype.beartype(conf=beartype.BeartypeConf(strategy=beartype.BeartypeStrategy.On))"
+addopts = "--jaxtyping-packages=stamox"
 
 [tool.ruff]
 select = ["E", "F", "I001"]

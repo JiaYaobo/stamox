@@ -15,6 +15,8 @@ def _pf(
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
 ):
+    dfn = jnp.asarray(dfn, dtype=x.dtype)
+    dfd = jnp.asarray(dfd, dtype=x.dtype)
     return fdtr(dfn, dfd, x)
 
 
@@ -97,6 +99,8 @@ def _qf(
     dfn: Union[Float, ArrayLike],
     dfd: Union[Float, ArrayLike],
 ):
+    dfn = jnp.asarray(dfn, dtype=q.dtype)
+    dfd = jnp.asarray(dfd, dtype=q.dtype)
     return fdtri(dfn, dfd, q)
 
 
