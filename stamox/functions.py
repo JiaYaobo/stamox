@@ -1,6 +1,7 @@
 from .anova import one_way
 from .cluster import kmeans
 from .core import (
+    better_partial,
     make_partial_pipe,
     make_pipe,
     partial_pipe_jit,
@@ -84,6 +85,7 @@ from .transformation import boxcox, z_fisher
 __all__ = [
     "one_way",
     "kmeans",
+    "better_partial",
     "make_partial_pipe",
     "make_pipe",
     "partial_pipe_jit",
