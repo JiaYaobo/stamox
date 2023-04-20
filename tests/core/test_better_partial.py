@@ -4,7 +4,7 @@ from absl.testing import absltest
 from jax import jit, vmap
 from jax._src import test_util as jtest
 
-from stamox.experimental import better_partial
+from stamox.core import better_partial
 
 
 class BetterPartialTest(jtest.JaxTestCase):

@@ -1,11 +1,12 @@
-from stamox.core._func_state import predict, summary
-from stamox.core.base import (
+from ._func_state import predict, summary
+from .base import (
     Functional,
     StateFunc,
 )
-from stamox.core.jit import partial_pipe_jit, pipe_jit
-from stamox.core.maps import partial_pipe_pmap, partial_pipe_vmap, pipe_pmap, pipe_vmap
-from stamox.core.pipe import (
+from .better_partial import better_partial
+from .jit import partial_pipe_jit, pipe_jit
+from .maps import partial_pipe_pmap, partial_pipe_vmap, pipe_pmap, pipe_vmap
+from .pipe import (
     make_partial_pipe,
     make_pipe,
     Pipe,
@@ -14,6 +15,7 @@ from stamox.core.pipe import (
 
 
 __all__ = [
+    "better_partial",
     "Functional",
     "make_partial_pipe",
     "make_pipe",
