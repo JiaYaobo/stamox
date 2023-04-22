@@ -1,4 +1,5 @@
 """Test Correlation coefficient"""
+import jax.numpy as jnp
 import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
@@ -10,11 +11,13 @@ from stamox.correlation import cor
 
 class CorTest(jtest.JaxTestCase):
     def test_pearson_correlation_1d(self):
-        x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9], np.float32)
-        y = np.array([1, 4, 3, 6, 5, 6, 8, 8, 9], np.float32)
-        self.assertAllClose(scp_pearsonr(x, x).statistic, cor(x, x))
-        self.assertAllClose(scp_pearsonr(x, y).statistic, cor(x, y))
-        self.assertAllClose(scp_pearsonr(x, y).statistic, cor([x, y], axis=1))
+        x = jnp.array([1, 2, 3, 4, 5, 6, 7, 8, 9], np.float32)
+        y = jnp.array([1, 4, 3, 6, 5, 6, 8, 8, 9], np.float32)
+        self.assertAllClose(scp_pearsonr(x, x).statistic.astype(np.float32), cor(x, x))
+        self.assertAllClose(scp_pearsonr(x, y).statistic.astype(np.float32), cor(x, y))
+        self.assertAllClose(
+            scp_pearsonr(x, y).statistic.astype(np.float32), cor([x, y], axis=1)
+        )
 
     def test_pearson_correlation_2d(self):
         rng = np.random.default_rng()

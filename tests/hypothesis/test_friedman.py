@@ -12,7 +12,6 @@ from stamox.hypothesis import friedman_test
 
 class FriedmanTest(jtest.JaxTestCase):
     def test_friedman(self):
-
         x3 = [
             np.array([7.0, 9.9, 8.5, 5.1, 10.3]),
             np.array([5.3, 5.7, 4.7, 3.5, 7.7]),
@@ -22,11 +21,16 @@ class FriedmanTest(jtest.JaxTestCase):
 
         state = friedman_test(x3[0], x3[1], x3[2], x3[3])
         osp_state = friedmanchisquare(x3[0], x3[1], x3[2], x3[3])
-        self.assertAllClose(state.statistic, np.array([osp_state.statistic]))
-        self.assertAllClose(state.p_value, np.array([osp_state.pvalue]))
+        self.assertAllClose(
+            state.statistic.astype(np.float32),
+            np.array([osp_state.statistic], dtype=np.float32),
+        )
+        self.assertAllClose(
+            state.p_value.astype(np.float32),
+            np.array([osp_state.pvalue], dtype=np.float32),
+        )
 
     def test_pipe_friedman(self):
-
         x3 = [
             np.array([7.0, 9.9, 8.5, 5.1, 10.3]),
             np.array([5.3, 5.7, 4.7, 3.5, 7.7]),
@@ -36,11 +40,16 @@ class FriedmanTest(jtest.JaxTestCase):
         dt = [x3[0], x3[1], x3[2], x3[3]]
         state = (Pipeable(dt) >> PF.friedman_test)()
         osp_state = friedmanchisquare(x3[0], x3[1], x3[2], x3[3])
-        self.assertAllClose(state.statistic, np.array([osp_state.statistic]))
-        self.assertAllClose(state.p_value, np.array([osp_state.pvalue]))
+        self.assertAllClose(
+            state.statistic.astype(np.float32),
+            np.array([osp_state.statistic], dtype=np.float32),
+        )
+        self.assertAllClose(
+            state.p_value.astype(np.float32),
+            np.array([osp_state.pvalue], dtype=np.float32),
+        )
 
     def test_pipe_friedman_jit(self):
-
         x3 = [
             np.array([7.0, 9.9, 8.5, 5.1, 10.3]),
             np.array([5.3, 5.7, 4.7, 3.5, 7.7]),
@@ -50,8 +59,15 @@ class FriedmanTest(jtest.JaxTestCase):
         dt = [x3[0], x3[1], x3[2], x3[3]]
         state = filter_jit(Pipeable(dt) >> PF.friedman_test)()
         osp_state = friedmanchisquare(x3[0], x3[1], x3[2], x3[3])
-        self.assertAllClose(state.statistic, np.array([osp_state.statistic]))
-        self.assertAllClose(state.p_value, np.array([osp_state.pvalue]))
+        self.assertAllClose(
+            state.statistic.astype(np.float32),
+            np.array([osp_state.statistic], dtype=np.float32),
+        )
+        self.assertAllClose(
+            state.p_value.astype(np.float32),
+            np.array([osp_state.pvalue], dtype=np.float32),
+        )
+
 
 if __name__ == "__main__":
     absltest.main(testLoader=jtest.JaxTestLoader())

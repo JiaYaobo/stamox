@@ -7,7 +7,7 @@ from ..core import make_partial_pipe
 
 
 @make_partial_pipe
-def combination(k, n, dtype=jnp.int32):
+def combination(k, n):
     """Calculates the number of combinations of k elements from a set of n elements.
 
     Args:
@@ -21,7 +21,7 @@ def combination(k, n, dtype=jnp.int32):
         >>> combination(2, 5)
         10
     """
-    k = jnp.asarray(k, dtype=dtype)
+    k = jnp.asarray(k, dtype=jnp.float_)
     k = jnp.atleast_1d(k)
     return filter_vmap(_comb)(k, n)
 

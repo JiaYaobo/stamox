@@ -1,7 +1,6 @@
 from typing import Optional
 
 import jax.numpy as jnp
-import numpy as np
 from equinox import filter_jit, filter_vmap
 from jax import pure_callback, ShapeDtypeStruct
 from jax._src.random import KeyArray, Shape
@@ -9,9 +8,18 @@ from jaxtyping import ArrayLike, Bool
 from scipy.stats import binom
 from tensorflow_probability.substrates.jax.distributions import Binomial as tfp_Binomial
 
+from ._utils import (
+    _check_clip_distribution_domain,
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
+
 
 @filter_jit
 def _pbinom(q, size, prob) -> ArrayLike:
+    size = jnp.asarray(size, dtype=q.dtype)
+    prob = jnp.asarray(prob, dtype=q.dtype)
     bino = tfp_Binomial(total_count=size, probs=prob)
     return bino.cdf(q)
 
@@ -22,7 +30,7 @@ def pbinom(
     prob: ArrayLike,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the cumulative probability of a binomial distribution.
 
@@ -32,7 +40,7 @@ def pbinom(
         prob (ArrayLike): The probability of success in each trial.
         lower_tail (Bool, optional): If True (default), the lower tail probability is returned.
         log_prob (Bool, optional): If True, the logarithm of the probability is returned.
-        dtype (optional): The data type of the output array. Defaults to jnp.float32.
+        dtype (optional): The data type of the output array. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The cumulative probability of the binomial distribution.
@@ -43,18 +51,18 @@ def pbinom(
         >>> prob = 0.5
         >>> pbinom(q, size, prob)
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, dtype = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
+    q = _check_clip_distribution_domain(q, 0, size)
     p = filter_vmap(_pbinom)(q, size, prob)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
 @filter_jit
 def _dbinom(q, size, prob) -> ArrayLike:
+    size = jnp.asarray(size, dtype=q.dtype)
+    prob = jnp.asarray(prob, dtype=q.dtype)
     bino = tfp_Binomial(total_count=size, probs=prob)
     return bino.prob(q)
 
@@ -65,7 +73,7 @@ def dbinom(
     prob: ArrayLike,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the probability of a binomial distribution.
 
@@ -75,25 +83,22 @@ def dbinom(
         prob (ArrayLike): The probability of success in each trial.
         lower_tail (Bool, optional): Whether to compute the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the logarithm of the probability. Defaults to False.
-        dtype (jnp.float32, optional): The data type of the output array. Defaults to jnp.float32.
+        dtype (jnp.float_, optional): The data type of the output array. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The probability of the binomial distribution.
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, dtype = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
-    p = filter_vmap(_dbinom)(q, size, prob)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
-    return p
+    d = filter_vmap(_dbinom)(q, size, prob)
+    d = _post_process(d, lower_tail, log_prob)
+    return d
 
 
 @filter_jit
 def _qbinom(p, size, prob, dtype) -> ArrayLike:
     result_shape_type = ShapeDtypeStruct(jnp.shape(p), dtype)
-    _scp_binom_ppf = lambda x: binom(size, prob).ppf(x).astype(np.int32)
+    _scp_binom_ppf = lambda x: binom(size, prob).ppf(x).astype(dtype)
     q = pure_callback(_scp_binom_ppf, result_shape_type, p)
     return q
 
@@ -104,7 +109,7 @@ def qbinom(
     prob: ArrayLike,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.int32,
+    dtype=jnp.int_,
 ) -> ArrayLike:
     """Computes the quantile of a binomial distribution.
 
@@ -114,18 +119,16 @@ def qbinom(
         prob (ArrayLike): The probability of success in each trial.
         lower_tail (Bool, optional): Whether to compute the lower tail or not. Defaults to True.
         log_prob (Bool, optional): Whether to compute the log probability or not. Defaults to False.
-        dtype (jnp.int32, optional): The data type of the output array. Defaults to jnp.int32.
+        dtype (jnp.int_, optional): The data type of the output array. Defaults to jnp.int_.
 
     Returns:
         ArrayLike: The quantile of the binomial distribution.
     """
-    p = jnp.asarray(p)
+    if dtype is None:
+        dtype = jnp.int_
+    p = jnp.asarray(p, dtype=jnp.float_)
     p = jnp.atleast_1d(p)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.exp(p)
-
+    p = _check_clip_probability(p, lower_tail, log_prob)
     q = filter_vmap(_qbinom)(p, size, prob, dtype)
     return q
 
@@ -143,7 +146,7 @@ def rbinom(
     prob: ArrayLike = None,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.int_,
 ) -> ArrayLike:
     """Generates random binomial samples from a given probability distribution.
 
@@ -160,8 +163,5 @@ def rbinom(
         ArrayLike: An array containing the random binomial samples.
     """
     rvs = _rbinom(key, size, prob, sample_shape, dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs

@@ -6,9 +6,14 @@ from equinox import filter_grad, filter_jit, filter_vmap
 from jax import lax
 from jax._src.random import Shape
 from jax.random import KeyArray
-from jax.scipy.special import betainc
 from jaxtyping import ArrayLike, Float, Int
 from tensorflow_probability.substrates.jax.math import special as tfp_special
+
+from ._utils import (
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
 
 
 @filter_jit
@@ -25,8 +30,11 @@ def _pt(
     scaled_squared = lax.integer_pow(scaled, 2)
     beta_value = lax.div(df, lax.add(df, scaled_squared))
     return 0.5 * (
-        1. + jnp.sign(scaled) - jnp.sign(scaled) * betainc(0.5 * df, 0.5, beta_value)
+        1.0
+        + jnp.sign(scaled)
+        - jnp.sign(scaled) * tfp_special.betainc(0.5 * df, 0.5, beta_value)
     )
+
 
 def pt(
     q: Union[Float, ArrayLike],
@@ -35,7 +43,7 @@ def pt(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the probability of a given value for Student T distribution.
 
@@ -46,7 +54,7 @@ def pt(
         scale: The scale parameter of the distribution.
         lower_tail: Whether to calculate the lower tail probability or not.
         log_prob: Whether to return the log probability or not.
-        dtype: The dtype of the output. Defaults to jnp.float32.
+        dtype: The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The cdf value of the given value for Student T distribution.
@@ -55,18 +63,15 @@ def pt(
         >>> pt(1.0, 1.0)
         Array([0.74999994], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, _ = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_pt)(q, df, loc, scale)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
-
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
 _dt = filter_jit(filter_grad(_pt))
+
 
 def dt(
     x: Union[Float, ArrayLike],
@@ -75,7 +80,7 @@ def dt(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the probability density function of a Student's t-distribution.
 
@@ -87,7 +92,7 @@ def dt(
         scale: Scale parameter for the Student's t-distribution. Defaults to 1.0.
         lower_tail: Whether to return the lower tail probability. Defaults to True.
         log_prob: Whether to return the log probability. Defaults to False.
-        dtype: The dtype of the output. Defaults to jnp.float32.
+        dtype: The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The probability density function evaluated at `x`.
@@ -96,13 +101,10 @@ def dt(
         >>> dt(1.0, 1.0)
         Array([0.1591549], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x, dtype=dtype)
+    x, _ = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
     grads = filter_vmap(_dt)(x, df, loc, scale)
-    if not lower_tail:
-        grads = 1 - grads
-    if log_prob:
-        grads = jnp.log(grads)
+    grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
 
@@ -122,6 +124,7 @@ def _qt(
     scaled = jnp.sign(q - 0.5) * jnp.sqrt(scaled_squared)
     return scaled * scale + loc
 
+
 def qt(
     p: Union[Float, ArrayLike],
     df: Union[Int, Float, ArrayLike],
@@ -129,7 +132,7 @@ def qt(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the quantile of Student T distribution.
 
@@ -140,7 +143,7 @@ def qt(
         scale: An optional float or array-like object representing the scale parameter. Defaults to 1.0.
         lower_tail: A boolean indicating whether the lower tail should be used. Defaults to True.
         log_prob: A boolean indicating whether the probability should be logged. Defaults to False.
-        dtype: The dtype of the output. Defaults to jnp.float32.
+        dtype: The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The quantile of the Student T distribution.
@@ -149,12 +152,9 @@ def qt(
         >>> qt(0.5, 1.0)
         Array([0.], dtype=float32, weak_type=True)
     """
-    p = jnp.asarray(p, dtype=dtype)
+    p, _ = _promote_dtype_to_floating(p, dtype)
     p = jnp.atleast_1d(p)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.exp(p)
+    p = _check_clip_probability(p, lower_tail=lower_tail, log_prob=log_prob)
     q = filter_vmap(_qt)(p, df, loc, scale)
     return q
 
@@ -166,7 +166,7 @@ def _rt(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(
@@ -176,6 +176,7 @@ def _rt(
     loc = jnp.broadcast_to(loc, sample_shape)
     return jrand.t(key, df, sample_shape, dtype=dtype) * scale + loc
 
+
 def rt(
     key: KeyArray,
     sample_shape: Optional[Shape] = None,
@@ -184,7 +185,7 @@ def rt(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Generates random numbers from a t-distribution.
 
@@ -196,7 +197,7 @@ def rt(
         scale: Scale parameter.
         lower_tail: Whether to return the lower tail probability. Defaults to True.
         log_prob: Whether to return the log probability. Defaults to False.
-        dtype: The dtype of the output. Defaults to jnp.float32.
+        dtype: The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: Random numbers from a t-distribution.
@@ -207,8 +208,5 @@ def rt(
                 [5.3681795e-02, 3.3967651e+01, 6.8611817e+00]], dtype=float32)
     """
     rvs = _rt(key, df, loc, scale, sample_shape, dtype=dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs

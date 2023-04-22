@@ -6,16 +6,13 @@ from jax.scipy.stats import rankdata
 from jaxtyping import ArrayLike
 
 
-def spearmanr(
-    x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0, dtype=None
-) -> ArrayLike:
+def spearmanr(x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0) -> ArrayLike:
     """Calculates a Spearman rank-order correlation coefficient and the p-value to test for non-correlation.
 
     Args:
         x (ArrayLike): An array of values.
         y (Optional[ArrayLike], optional): An array of values. Defaults to None.
         axis (int, optional): The axis along which to calculate. Defaults to 0.
-        dtype (jnp.float32, optional): The data type of the array. Defaults to None
 
     Raises:
         ValueError: If the supplied axis argument is greater than 1 or if the number of dimensions of the array is greater than 2.
@@ -37,7 +34,8 @@ def spearmanr(
             "supplied axis argument {}, please use only "
             "values 0, 1 or None for axis".format(axis)
         )
-    x = jnp.asarray(x, dtype=dtype)
+    x = jnp.asarray(x)
+
     if axis is None:
         x = x.ravel()
         axis_out = 0

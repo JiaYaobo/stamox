@@ -7,6 +7,12 @@ from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float, Int
 
 from ._gamma import _dgamma, _pgamma, _qgamma
+from ._utils import (
+    _check_clip_distribution_domain,
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
 
 
 def dchisq(
@@ -14,7 +20,7 @@ def dchisq(
     df: Union[Int, Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the chi-squared distribution.
 
@@ -32,13 +38,11 @@ def dchisq(
         >>> dchisq(2.0, 3, lower_tail=True, log_prob=False)
         Array([0.20755368], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x, dtype=dtype)
+    x, dtype = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
+    x = _check_clip_distribution_domain(x, 0.0, jnp.inf)
     grads = filter_vmap(_dgamma)(x, df / 2, 1 / 2)
-    if not lower_tail:
-        grads = 1 - grads
-    if log_prob:
-        grads = jnp.log(grads)
+    grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
 
@@ -47,7 +51,7 @@ def pchisq(
     df: Union[Int, Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the chi-squared probability density function.
 
@@ -67,11 +71,9 @@ def pchisq(
     """
     q = jnp.asarray(q, dtype=dtype)
     q = jnp.atleast_1d(q)
+    q = _check_clip_distribution_domain(q, 0.0, jnp.inf)
     p = filter_vmap(_pgamma)(q, df / 2, 1 / 2)
-    if not lower_tail:
-        p = 1.0 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
@@ -80,7 +82,7 @@ def qchisq(
     df: Union[Int, Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the inverse of the chi-squared cumulative distribution function.
 
@@ -89,7 +91,7 @@ def qchisq(
         df (Union[Int, Float, ArrayLike]): Degrees of freedom.
         lower_tail (bool, optional): If True (default), probabilities are P[X ≤ x], otherwise, P[X > x].
         log_prob (bool, optional): If True, probabilities are given as log(p).
-        dtype (dtype, optional): The dtype of the output (default float32).
+        dtype (dtype, optional): The dtype of the output (default jnp.float_).
 
     Returns:
         ArrayLike: The quantiles corresponding to the given probabilities.
@@ -100,10 +102,7 @@ def qchisq(
     """
     p = jnp.asarray(p, dtype=dtype)
     p = jnp.atleast_1d(p)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.exp(p)
+    p = _check_clip_probability(p, lower_tail, log_prob)
     q = filter_vmap(_qgamma)(p, df / 2, 1 / 2)
     return q
 
@@ -113,7 +112,7 @@ def _rchisq(
     key: KeyArray,
     df: Union[Int, Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ):
     if sample_shape is None:
         sample_shape = jnp.shape(df)
@@ -127,7 +126,7 @@ def rchisq(
     df: Union[Int, Float, ArrayLike] = None,
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """
     Generates random variates from the chi-squared distribution.
@@ -138,7 +137,7 @@ def rchisq(
         df (Union[Int, Float, ArrayLike], optional): Degrees of freedom. Defaults to None.
         lower_tail (bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (dtype, optional): The dtype of the output (default float32).
+        dtype (dtype, optional): The dtype of the output (default float_).
 
     Returns:
         ArrayLike: Random variates from the chi-squared distribution.
@@ -149,8 +148,5 @@ def rchisq(
         Array(1.982825, dtype=float32)
     """
     rvs = _rchisq(key, df, sample_shape, dtype=dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs

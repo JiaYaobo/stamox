@@ -11,7 +11,6 @@ def cor(
     y: Optional[ArrayLike] = None,
     axis: int = 0,
     method: str = "pearson",
-    dtype=None,
 ) -> ArrayLike:
     """Calculates correlation between two arrays.
 
@@ -20,7 +19,6 @@ def cor(
         y (Optional[ArrayLike], optional): The second array. Defaults to None.
         axis (int, optional): Axis along which the correlation is calculated. Defaults to 0.
         method (str, optional): Method used for calculating correlation. Defaults to "pearson".
-        dtype (jnp.float32, optional): Data type of the output array. Defaults to None.
 
     Returns:
         ArrayLike: Correlation between two arrays.
@@ -37,8 +35,8 @@ def cor(
         Array(0.8320503, dtype=float32)
     """
     if method == "pearson":
-        return pearsonr(x, y, axis, dtype)
+        return pearsonr(x, y, axis)
     elif method == "spearman":
-        return spearmanr(x, y, axis, dtype)
+        return spearmanr(x, y, axis)
     else:
         raise NotImplementedError(f"method {method} not supported")

@@ -10,6 +10,13 @@ from jax.scipy.special import gammainc, gammaln
 from jaxtyping import Array, ArrayLike, Bool, Float
 from scipy.stats import poisson
 
+from ._utils import (
+    _check_clip_distribution_domain,
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
+
 
 @filter_jit
 def _ppoisson(x: Union[Float, ArrayLike], rate: Union[Float, ArrayLike]) -> Array:
@@ -22,7 +29,7 @@ def ppoisson(
     rate: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the cumulative distribution function of the Poisson distribution.
 
@@ -31,18 +38,16 @@ def ppoisson(
         rate (Union[Float, ArrayLike]): The rate parameter of the Poisson distribution.
         lower_tail (bool, optional): Whether to compute the lower tail of the CDF. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The cumulative distribution function of the Poisson distribution evaluated at `q`.
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, dtype = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
+    q = _check_clip_distribution_domain(q, lower=0.0)
     p = filter_vmap(_ppoisson)(q, rate)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = _post_process(p, lower_tail=lower_tail, log_prob=log_prob)
     return p
 
 
@@ -59,7 +64,7 @@ def dpoisson(
     rate: Union[Float, ArrayLike],
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the probability density function of the Poisson distribution.
 
@@ -68,18 +73,16 @@ def dpoisson(
         rate (Union[Float, ArrayLike]): The rate parameter of the Poisson distribution.
         lower_tail (bool, optional): Whether to compute the lower tail of the PDF. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The probability density function of the Poisson distribution evaluated at `x`.
     """
-    x = jnp.asarray(x, dtype=dtype)
+    x, _ = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
+    x = _check_clip_distribution_domain(x, lower=0.0)
     grads = filter_vmap(_dpoisson)(x, rate)
-    if not lower_tail:
-        grads = 1 - grads
-    if log_prob:
-        grads = jnp.log(grads)
+    grads = _post_process(grads, lower_tail=lower_tail, log_prob=log_prob)
     return grads
 
 
@@ -88,7 +91,7 @@ def _rpoisson(
     key: KeyArray,
     rate: Union[Float, ArrayLike],
     sample_shape: Optional[Shape] = None,
-    dtype=jnp.int32,
+    dtype=jnp.int_,
 ):
     return jrand.poisson(key, rate, shape=sample_shape, dtype=dtype)
 
@@ -99,7 +102,7 @@ def rpoisson(
     rate: Union[Float, ArrayLike] = None,
     lower_tail=True,
     log_prob=False,
-    dtype=jnp.int32,
+    dtype=jnp.int_,
 ) -> ArrayLike:
     """Generates samples from the Poisson distribution.
 
@@ -109,16 +112,13 @@ def rpoisson(
         sample_shape (Optional[Shape], optional): Shape of the output array. Defaults to None.
         lower_tail (bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.int32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.int_.
 
     Returns:
         ArrayLike: Samples from the Poisson distribution.
     """
     rvs = _rpoisson(key, rate, sample_shape=sample_shape, dtype=dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail=lower_tail, log_prob=log_prob)
     return rvs
 
 
@@ -135,7 +135,7 @@ def qpoisson(
     rate: Union[Float, ArrayLike],
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.int32,
+    dtype=jnp.int_,
 ) -> ArrayLike:
     """Computes the quantile function of the Poisson distribution.
 
@@ -144,16 +144,13 @@ def qpoisson(
         rate (Union[Float, ArrayLike]): The rate parameter of the Poisson distribution.
         lower_tail (bool, optional): Whether to compute the lower tail of the quantile function. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.int32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.int_.
 
     Returns:
         ArrayLike: The quantile function of the Poisson distribution evaluated at `p`.
     """
-    p = jnp.asarray(p)
+    p, _ = _promote_dtype_to_floating(p, None)
     p = jnp.atleast_1d(p)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.exp(p)
+    p = _check_clip_probability(p, lower_tail, log_prob)
     q = filter_vmap(_qpoisson)(p, rate, dtype)
     return q

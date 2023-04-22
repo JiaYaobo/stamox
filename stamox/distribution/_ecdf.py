@@ -5,7 +5,7 @@ from jax import jit
 from jaxtyping import ArrayLike
 
 
-def step_fun(x, y, ival=0.0, sorted=False, side="left", dtype=jnp.float32):
+def step_fun(x, y, ival=0.0, sorted=False, side="left", dtype=jnp.float_):
     """Returns a function that evaluates a step function at given points.
 
     Args:
@@ -14,7 +14,7 @@ def step_fun(x, y, ival=0.0, sorted=False, side="left", dtype=jnp.float32):
         ival (float, optional): The initial value of the step function. Defaults to 0.
         sorted (bool, optional): Whether the x-coordinates are already sorted. Defaults to False.
         side (str, optional): The side of the interval to take when evaluating the step function. Must be either 'left' or 'right'. Defaults to 'left'.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         Callable[..., ArrayLike]: A function that evaluates the step function at given points.
@@ -35,26 +35,26 @@ def step_fun(x, y, ival=0.0, sorted=False, side="left", dtype=jnp.float32):
 
     @jit
     def _call(time):
-        time = jnp.asarray(time)
+        time = jnp.asarray(time, dtype=dtype)
         tind = jnp.searchsorted(_x, time, side) - 1
         return _y[tind]
 
     return _call
 
 
-def ecdf(x: ArrayLike, side="right", dtype=jnp.float32) -> Callable[..., ArrayLike]:
+def ecdf(x: ArrayLike, side="right", dtype=jnp.float_) -> Callable[..., ArrayLike]:
     """Calculates the empirical cumulative distribution function (ECDF) of a given array.
 
     Args:
         x (array): The array to calculate the ECDF for.
         side (str, optional): Specifies which side of the step function to use. Defaults to 'right'.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         Callable[..., ArrayLike]: A function that evaluates the ECDF at given points.
     """
-    x = jnp.array(x, copy=True, dtype=dtype)
+    x = jnp.asarray(x, dtype=dtype)
     x = jnp.sort(x)
     nobs = x.size
-    y = jnp.linspace(1.0 / nobs, 1, nobs)
+    y = jnp.linspace(1.0 / nobs, 1, nobs, dtype=dtype)
     return step_fun(x, y, side=side, sorted=True)

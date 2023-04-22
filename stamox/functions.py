@@ -75,7 +75,6 @@ from .hypothesis import (
     bartlett_test,
     durbin_watson_test,
     friedman_test,
-    shapiro_wilk_test,
 )
 from .regression import lm
 from .sample import bootstrap, bootstrap_sample, jackknife, jackknife_sample
@@ -101,7 +100,6 @@ __all__ = [
     "durbin_watson_test",
     "friedman_test",
     "lm",
-    "shapiro_wilk_test",
     "bootstrap",
     "bootstrap_sample",
     "jackknife",

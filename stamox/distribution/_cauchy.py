@@ -8,6 +8,13 @@ from jax._src.random import Shape
 from jax.random import KeyArray
 from jaxtyping import ArrayLike, Bool, Float
 
+from ._utils import (
+    _check_clip_distribution_domain,
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
+
 
 @filter_jit
 def _pcauchy(
@@ -15,6 +22,9 @@ def _pcauchy(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ) -> ArrayLike:
+    dtype = lax.dtype(x)
+    loc = jnp.asarray(loc, dtype=dtype)
+    scale = jnp.asarray(scale, dtype=dtype)
     scaled = (x - loc) / scale
     return jnp.arctan(scaled) / jnp.pi + 0.5
 
@@ -25,7 +35,7 @@ def pcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the cumulative denisty probability c function of the Cauchy distribution.
 
@@ -35,7 +45,7 @@ def pcauchy(
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Cauchy distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The cumulative density function of the Cauchy distribution.
@@ -44,13 +54,11 @@ def pcauchy(
         >>> pcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
         Array([0.75], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, dtype = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
+    q = _check_clip_distribution_domain(q)
     p = filter_vmap(_pcauchy)(q, loc, scale)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
@@ -63,7 +71,7 @@ def dcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the pdf of the Cauchy distribution.
 
@@ -73,7 +81,7 @@ def dcauchy(
         scale (Union[Float, ArrayLike], optional): The scale parameter. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to compute the lower tail. Defaults to True.
         log_prob (Bool, optional): Whether to compute the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The pdf of the Cauchy distribution.
@@ -82,13 +90,11 @@ def dcauchy(
         >>> dcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
         Array([0.15915494], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x, dtype=dtype)
+    x, dtype = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
+    x = _check_clip_distribution_domain(x)
     grads = filter_vmap(_dcauchy)(x, loc, scale)
-    if not lower_tail:
-        grads = 1 - grads
-    if log_prob:
-        grads = jnp.log(grads)
+    grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
 
@@ -98,6 +104,9 @@ def _qcauchy(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
+    dtype = lax.dtype(q)
+    loc = jnp.asarray(loc, dtype=dtype)
+    scale = jnp.asarray(scale, dtype=dtype)
     return lax.add(loc, lax.mul(scale, lax.tan(lax.mul(jnp.pi, lax.sub(q, 0.5)))))
 
 
@@ -107,7 +116,7 @@ def qcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the quantile of the Cauchy distribution.
 
@@ -117,7 +126,7 @@ def qcauchy(
         scale (Union[float, array-like], optional): Scale parameter. Defaults to 1.0.
         lower_tail (bool, optional): Whether to compute the lower tail. Defaults to True.
         log_prob (bool, optional): Whether to compute the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The quantiles of the Cauchy distribution.
@@ -126,12 +135,9 @@ def qcauchy(
         >>> qcauchy(0.5, loc=1.0, scale=2.0, lower_tail=True, log_prob=False)
         Array([1.], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, dtype = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
-    if not lower_tail:
-        q = 1 - q
-    if log_prob:
-        q = jnp.exp(q)
+    q = _check_clip_probability(q, lower_tail, log_prob)
     return filter_vmap(_qcauchy)(q, loc, scale)
 
 
@@ -141,7 +147,7 @@ def _rcauchy(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(loc), jnp.shape(scale))
@@ -159,7 +165,7 @@ def rcauchy(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Generates random samples from the Cauchy distribution.
 
@@ -182,8 +188,5 @@ def rcauchy(
                 [ 2.8963416 ,  0.31303588, -0.14792857]], dtype=float32)
     """
     rvs = _rcauchy(key, loc, scale, sample_shape, dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs

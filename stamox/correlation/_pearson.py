@@ -5,9 +5,7 @@ from equinox import filter_jit
 from jaxtyping import ArrayLike
 
 
-def pearsonr(
-    x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0, dtype=None
-) -> ArrayLike:
+def pearsonr(x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0) -> ArrayLike:
     """Computes Pearson correlation coefficient for two arrays.
 
     Args:
@@ -16,7 +14,6 @@ def pearsonr(
         provided, `x` is assumed to contain two sets of data.
         axis: The axis along which the correlation coefficient should be computed.
         Must be 0 or 1. Defaults to 0.
-        dtype: The data type of the input arrays. Defaults to None.
 
     Returns:
         An array-like object containing the Pearson correlation coefficient.
@@ -35,7 +32,7 @@ def pearsonr(
             "supplied axis argument {}, please use only "
             "values 0, 1 or None for axis".format(axis)
         )
-    x = jnp.asarray(x, dtype=dtype)
+    x = jnp.asarray(x)
     if axis is None:
         x = x.ravel()
         axis_out = 0

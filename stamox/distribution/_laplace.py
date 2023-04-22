@@ -8,6 +8,13 @@ from jax._src.random import Shape
 from jax.random import KeyArray
 from jaxtyping import ArrayLike, Bool, Float
 
+from ._utils import (
+    _check_clip_distribution_domain,
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
+
 
 @filter_jit
 def _plaplace(
@@ -15,9 +22,13 @@ def _plaplace(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
+    dtype = lax.dtype(x)
+    loc = jnp.asarray(loc, dtype=dtype)
+    scale = jnp.asarray(scale, dtype=dtype)
+    half = jnp.asarray(0.5, dtype=dtype)
     scaled = lax.div(lax.sub(x, loc), scale)
-    subtrahend = 0.5 * lax.mul(jnp.sign(scaled), lax.expm1(-lax.abs(scaled)))
-    return lax.sub(0.5, subtrahend)
+    subtrahend = half * lax.mul(jnp.sign(scaled), lax.expm1(-lax.abs(scaled)))
+    return lax.sub(half, subtrahend)
 
 
 def plaplace(
@@ -26,7 +37,7 @@ def plaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the Laplace cumulative density function.
 
@@ -44,13 +55,11 @@ def plaplace(
         >>> plaplace(1.0, 1.0, 1.0)
         Array([0.5], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, _ = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
+    q = _check_clip_distribution_domain(q)
     p = filter_vmap(_plaplace)(q, loc, scale)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
@@ -63,7 +72,7 @@ def dlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the Laplace probability density function for a given x, location and scale.
 
@@ -73,7 +82,7 @@ def dlaplace(
         scale (Union[Float, ArrayLike], optional): The scale parameter. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail of the distribution. Defaults to True.
         log_prob (Bool, optional): Whether to return the logarithm of the probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The probability density at the given x.
@@ -82,13 +91,11 @@ def dlaplace(
         >>> dlaplace(1.0, 1.0, 1.0)
         Array([0.], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x, dtype=dtype)
+    x, _ = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
+    x = _check_clip_distribution_domain(x)
     grads = filter_vmap(_dlaplace)(x, loc, scale)
-    if not lower_tail:
-        grads = 1 - grads
-    if log_prob:
-        grads = jnp.log(grads)
+    grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
 
@@ -98,7 +105,11 @@ def _qlaplace(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
 ):
-    a = lax.sub(0.5, q)
+    dtype = lax.dtype(q)
+    loc = jnp.asarray(loc, dtype=dtype)
+    scale = jnp.asarray(scale, dtype=dtype)
+    half = jnp.asarray(0.5, dtype=dtype)
+    a = lax.sub(half, q)
     return scale * jnp.sign(a) * jnp.log1p(-2 * jnp.abs(a)) - loc
 
 
@@ -108,7 +119,7 @@ def qlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the quantile of the Laplace distribution.
 
@@ -118,7 +129,7 @@ def qlaplace(
         scale (Union[Float, ArrayLike], optional): Scale parameter. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to compute the lower tail. Defaults to True.
         log_prob (Bool, optional): Whether to compute the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The quantiles of the Laplace distribution.
@@ -127,12 +138,9 @@ def qlaplace(
         >>> qlaplace(0.5, 1.0, 1.0)
         Array([1.], dtype=float32, weak_type=True)
     """
-    p = jnp.asarray(p, dtype=dtype)
+    p, _ = _promote_dtype_to_floating(p, dtype)
     p = jnp.atleast_1d(p)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.exp(p)
+    p = _check_clip_probability(p, lower_tail, log_prob)
     return filter_vmap(_qlaplace)(p, loc, scale)
 
 
@@ -142,7 +150,7 @@ def _rlaplace(
     loc: Union[Float, ArrayLike] = 0.0,
     scale: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(loc), jnp.shape(scale))
@@ -158,7 +166,7 @@ def rlaplace(
     scale: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Generates random Laplace samples from a given key.
 
@@ -169,7 +177,7 @@ def rlaplace(
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Laplace distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: An array containing the random Laplace samples.

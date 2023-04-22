@@ -130,7 +130,7 @@ def lm(
     weights=None,
     NA_action="drop",
     method="qr",
-    dtype=jnp.float32,
+    dtype: jnp.dtype = jnp.float_,
 ) -> OLSState:
     """Fits a linear model using the given data and parameters.
 
@@ -141,7 +141,7 @@ def lm(
         weights (array-like, optional): An array of weights to apply to the data. Defaults to None.
         NA_action (str, optional): The action to take when encountering missing values. Defaults to "drop".
         method (str, optional): The method to use for fitting the linear model. Defaults to "qr".
-        dtype (jnp.float32, optional): The data type to use for the linear model. Defaults to jnp.float32.
+        dtype (jnp.float32, optional): The data type to use for the linear model. Defaults to jnp.float_.
 
     Returns:
         OLSState: The state of the fitted linear model.
@@ -181,6 +181,11 @@ def lm(
             X = data[:, 1:]
         else:
             raise ValueError("data is not supported")
+
+        if dtype is None:
+            dtype = jnp.promote_types(y.dtype, X.dtype)
+        y = jnp.asarray(y, dtype=dtype)
+        X = jnp.asarray(X, dtype=dtype)
         X_names = None
         y_names = None
     else:
@@ -193,7 +198,7 @@ def lm(
         y = y[subset, :]
         X = X[subset, :]
     if weights is not None:
-        weights = jnp.asarray(weights).reshape(-1, 1)
+        weights = jnp.asarray(weights, dtype=dtype).reshape(-1, 1)
         W = jnp.diag(weights.reshape(-1))
         y = jnp.multiply(y, weights)
         X = jnp.matmul(X.T, W).T
@@ -220,7 +225,7 @@ def _fit_lm(X, y, method, X_names=None, y_names=None):
         X_pinv = R_inv @ Q.T
     elif method == "svd":
         U, S, Vt = jnp.linalg.svd(X)
-        D = jnp.zeros((num_samples, in_features))
+        D = jnp.zeros((num_samples, in_features), dtype=X.dtype)
         D = D.at[:in_features, :in_features].set(jnp.diag(1 / S))
         X_pinv = Vt.T @ D.T @ U.T
     else:

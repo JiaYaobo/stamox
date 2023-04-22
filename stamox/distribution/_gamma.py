@@ -9,6 +9,13 @@ from jax._src.random import KeyArray, Shape
 from jax.scipy.special import gammainc
 from jaxtyping import ArrayLike, Float
 
+from ._utils import (
+    _check_clip_distribution_domain,
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
+
 
 @filter_jit
 def _pgamma(
@@ -23,7 +30,7 @@ def pgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the cumulative distribution function of the gamma distribution.
 
@@ -33,7 +40,7 @@ def pgamma(
         rate: A float or array-like object representing the rate parameter of the gamma function.
         lower_tail: A boolean indicating whether to compute the lower tail of the gamma function.
         log_prob: A boolean indicating whether to compute the logarithm of the probability density function.
-        dtype: The dtype of the output. Defaults to float32.
+        dtype: The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The CDF value of the given value or array of values.
@@ -42,13 +49,11 @@ def pgamma(
         >>> pgamma(1.0, 0.5, 0.5)
         Array([0.6826893], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, _ = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
+    q = _check_clip_distribution_domain(q, 0.0, jnp.inf)
     p = filter_vmap(_pgamma)(q, shape, rate)
-    if not lower_tail:
-        p = 1.0 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
@@ -61,7 +66,7 @@ def dgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Compute density of gamma distribution.
 
@@ -86,13 +91,11 @@ def dgamma(
         >>> dgamma(1.0, 0.5, 0.5)
         Array([0.24197064], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x, dtype=dtype)
+    x, _ = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
+    x = _check_clip_distribution_domain(x, 0.0, jnp.inf)
     grads = filter_vmap(_dgamma)(x, shape, rate)
-    if not lower_tail:
-        grads = 1 - grads
-    if log_prob:
-        grads = jnp.log(grads)
+    grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
 
@@ -102,6 +105,9 @@ def _qgamma(
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
 ):
+    dtype = lax.dtype(q)
+    shape = jnp.asarray(shape, dtype=dtype)
+    rate = jnp.asarray(rate, dtype=dtype)
     return lax.div(tfp_math.igammainv(shape, q), rate)
 
 
@@ -111,7 +117,7 @@ def qgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the quantile of the gamma distribution.
 
@@ -130,12 +136,9 @@ def qgamma(
         >>> qgamma(0.5, 0.5, 0.5)
         Array([0.45493677], dtype=float32)
     """
-    p = jnp.asarray(p, dtype=dtype)
+    p, _ = _promote_dtype_to_floating(p, dtype)
     p = jnp.atleast_1d(p)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.exp(p)
+    p = _check_clip_probability(p, lower_tail, log_prob)
     x = filter_vmap(_qgamma)(p, shape, rate)
     return x
 
@@ -147,7 +150,7 @@ def rgamma(
     rate: Union[Float, ArrayLike] = 1.0,
     lower_tail: bool = True,
     log_prob: bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Generates random gamma values.
 
@@ -158,7 +161,7 @@ def rgamma(
         rate: The rate parameter of the gamma distribution.
         lower_tail: Whether to return the lower tail of the distribution.
         log_prob: Whether to return the log probability of the result.
-        dtype: The dtype of the output. Defaults to float32.
+        dtype: The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: A random gamma value or an array of random gamma values.
@@ -181,7 +184,7 @@ def _rgamma(
     shape: Union[Float, ArrayLike] = 1.0,
     rate: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ):
     if sample_shape is None:
         sample_shape = jnp.broadcast_shapes(jnp.shape(shape), jnp.shape(rate))

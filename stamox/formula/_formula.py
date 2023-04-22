@@ -22,7 +22,7 @@ def get_design_matrices(
     eval_env=0,
     NA_action="drop",
     return_type="matrix",
-    dtype=jnp.float32,
+    dtype: jnp.dtype = None,
 ) -> Matrices:
     """Get design matrices from a formula and data.
 
@@ -32,6 +32,7 @@ def get_design_matrices(
         eval_env: An environment mapping column names to arrays which patsy can use when evaluating a formula.
         NA_action: A string specifying how to handle missing values. One of "drop", "raise", or "na_action".
         return_type: A string specifying the return type. One of "matrix", "dataframe", or "design_info".
+        dtype: The data type to use for the design matrices.
 
     Returns:
         Matrices: A named tuple containing the design matrices for the response and predictors, as well as the names of the columns in each matrix.
@@ -40,6 +41,8 @@ def get_design_matrices(
     y, X = patsy.dmatrices(
         formula, data, eval_env=eval_env, NA_action=NA_action, return_type=return_type
     )
+    if dtype is None:
+        dtype = jnp.promote_types(y.dtype, X.dtype)
     return Matrices(
         jnp.asarray(y, dtype=dtype),
         jnp.asarray(X, dtype=dtype),

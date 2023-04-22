@@ -7,6 +7,12 @@ from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Bool, Float
 
+from ._utils import (
+    _check_clip_probability,
+    _post_process,
+    _promote_dtype_to_floating,
+)
+
 
 @filter_jit
 def _punif(
@@ -20,13 +26,14 @@ def _punif(
     p = jnp.clip(p, a_min=mini, a_max=maxi)
     return p
 
+
 def punif(
     q: Union[Float, ArrayLike],
     mini: Union[Float, ArrayLike] = 0.0,
     maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Computes the cumulative distribution function of the uniform distribution.
 
@@ -36,7 +43,7 @@ def punif(
         maxi (Union[Float, ArrayLike], optional): The maximum value of the uniform distribution. Defaults to 1.0.
         lower_tail (bool, optional): Whether to compute the lower tail of the CDF. Defaults to True.
         log_prob (bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The cumulative distribution function of the uniform distribution evaluated at `q`.
@@ -45,17 +52,15 @@ def punif(
         >>> punif(0.5)
         Array([0.5], dtype=float32, weak_type=True)
     """
-    q = jnp.asarray(q, dtype=dtype)
+    q, _ = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
     p = filter_vmap(_punif)(q, mini, maxi)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
 _dunif = filter_grad(filter_jit(_punif))
+
 
 def dunif(
     x: Union[Float, ArrayLike],
@@ -63,7 +68,7 @@ def dunif(
     maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Calculates the probability density function of a uniform distribution.
 
@@ -73,7 +78,7 @@ def dunif(
         maxi (Union[Float, Array], optional): The upper bound of the uniform distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to calculate the lower tail probability. Defaults to True.
         log_prob (Bool, optional): Whether to return the log probability. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The probability density of the given value(s).
@@ -82,7 +87,7 @@ def dunif(
         >>> dunif(0.5)
         Array([1.], dtype=float32, weak_type=True)
     """
-    x = jnp.asarray(x, dtype=dtype)
+    x, _ = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
     p = filter_vmap(_dunif)(x, mini, maxi)
     if not lower_tail:
@@ -102,13 +107,14 @@ def _qunif(
     x = jnp.clip(x, a_min=mini, a_max=maxi)
     return x
 
+
 def qunif(
     p: Union[Float, ArrayLike],
     mini: Union[Float, ArrayLike] = 0.0,
     maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """
     Computes the quantile function of a uniform distribution.
@@ -119,7 +125,7 @@ def qunif(
         maxi (Union[Float, Array], optional): Upper bound of the uniform distribution. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to compute the lower tail or not. Defaults to True.
         log_prob (Bool, optional): Whether to compute the log probability or not. Defaults to False.
-        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float32.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
        ArrayLike: The quantiles of the uniform distribution.
@@ -130,10 +136,7 @@ def qunif(
     """
     p = jnp.asarray(p, dtype=dtype)
     p = jnp.atleast_1d(p)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.exp(p)
+    p = _check_clip_probability(p, lower_tail, log_prob)
     q = filter_vmap(_qunif)(p, mini, maxi)
     return q
 
@@ -144,9 +147,10 @@ def _runif(
     mini: Union[Float, ArrayLike] = 0.0,
     maxi: Union[Float, ArrayLike] = 1.0,
     sample_shape: Optional[Shape] = None,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ):
     return jrand.uniform(key, sample_shape, minval=mini, maxval=maxi, dtype=dtype)
+
 
 def runif(
     key: KeyArray,
@@ -155,7 +159,7 @@ def runif(
     maxi: Union[Float, ArrayLike] = 1.0,
     lower_tail: Bool = True,
     log_prob: Bool = False,
-    dtype=jnp.float32,
+    dtype=jnp.float_,
 ) -> ArrayLike:
     """Generates random numbers from a uniform distribution.
 
@@ -166,7 +170,7 @@ def runif(
         maxi: The maximum value of the uniform distribution.
         lower_tail: Whether to generate values from the lower tail of the distribution.
         log_prob: Whether to return the log probability of the generated values.
-        dtype: The dtype of the output. Defaults to jnp.float32.
+        dtype: The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: An array of random numbers from a uniform distribution.
@@ -178,8 +182,5 @@ def runif(
 
     """
     rvs = _runif(key, mini, maxi, sample_shape, dtype=dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs
