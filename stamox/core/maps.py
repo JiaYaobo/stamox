@@ -15,7 +15,7 @@ def pipe_vmap(
     in_axes=0,
     out_axes=0,
     axis_name: Hashable = None,
-    axis_size: int | None = None,
+    axis_size: int = None,
     name: str = None
 ) -> Callable[..., T]:
     """Creates a functional from a function with vmap.
@@ -99,7 +99,7 @@ def partial_pipe_vmap(
             in_axes=0,
             out_axes=0,
             axis_name: Hashable = None,
-            axis_size: int | None = None,
+            axis_size: int = None,
             **kwargs
         ):
             fn = partial(func, **kwargs)
@@ -125,7 +125,7 @@ def pipe_pmap(
     in_axes=0,
     out_axes=0,
     axis_name: Hashable = None,
-    axis_size: int | None = None,
+    axis_size: int = None,
     name: str = None
 ) -> Callable[..., T]:
     """Creates a functional object from a given function.
@@ -135,7 +135,7 @@ def pipe_pmap(
         in_axes (int): The number of input axes for the function.
         out_axes (int): The number of output axes for the function.
         axis_name (Hashable): The name of the axis.
-        axis_size (int | None): The size of the axis.
+        axis_size (int ): The size of the axis.
         name (str): The name of the functional object.
 
     Returns:
@@ -209,7 +209,7 @@ def partial_pipe_pmap(
             in_axes=0,
             out_axes=0,
             axis_name: Hashable = None,
-            axis_size: int | None = None,
+            axis_size: int = None,
             **kwargs
         ):
             fn = partial(func, **kwargs)
