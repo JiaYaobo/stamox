@@ -2,6 +2,7 @@ from typing import List, Tuple, Union
 
 import equinox as eqx
 import jax.numpy as jnp
+import numpy as np
 from jaxtyping import ArrayLike
 from pandas import DataFrame
 
@@ -176,7 +177,7 @@ def lm(
         elif isinstance(data, tuple):
             y = data[0]
             X = data[1]
-        elif isinstance(data, ArrayLike):
+        elif isinstance(data, jnp.ndarray) or isinstance(data, np.ndarray):
             y = data[:, 0]
             X = data[:, 1:]
         else:
