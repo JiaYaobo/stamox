@@ -1,5 +1,5 @@
 import jax.numpy as jnp
-from jax import lax, vmap
+from jax import vmap
 from jaxtyping import ArrayLike
 
 from .core import make_partial_pipe

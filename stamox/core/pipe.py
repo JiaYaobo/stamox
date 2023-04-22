@@ -3,7 +3,6 @@ from typing import (
     Any,
     Callable,
     Optional,
-    ParamSpec,
     Sequence,
     Tuple,
     TypeVar,
@@ -15,7 +14,6 @@ import equinox as eqx
 from .base import Functional
 
 
-P = ParamSpec("P")
 T = TypeVar("T")
 
 
@@ -148,8 +146,8 @@ class Pipeable(Functional):
 
 
 def make_pipe(
-    func: Optional[Callable[P, T]] = None, name: str = None
-) -> Callable[P, T]:
+    func: Optional[Callable[..., T]] = None, name: str = None
+) -> Callable[..., T]:
     """Makes a Function Pipeable.
 
     Args:
@@ -176,7 +174,7 @@ def make_pipe(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable[P, T]:
+    def wrap(func: Callable[..., T]) -> Callable[..., T]:
         if isinstance(func, Functional):
             func = func.func
 
@@ -187,8 +185,8 @@ def make_pipe(
 
 
 def make_partial_pipe(
-    func: Optional[Callable[P, T]] = None, name: str = None
-) -> Callable[P, T]:
+    func: Optional[Callable[..., T]] = None, name: str = None
+) -> Callable[..., T]:
     """Makes a Partial Function Pipe.
 
     Args:
@@ -214,7 +212,7 @@ def make_partial_pipe(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable:
+    def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
 

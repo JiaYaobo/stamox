@@ -1,18 +1,17 @@
 from functools import partial, wraps
-from typing import Callable, ParamSpec, TypeVar
+from typing import Callable, TypeVar
 
 from equinox import filter_jit
 
 from .base import Functional
 
 
-P = ParamSpec("P")
 T = TypeVar("T")
 
 
 def pipe_jit(
-    func: Callable[P, T] = None, *, donate: str = "none", name: str = None
-) -> Callable[P, T]:
+    func: Callable[..., T] = None, *, donate: str = "none", name: str = None
+) -> Callable[..., T]:
     """Creates a pipeable jitted functional from a given function.
 
     Args:
@@ -38,7 +37,7 @@ def pipe_jit(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable:
+    def wrap(func: Callable[..., T]) -> Callable:
         fn = filter_jit(func, donate=donate)
 
         return Functional(name=name, fn=fn)
@@ -47,8 +46,8 @@ def pipe_jit(
 
 
 def partial_pipe_jit(
-    func: Callable[P, T] = None, *, name: str = None
-) -> Callable[P, T]:
+    func: Callable[..., T] = None, *, name: str = None
+) -> Callable[..., T]:
     """Creates a partial pipeable jitted functional from a given function.
 
     Args:
@@ -73,7 +72,7 @@ def partial_pipe_jit(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable:
+    def wrap(func: Callable[..., T]) -> Callable:
         @wraps(func)
         def partial_fn(*args, donate: str = "none", **kwargs):
             fn = filter_jit(func, donate=donate)

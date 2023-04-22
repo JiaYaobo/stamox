@@ -1,24 +1,23 @@
 from functools import partial, wraps
-from typing import Callable, Hashable, ParamSpec, TypeVar
+from typing import Callable, Hashable, TypeVar
 
 from equinox import filter_pmap, filter_vmap
 
 from .base import Functional
 
 
-P = ParamSpec("P")
 T = TypeVar("T")
 
 
 def pipe_vmap(
-    func: Callable[P, T] = None,
+    func: Callable[..., T] = None,
     *,
     in_axes=0,
     out_axes=0,
     axis_name: Hashable = None,
     axis_size: int | None = None,
     name: str = None
-) -> Callable[P, T]:
+) -> Callable[..., T]:
     """Creates a functional from a function with vmap.
 
     Args:
@@ -48,7 +47,7 @@ def pipe_vmap(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable:
+    def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
         fn = filter_vmap(
@@ -64,8 +63,8 @@ def pipe_vmap(
 
 
 def partial_pipe_vmap(
-    func: Callable[P, T] = None, *, name: str = None
-) -> Callable[P, T]:
+    func: Callable[..., T] = None, *, name: str = None
+) -> Callable[..., T]:
     """Partially apply a function to a vmap.
 
     Args:
@@ -90,7 +89,7 @@ def partial_pipe_vmap(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable:
+    def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
 
@@ -121,14 +120,14 @@ def partial_pipe_vmap(
 
 
 def pipe_pmap(
-    func: Callable[P, T] = None,
+    func: Callable[..., T] = None,
     *,
     in_axes=0,
     out_axes=0,
     axis_name: Hashable = None,
     axis_size: int | None = None,
     name: str = None
-) -> Callable[P, T]:
+) -> Callable[..., T]:
     """Creates a functional object from a given function.
 
     Args:
@@ -157,7 +156,7 @@ def pipe_pmap(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable:
+    def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
         fn = filter_pmap(
@@ -174,8 +173,8 @@ def pipe_pmap(
 
 
 def partial_pipe_pmap(
-    func: Callable[P, T] = None, *, name: str = None
-) -> Callable[P, T]:
+    func: Callable[..., T] = None, *, name: str = None
+) -> Callable[..., T]:
     """Partially apply a function to a pipe.
 
     Args:
@@ -200,7 +199,7 @@ def partial_pipe_pmap(
             name = func.__name__
 
     @wraps(func)
-    def wrap(func: Callable[P, T]) -> Callable:
+    def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
             func = func.func
 

@@ -1,21 +1,21 @@
-from typing import Callable, Optional, ParamSpec, TypeVar
+from typing import Callable, Optional, TypeVar
 
 import equinox as eqx
 
 
-P = ParamSpec("P")
 T = TypeVar("T")
 
 
 class Functional(eqx.Module):
     """General Function"""
+
     _name: str
-    _fn: Callable[P, T]
+    _fn: Callable[..., T]
     _is_partial: bool
 
     def __init__(
         self,
-        fn: Optional[Callable[P, T]] = None,
+        fn: Optional[Callable[..., T]] = None,
         name: str = "Func",
         is_partial: bool = False,
     ):
@@ -30,8 +30,6 @@ class Functional(eqx.Module):
         self._fn = fn
         self._is_partial = is_partial
 
-    
-    
     @property
     def name(self):
         """Get the name of the function."""
@@ -46,7 +44,7 @@ class Functional(eqx.Module):
         """Description for the function."""
         return self.__repr__()
 
-    def __call__(self, *args: P.args, **kwargs: P.kwargs):
+    def __call__(self, *args, **kwargs):
         """Call the function with given arguments."""
         if self._fn is None:
             raise ValueError("No Callable Function to Call")
@@ -84,7 +82,7 @@ class StateFunc(Functional):
 
     def __init__(
         self,
-        fn: Optional[Callable[P, T]] = None,
+        fn: Optional[Callable[..., T]] = None,
         name: str = "State",
     ):
         """Initialize the state function."""
@@ -101,9 +99,9 @@ class StateFunc(Functional):
     def _summary(self):
         """Print a summary of the state function."""
         pass
-    
+
     def _predict(self, *args, **kwargs):
-        """Predict """
+        """Predict"""
         pass
 
     def __call__(self, *args, **kwargs):
