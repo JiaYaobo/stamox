@@ -5,22 +5,18 @@ from jaxtyping import ArrayLike
 from .core import make_partial_pipe
 
 
-mean = make_partial_pipe(jnp.mean)
-sd = make_partial_pipe(jnp.std)
-var = make_partial_pipe(jnp.var)
-median = make_partial_pipe(jnp.median)
-quantile = make_partial_pipe(jnp.quantile)
-min = make_partial_pipe(jnp.min)
-max = make_partial_pipe(jnp.max)
-sum = make_partial_pipe(jnp.sum)
-prod = make_partial_pipe(jnp.prod)
-cumsum = make_partial_pipe(jnp.cumsum)
-cumprod = make_partial_pipe(jnp.cumprod)
-diff = make_partial_pipe(jnp.diff)
-cov = make_partial_pipe(jnp.cov)
-corrcoef = make_partial_pipe(jnp.corrcoef)
-arcsin = make_partial_pipe(jnp.arcsin)
-arccos = make_partial_pipe(jnp.arccos)
+mean = make_partial_pipe(jnp.mean, "mean")
+sd = make_partial_pipe(jnp.std, "sd")
+var = make_partial_pipe(jnp.var, "var")
+median = make_partial_pipe(jnp.median, "median")
+quantile = make_partial_pipe(jnp.quantile, "quantile")
+min = make_partial_pipe(jnp.min, "min")
+max = make_partial_pipe(jnp.max, "max")
+sum = make_partial_pipe(jnp.sum, "sum")
+prod = make_partial_pipe(jnp.prod, "prod")
+cumsum = make_partial_pipe(jnp.cumsum, "cumsum")
+cumprod = make_partial_pipe(jnp.cumprod, "cumprod")
+diff = make_partial_pipe(jnp.diff, "diff")
 
 
 @make_partial_pipe
