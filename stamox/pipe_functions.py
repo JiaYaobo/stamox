@@ -1,6 +1,6 @@
 from .anova import one_way
 from .cluster import kmeans
-from .core import make_partial_pipe, make_pipe
+from .core import Functional, make_partial_pipe, make_pipe, Pipeable, StateFunc
 from .correlation import cor, pearsonr, spearmanr
 from .distribution import (
     dbeta,
@@ -218,4 +218,7 @@ __all__ = [
     "rt",
     "runif",
     "rweibull",
+    "Pipeable",
+    "Functional",
+    "StateFunc",
 ]
