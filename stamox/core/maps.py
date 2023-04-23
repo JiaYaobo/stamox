@@ -49,7 +49,8 @@ def pipe_vmap(
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
-            func = func.func
+            if func.func is not None:
+                func = func.func
         fn = filter_vmap(
             func,
             in_axes=in_axes,
@@ -91,7 +92,8 @@ def partial_pipe_vmap(
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
-            func = func.func
+            if func.func is not None:
+                func = func.func
 
         @wraps(func)
         def partial_fn(
@@ -158,7 +160,8 @@ def pipe_pmap(
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
-            func = func.func
+            if func.func is not None:
+                func = func.func
         fn = filter_pmap(
             func,
             in_axes=in_axes,
@@ -201,7 +204,8 @@ def partial_pipe_pmap(
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
-            func = func.func
+            if func.func is not None:
+                func = func.func
 
         @wraps(func)
         def partial_fn(
@@ -222,7 +226,7 @@ def partial_pipe_pmap(
             )
             if len(args) != 0:
                 return fn(*args, **kwargs)
-            return Functional(name=name, fn=fn, is_partial=True)
+            return Functional(name=name, fn=fn)
 
         return partial_fn
 

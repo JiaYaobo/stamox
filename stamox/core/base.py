@@ -11,13 +11,11 @@ class Functional(eqx.Module):
 
     _name: str
     _fn: Callable[..., T]
-    _is_partial: bool
 
     def __init__(
         self,
         fn: Optional[Callable[..., T]] = None,
         name: str = "Func",
-        is_partial: bool = False,
     ):
         """Make a General Function.
 
@@ -28,7 +26,6 @@ class Functional(eqx.Module):
         super().__init__()
         self._name = name
         self._fn = fn
-        self._is_partial = is_partial
 
     @property
     def name(self):

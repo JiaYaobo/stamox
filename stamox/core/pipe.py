@@ -176,7 +176,8 @@ def make_pipe(
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable[..., T]:
         if isinstance(func, Functional):
-            func = func.func
+            if func.func is not None:
+                func = func.func
 
         functional = Functional(name=name, fn=func)
         return functional
@@ -214,7 +215,8 @@ def make_partial_pipe(
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
-            func = func.func
+            if func.func is not None:
+                func = func.func
 
         @wraps(func)
         def partial_fn(*args, **kwargs):

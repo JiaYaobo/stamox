@@ -73,6 +73,7 @@ def partial_pipe_jit(
 
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
+
         @wraps(func)
         def partial_fn(*args, donate: str = "none", **kwargs):
             fn = filter_jit(func, donate=donate)
