@@ -1,5 +1,4 @@
 """Tests for one-way ANOVA."""
-import jax.numpy as jnp
 import numpy as np
 
 from stamox.anova import one_way

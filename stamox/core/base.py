@@ -11,21 +11,25 @@ class Functional(eqx.Module):
 
     _name: str
     _fn: Callable[..., T]
+    _pipe_type: str
 
     def __init__(
         self,
         fn: Optional[Callable[..., T]] = None,
+        pipe_type: str = "normal",
         name: str = "Func",
     ):
         """Make a General Function.
 
         Args:
             name (str, optional): Name of the function. Defaults to "Func".
+            pipe_type: Type of the function.(vmap or pmap or jit or normal) Defaults to "normal".
             fn (Optional[Callable|None], optional): Callable object.
         """
         super().__init__()
         self._name = name
         self._fn = fn
+        self._pipe_type = pipe_type
 
     @property
     def name(self):
@@ -36,6 +40,11 @@ class Functional(eqx.Module):
     def func(self):
         """Get the function."""
         return self._fn
+
+    @property
+    def piep_type(self):
+        """Get the type of the function."""
+        return self._pipe_type
 
     def desc(self):
         """Description for the function."""

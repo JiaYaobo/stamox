@@ -170,8 +170,10 @@ def make_pipe(
     if name is None and func is not None:
         if hasattr(func, "name"):
             name = func.name
-        else:
+        elif hasattr(func, "__name__"):
             name = func.__name__
+        else:
+            name = "none"
 
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable[..., T]:
@@ -209,8 +211,10 @@ def make_partial_pipe(
     if name is None and func is not None:
         if hasattr(func, "name"):
             name = func.name
-        else:
+        elif hasattr(func, "__name__"):
             name = func.__name__
+        else:
+            name = "none"
 
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:

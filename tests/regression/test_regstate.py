@@ -5,7 +5,6 @@ import pandas as pd
 import statsmodels.formula.api as smf
 
 import stamox.pipe_functions as PF
-from stamox.core import Pipeable, predict
 from stamox.regression import lm, RegState
 
 
@@ -27,7 +26,7 @@ def test_olsstate():
     )
 
     res = lm(data, "y ~ x1 + x2 + x3", dtype=jnp.float64)
-    np.testing.assert_allclose(predict(X, res), y.reshape((-1, 1)), atol=1e-5)
+    np.testing.assert_allclose(PF.predict(X, res), y.reshape((-1, 1)), atol=1e-5)
     np.testing.assert_allclose(
         np.sum(np.multiply(res.resid, X), axis=1), np.zeros(1000), atol=1e-4
     )
@@ -68,6 +67,8 @@ def test_pipe_olsstate():
         columns=["x1", "x2", "x3", "y"],
     )
 
-    model = (Pipeable(data) >> PF.lm(formula="y ~ x1 + x2 + x3", dtype=jnp.float64))()
-    trans_X = (Pipeable(X) >> predict(state=model))()
+    model = (
+        PF.Pipeable(data) >> PF.lm(formula="y ~ x1 + x2 + x3", dtype=jnp.float64)
+    )()
+    trans_X = (PF.Pipeable(X) >> PF.predict(state=model))()
     np.testing.assert_allclose(trans_X, y.reshape((-1, 1)), atol=1e-5)

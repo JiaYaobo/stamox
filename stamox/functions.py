@@ -10,6 +10,8 @@ from .core import (
     pipe_jit,
     pipe_pmap,
     pipe_vmap,
+    predict,
+    summary,
 )
 from .correlation import cor, pearsonr, spearmanr
 from .distribution import (
@@ -163,4 +165,6 @@ __all__ = [
     "rt",
     "runif",
     "rweibull",
+    "predict",
+    "summary",
 ]

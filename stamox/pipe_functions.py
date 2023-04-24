@@ -1,6 +1,14 @@
 from .anova import one_way
 from .cluster import kmeans
-from .core import Functional, make_partial_pipe, make_pipe, Pipeable, StateFunc
+from .core import (
+    Functional,
+    make_partial_pipe,
+    make_pipe,
+    Pipeable,
+    predict,
+    StateFunc,
+    summary,
+)
 from .correlation import cor, pearsonr, spearmanr
 from .distribution import (
     dbeta,
@@ -143,6 +151,8 @@ rpoisson = make_partial_pipe(rpoisson, name="rpoisson")
 rt = make_partial_pipe(rt, name="rt")
 runif = make_partial_pipe(runif, name="runif")
 rweibull = make_partial_pipe(rweibull, name="rweibull")
+predict = make_partial_pipe(predict, name="predict")
+summary = make_partial_pipe(summary, name="summary")
 
 
 __all__ = [
@@ -221,4 +231,6 @@ __all__ = [
     "Pipeable",
     "Functional",
     "StateFunc",
+    "predict",
+    "summary"
 ]
