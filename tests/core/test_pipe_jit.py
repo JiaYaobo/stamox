@@ -109,7 +109,7 @@ class PipeJitTest(jtest.JaxTestCase):
             (5, 2),
         )
         assert num_traces == 3
-    
+
     def test_partial_jit_vmap(self):
         num_traces = 0
 
@@ -118,11 +118,11 @@ class PipeJitTest(jtest.JaxTestCase):
             num_traces += 1
             return y * x + 1 + z
 
-        out = partial_pipe_jit(partial_pipe_vmap(f)(y=1, z=0))(jnp.array([1, 2]))
+        out = pipe_jit(partial_pipe_vmap(f)(y=1, z=0))(jnp.array([1, 2]))
         self.assertAllClose(out, jnp.array([2, 3]))
         assert num_traces == 1
 
-        out = partial_pipe_jit(partial_pipe_vmap(f)(y=2, z=0))(jnp.array([2, 3]))
+        out = pipe_jit(partial_pipe_vmap(f)(y=2, z=0))(jnp.array([2, 3]))
         self.assertAllClose(out, jnp.array([5, 7]))
         assert num_traces == 2
 

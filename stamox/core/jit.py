@@ -77,6 +77,14 @@ def partial_pipe_jit(
 
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
+        if isinstance(func, Functional):
+            if func.func is not None:
+                if func.pipe_type == "pmap" or func.pipe_type == "vmap":
+                    raise ValueError(
+                        "You can not use pmap or vmap with partial_pipe_*, use make_pipe or pipe_* instead."
+                    )
+                func = func.func
+
         @wraps(func)
         def partial_fn(*args, donate: str = "none", **kwargs):
             fn = filter_jit(func, donate=donate)

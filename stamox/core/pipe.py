@@ -220,6 +220,10 @@ def make_partial_pipe(
     def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
             if func.func is not None:
+                if func.pipe_type == "pmap" or func.pipe_type == "vmap":
+                    raise ValueError(
+                        "You can not use pmap or vmap with make_partial_pipe, use make_pipe or pipe_* instead."
+                    )
                 func = func.func
 
         @wraps(func)
