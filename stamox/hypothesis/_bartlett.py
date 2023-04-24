@@ -59,6 +59,7 @@ def bartlett_test(*samples: Sequence[ArrayLike]) -> BartlettTest:
         BartlettTest: The Bartlett Test object.
 
     Example:
+        >>> from stamox.functions import bartlett_test
         >>> bartlett_test([1, 2, 3], [1, 2, 3])
         BartlettTest(statistic=0.0, parameters=1, p_value=1.0)
     """

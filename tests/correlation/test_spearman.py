@@ -1,7 +1,5 @@
 """Test Spearman correlation coefficient"""
 import numpy as np
-from absl.testing import absltest
-from jax._src import test_util as jtest
 from scipy.stats import spearmanr as scp_spearman
 
 import stamox.pipe_functions as PF

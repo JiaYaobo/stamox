@@ -47,6 +47,7 @@ def plaplace(
         scale (Union[Float, ArrayLike], optional): The scale parameter of the Plaplace PDF. Defaults to 1.0.
         lower_tail (Bool, optional): Whether to return the lower tail of the Plaplace PDF. Defaults to True.
         log_prob (Bool, optional): Whether to return the logarithm of the Plaplace PDF. Defaults to False.
+        dtype (jnp.dtype, optional): The dtype of the output. Defaults to jnp.float_.
 
     Returns:
         ArrayLike: The Laplace CDF evaluated at `q`.

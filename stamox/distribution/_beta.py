@@ -129,7 +129,7 @@ def qbeta(
         ArrayLike: The value of the beta distribution at the given quantile.
 
     Example:
-        >>> qbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
+        >>> qbeta(0.5, 2, 3)
         Array([0.38572744], dtype=float32)
     """
     p, dtype = _promote_dtype_to_floating(p, dtype)

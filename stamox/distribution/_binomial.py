@@ -87,6 +87,12 @@ def dbinom(
 
     Returns:
         ArrayLike: The probability of the binomial distribution.
+
+    Example:
+        >>> q = jnp.array([0.1, 0.5, 0.9])
+        >>> size = 10
+        >>> prob = 0.5
+        >>> dbinom(q, size, prob)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
@@ -123,6 +129,12 @@ def qbinom(
 
     Returns:
         ArrayLike: The quantile of the binomial distribution.
+
+    Example:
+        >>> p = jnp.array([0.1, 0.5, 0.9])
+        >>> size = 10
+        >>> prob = 0.5
+        >>> qbinom(p, size, prob)
     """
     if dtype is None:
         dtype = jnp.int_
@@ -161,6 +173,13 @@ def rbinom(
 
     Returns:
         ArrayLike: An array containing the random binomial samples.
+
+    Example:
+        >>> key = jax.random.PRNGKey(0)
+        >>> sample_shape = (3, 3)
+        >>> size = 10
+        >>> prob = 0.5
+        >>> rbinom(key, sample_shape, size, prob)
     """
     rvs = _rbinom(key, size, prob, sample_shape, dtype)
     rvs = _post_process(rvs, lower_tail, log_prob)

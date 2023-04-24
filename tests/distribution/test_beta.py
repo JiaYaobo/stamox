@@ -26,8 +26,8 @@ def test_pbeta():
     x = jrand.uniform(key, (1000,))
     a = 2.0
     b = 2.0
-    p = pbeta(1, a, b)
-    true_p = beta.cdf(1, a, b)
+    p = pbeta(x, a, b)
+    true_p = beta.cdf(x, a, b)
     np.testing.assert_allclose(p, true_p, atol=1e-6)
 
 

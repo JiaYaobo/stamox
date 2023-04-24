@@ -5,7 +5,7 @@ import numpy as np
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.core import partial_pipe_pmap, partial_pipe_vmap, pipe_pmap, pipe_vmap
+from stamox import partial_pipe_pmap, partial_pipe_vmap, pipe_pmap, pipe_vmap
 
 
 os.environ['XLA_FLAGS'] = '--xla_force_host_platform_device_count=8'

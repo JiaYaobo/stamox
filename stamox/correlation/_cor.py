@@ -28,7 +28,7 @@ def cor(
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from stamox.correlation import cor
+        >>> from stamox.functions import cor
         >>> x = jnp.array([1, 2, 3, 4, 5])
         >>> y = jnp.array([5, 6, 7, 8, 7])
         >>> cor(x, y)

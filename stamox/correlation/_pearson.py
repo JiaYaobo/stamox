@@ -20,7 +20,7 @@ def pearsonr(x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0) -> Arra
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from stamox.correlation import pearsonr
+        >>> from stamox.functions import pearsonr
         >>> x = jnp.array([1, 2, 3, 4, 5])
         >>> y = jnp.array([5, 6, 7, 8, 7])
         >>> pearsonr(x, y)

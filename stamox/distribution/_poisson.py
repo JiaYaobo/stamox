@@ -42,6 +42,9 @@ def ppoisson(
 
     Returns:
         ArrayLike: The cumulative distribution function of the Poisson distribution evaluated at `q`.
+
+    Example:
+        >>> ppoisson(1.0, rate=1.0)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
@@ -77,6 +80,9 @@ def dpoisson(
 
     Returns:
         ArrayLike: The probability density function of the Poisson distribution evaluated at `x`.
+
+    Examples:
+        >>> dpoisson(1.0, rate=1.0)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
@@ -116,6 +122,10 @@ def rpoisson(
 
     Returns:
         ArrayLike: Samples from the Poisson distribution.
+
+    Examples:
+        >>> key = jrand.PRNGKey(0)
+        >>> rpoisson(key, rate=1.0)
     """
     rvs = _rpoisson(key, rate, sample_shape=sample_shape, dtype=dtype)
     rvs = _post_process(rvs, lower_tail=lower_tail, log_prob=log_prob)
@@ -148,6 +158,9 @@ def qpoisson(
 
     Returns:
         ArrayLike: The quantile function of the Poisson distribution evaluated at `p`.
+
+    Example:
+        >>> qpoisson(0.5, rate=1.0)
     """
     p, _ = _promote_dtype_to_floating(p, None)
     p = jnp.atleast_1d(p)

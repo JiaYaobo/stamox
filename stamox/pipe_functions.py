@@ -1,12 +1,9 @@
 from .anova import one_way
 from .cluster import kmeans
 from .core import (
-    Functional,
     make_partial_pipe,
     make_pipe,
-    Pipeable,
     predict,
-    StateFunc,
     summary,
 )
 from .correlation import cor, pearsonr, spearmanr
@@ -228,9 +225,6 @@ __all__ = [
     "rt",
     "runif",
     "rweibull",
-    "Pipeable",
-    "Functional",
-    "StateFunc",
     "predict",
-    "summary"
+    "summary",
 ]

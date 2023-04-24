@@ -2,7 +2,7 @@
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.core import make_partial_pipe, make_pipe, Pipe
+from stamox import make_partial_pipe, make_pipe, Pipe
 
 
 class PipeTest(jtest.JaxTestCase):

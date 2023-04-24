@@ -19,6 +19,21 @@ from stamox import (
     sample,
     transformation,
 )
+from stamox.core import (
+    better_partial,
+    Functional,
+    make_partial_pipe,
+    make_pipe,
+    partial_pipe_jit,
+    partial_pipe_pmap,
+    partial_pipe_vmap,
+    Pipe,
+    pipe_jit,
+    pipe_pmap,
+    pipe_vmap,
+    Pipeable,
+    StateFunc,
+)
 
 
 def _check_py_version():
@@ -45,4 +60,17 @@ __all__ = [
     "regression",
     "sample",
     "transformation",
+    "Functional",
+    "make_partial_pipe",
+    "make_pipe",
+    "partial_pipe_jit",
+    "partial_pipe_pmap",
+    "partial_pipe_vmap",
+    "pipe_jit",
+    "pipe_pmap",
+    "pipe_vmap",
+    "Pipe",
+    "Pipeable",
+    "StateFunc",
+    "better_partial",
 ]

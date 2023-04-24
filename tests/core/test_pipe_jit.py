@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.core import partial_pipe_jit, partial_pipe_vmap, pipe_jit, pipe_vmap
+from stamox import partial_pipe_jit, partial_pipe_vmap, pipe_jit, pipe_vmap
 
 
 class PipeJitTest(jtest.JaxTestCase):

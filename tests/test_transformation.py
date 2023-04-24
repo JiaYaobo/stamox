@@ -3,7 +3,7 @@ import numpy as np
 from scipy.stats import boxcox as scp_boxcox
 
 import stamox.pipe_functions as PF
-from stamox.core import Pipeable
+from stamox import Pipeable
 from stamox.transformation import boxcox, z_fisher
 
 

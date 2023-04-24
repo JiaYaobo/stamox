@@ -48,6 +48,9 @@ def pweibull(
 
     Returns:
         Array: The cumulative distribution function of the Weibull distribution evaluated at `q`.
+
+    Example:
+        >>> pweibull(1.0, concentration=1.0, scale=1.0)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
     q = jnp.atleast_1d(q)
@@ -76,6 +79,9 @@ def dweibull(
 
     Returns:
         Array: The probability density function of the Weibull distribution evaluated at `x`.
+
+    Example:
+        >>> dweibull(0.5, 1.0, 1.0)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = jnp.atleast_1d(x)
@@ -122,6 +128,9 @@ def qweibull(
 
     Returns:
         Array: The computed quantiles.
+
+    Example:
+        >>> qweibull(0.5, 1.0, 1.0)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
     p = jnp.atleast_1d(p)
@@ -164,6 +173,10 @@ def rweibull(
 
     Returns:
         rvs (ArrayLike): Probability of the Weibull distribution.
+
+    Example:
+        >>> key = jax.random.PRNGKey(0)
+        >>> rweibull(key, 1.0, 1.0)
     """
     rvs = _rweibull(key, concentration, scale, sample_shape, dtype=dtype)
     rvs = _post_process(rvs, lower_tail=lower_tail, log_prob=log_prob)

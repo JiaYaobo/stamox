@@ -4,7 +4,7 @@ import sklearn.decomposition
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.core import Pipeable
+from stamox import Pipeable
 from stamox.experimental.decomposition import PCA
 
 

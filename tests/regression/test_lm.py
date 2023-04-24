@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 import stamox.pipe_functions as PF
+from stamox import Pipeable
 from stamox.regression import lm
 
 
@@ -122,7 +123,7 @@ def test_pipe_lm():
         columns=["x1", "x2", "x3", "y"],
     )
 
-    res = (PF.Pipeable(data) >> PF.lm(formula="y ~ x1 + x2 + x3"))()
+    res = (Pipeable(data) >> PF.lm(formula="y ~ x1 + x2 + x3"))()
     np.testing.assert_allclose(
         res.params.reshape(1, 4),
         np.array([[1.0, 3.0, 2.0, -7.0]]),

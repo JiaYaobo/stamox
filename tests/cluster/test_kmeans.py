@@ -4,8 +4,9 @@ import jax.random
 import numpy as np
 
 import stamox.pipe_functions as PF
+from stamox import Pipeable
 from stamox.cluster import kmeans
-from stamox.core import Pipeable, predict
+from stamox.pipe_functions import predict
 
 
 def test_kmeans():

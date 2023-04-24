@@ -3,7 +3,7 @@ import pandas as pd
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.core import Pipeable
+from stamox import Pipeable
 from stamox.formula import get_design_matrices
 
 

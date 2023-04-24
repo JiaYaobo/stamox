@@ -2,7 +2,7 @@
 from absl.testing import absltest
 from jax._src import test_util as jtest
 
-from stamox.core import Functional, StateFunc
+from stamox import Functional, StateFunc
 
 
 class BaseTest(jtest.JaxTestCase):

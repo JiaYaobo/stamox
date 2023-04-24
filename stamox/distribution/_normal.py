@@ -191,8 +191,6 @@ def rnorm(
         ArrayLike: Random samples from a normal distribution.
 
     Example:
-        >>> import jax.numpy as jnp
-        >>> from jax import random
         >>> key = random.PRNGKey(0)
         >>> rnorm(key, sample_shape=(3, 2))
         Array([[ 0.18784384, -1.2833426 ],

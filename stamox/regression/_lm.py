@@ -148,7 +148,7 @@ def lm(
         OLSState: The state of the fitted linear model.
 
     Example:
-        >>> from stamox.regression import lm
+        >>> from stamox.functions import lm
         >>> import pandas as pd
         >>> import numpy as np
         >>> np.random.seed(42)

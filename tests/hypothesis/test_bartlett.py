@@ -3,7 +3,7 @@ import numpy as np
 from equinox import filter_jit
 
 import stamox.pipe_functions as PF
-from stamox.core import Pipeable
+from stamox import Pipeable
 from stamox.hypothesis import bartlett_test
 
 

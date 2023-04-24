@@ -87,7 +87,7 @@ def dcauchy(
         ArrayLike: The pdf of the Cauchy distribution.
 
     Example:
-        >>> dcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
+        >>> dcauchy(1.0, loc=0.0, scale=1.0)
         Array([0.15915494], dtype=float32, weak_type=True)
     """
     x, dtype = _promote_dtype_to_floating(x, dtype)
@@ -132,7 +132,7 @@ def qcauchy(
         ArrayLike: The quantiles of the Cauchy distribution.
 
     Example:
-        >>> qcauchy(0.5, loc=1.0, scale=2.0, lower_tail=True, log_prob=False)
+        >>> qcauchy(0.5, loc=1.0, scale=2.0)
         Array([1.], dtype=float32, weak_type=True)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)

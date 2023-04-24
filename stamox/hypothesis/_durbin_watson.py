@@ -49,7 +49,7 @@ def durbin_watson_test(resids: ArrayLike, axis: int = 0):
 
     Example:
         >>> import jax.numpy as jnp
-        >>> from stamox.hypothesis import durbin_watson_test
+        >>> from stamox.functions import durbin_watson_test
         >>> resids = jnp.array([1, 2, 3, 4, 5])
         >>> durbin_watson_test(resids)
         Durbin-Waston Test(statistic=0.0, parameters=None, p_value=None)

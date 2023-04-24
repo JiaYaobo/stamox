@@ -33,7 +33,7 @@ def pipe_vmap(
         A callable that creates a functional from the given function.
 
     Example:
-        >>> from stamox.core import pipe_vmap
+        >>> from stamox import pipe_vmap
         >>> f = lambda x: x + 1
         >>> f = pipe_vmap(f)
         >>> g = f >> f >> f
@@ -78,7 +78,7 @@ def partial_pipe_vmap(
         Callable[P, T]: A partially applied function.
 
     Example:
-        >>> from stamox.core import partial_pipe_vmap
+        >>> from stamox import partial_pipe_vmap
         >>> f = lambda x, y: x + y
         >>> f = partial_pipe_vmap(f)
         >>> g = f(y=1) >> f(y=2) >> f(y=3)
@@ -150,7 +150,7 @@ def pipe_pmap(
         Callable[P, T]: A callable object that wraps the given function.
 
     Example:
-        >>> from stamox.core import pipe_pmap
+        >>> from stamox import pipe_pmap
         >>> f = lambda x: x + 1
         >>> f = pipe_pmap(f)
         >>> g = f >> f >> f
@@ -200,7 +200,7 @@ def partial_pipe_pmap(
         Callable[P, T]: A partially applied function.
 
     Example:
-        >>> from stamox.core import partial_pipe_pmap
+        >>> from stamox import partial_pipe_pmap
         >>> f = lambda x, y: x + y
         >>> f = partial_pipe_pmap(f)
         >>> g = f(y=1) >> f(y=2) >> f(y=3)

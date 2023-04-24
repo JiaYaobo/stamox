@@ -22,7 +22,7 @@ def spearmanr(x: ArrayLike, y: Optional[ArrayLike] = None, axis: int = 0) -> Arr
 
     Examples:
         >>> import jax.numpy as jnp
-        >>> from stamox.correlation import spearmanr
+        >>> from stamox.functions import spearmanr
         >>> x = jnp.array([1, 2, 3, 4, 5])
         >>> y = jnp.array([5, 6, 7, 8, 7])
         >>> spearmanr(x, y)

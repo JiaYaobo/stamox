@@ -159,6 +159,7 @@ def make_pipe(
         Callable: The wrapped function.
 
     Examples:
+        >>> from stamox import make_pipe
         >>> @make_pipe
         ... def add(x):
         ...     return x + 1
@@ -201,6 +202,7 @@ def make_partial_pipe(
         Callable: A partial function pipe.
 
     Examples:
+        >>> from stamox import make_partial_pipe
         >>> @make_partial_pipe
         ... def add(x, y):
         ...     return x + y

@@ -127,7 +127,7 @@ def qgamma(
         rate: A float or array-like object representing the rate parameter of the gamma distribution.
         lower_tail: A boolean indicating whether to compute the lower tail (default) or upper tail.
         log_prob: A boolean indicating whether to compute the log probability (default False).
-        dtype: The dtype of the output. Defaults to float32.
+        dtype: The dtype of the output. Defaults to float_.
 
     Returns:
         ArrayLike: The quantile of the gamma distribution.

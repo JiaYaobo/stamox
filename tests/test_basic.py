@@ -1,8 +1,8 @@
 """Test Basic Functions"""
 import numpy as np
 
+from stamox import Pipeable
 from stamox.basic import mean, median, scale, sd, var
-from stamox.core import Pipeable
 
 
 def test_mean():

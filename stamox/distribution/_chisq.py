@@ -35,7 +35,7 @@ def dchisq(
         ArrayLike: The chi-squared distribution evaluated at `x`.
 
     Example:
-        >>> dchisq(2.0, 3, lower_tail=True, log_prob=False)
+        >>> dchisq(2.0, 3)
         Array([0.20755368], dtype=float32, weak_type=True)
     """
     x, dtype = _promote_dtype_to_floating(x, dtype)
@@ -60,13 +60,13 @@ def pchisq(
         df (Union[int, float, array-like]): The degrees of freedom.
         lower_tail (bool): Whether to calculate the lower tail (default True).
         log_prob (bool): Whether to return the log probability (default False).
-        dtype (dtype): The dtype of the output (default float32).
+        dtype (dtype): The dtype of the output (default jnp.float_).
 
     Returns:
         ArrayLike: The chi-squared probability density function.
 
     Example:
-        >>> pchisq(2.0, 3, lower_tail=True, log_prob=False)
+        >>> pchisq(2.0, 3)
         Array([0.42759317], dtype=float32, weak_type=True)
     """
     q = jnp.asarray(q, dtype=dtype)

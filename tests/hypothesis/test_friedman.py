@@ -6,7 +6,7 @@ from jax._src import test_util as jtest
 from scipy.stats import friedmanchisquare
 
 import stamox.pipe_functions as PF
-from stamox.core import Pipeable
+from stamox import Pipeable
 from stamox.hypothesis import friedman_test
 
 

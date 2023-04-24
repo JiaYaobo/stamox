@@ -23,7 +23,7 @@ def pipe_jit(
         A callable that creates a functional from the given function.
 
     Example:
-        >>> from stamox.core import pipe_jit
+        >>> from stamox import pipe_jit
         >>> f = lambda x: x + 1
         >>> f = pipe_jit(f)
         >>> g = f >> f >> f

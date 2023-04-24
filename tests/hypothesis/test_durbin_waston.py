@@ -6,7 +6,7 @@ from jax._src import test_util as jtest
 from statsmodels.stats.stattools import durbin_watson
 
 import stamox.pipe_functions as PF
-from stamox.core import Pipeable
+from stamox import Pipeable
 from stamox.hypothesis import durbin_watson_test
 
 
