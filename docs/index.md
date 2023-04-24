@@ -35,7 +35,7 @@ x = np.random.uniform(size=(8, 100000))
 ## Stamox
 
 ```python
-from stamox.distribution import pnorm, rnorm
+from stamox.functions import pnorm, rnorm
 import jax.numpy as jnp
 import jax.random as jrandom
 key = jrandom.PRNGKey(20010813)
@@ -62,7 +62,7 @@ And the mean elapsed time barplot is as follows:
 For univariate functions, `stamox` provides a decorator `make_pipe` to make it pipeable, for example:
 
 ```python   
-from stamox.core import make_pipe
+from stamox import make_pipe
 
 @make_pipe
 def f(x):
@@ -77,7 +77,7 @@ f(1) # 2
 For multi-variables functions, `stamox` provides a decorator `make_partial_pipe` to make it pipeable, for example:
 
 ```python
-from stamox.core import make_partial_pipe
+from stamox import make_partial_pipe
 
 @make_partial_pipe
 def g(x, y):
@@ -92,7 +92,7 @@ h = g(y=1)
 And `make_partial_pipe` can be used to make a function pipeable with `make_pipe`:
 
 ```python
-from stamox.core import make_pipe, make_partial_pipe
+from stamox import make_pipe, make_partial_pipe
 
 @make_pipe
 def f(x):
@@ -114,7 +114,7 @@ When we define `h = f>>g`, then `h` is a `Pipe` class, which also has a `__call_
 But next,  you may be confused with several conditions below:
 
 ```python
-from statox.core import make_partial_pipe
+from statox import make_partial_pipe
 
 @make_partial_pipe
 def g(x, y):
@@ -136,7 +136,7 @@ Just compatible with `jit`, `vmap`, `grad`, `pmap` and so on, for example:
 
 ```python
 import jax.numpy as jnp
-from stamox.core import make_pipe
+from stamox import make_pipe
 from equinox import filter_jit, filter_vmap, filter_grad
 
 @make_partial_pipe

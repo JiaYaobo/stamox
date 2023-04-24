@@ -5,7 +5,7 @@
 ```python
 import jax.numpy as jnp
 from stamox.basic import mean, var, std
-from stamox.core import Pipeable
+from stamox import Pipeable
 
 x = jnp.ones((3, 4))
 mean(x) # 1.0
@@ -21,7 +21,7 @@ f() # 0.0
 
 ```python
 import jax.random as jrandom
-from stamox.distribution import pnorm, rnorm, qnorm, dnorm
+from stamox.functions import pnorm, rnorm, qnorm, dnorm
 
 key = jrandom.PRNGKey(20010813)
 x = rnorm(key, sample_shape=(8, 100000))
@@ -34,7 +34,7 @@ pdf = dnorm(q)
 
 ```python
 import jax.numpy as jnp
-from stamox.regression import lm
+from stamox.pipe_functions import lm
 
 X = np.random.uniform(size=(1000, 3))
 y = 3 * X[:, 0] + 2 * X[:, 1] - 7 * X[:, 2] + 1.0
@@ -53,9 +53,8 @@ res  = (Pipeable(data) >> lm("y ~ x1 + x2 + x3"))()
 import jax.numpy as jnp
 import jax.random as jrandom
 import pandas as pd
-from stamox.cluster import kmeans
-from stamox.core import Pipeable
-from stamox.distribution import runif
+from stamox.pipe_functions import kmeans, runif
+from stamox import Pipeable
 
 key = jrandom.PRNGKey(20010813)
 k1, k2 = jrandom.split(key)

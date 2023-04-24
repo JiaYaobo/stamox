@@ -33,7 +33,9 @@ And here're few benchmarks:
 ## Installation
 
 ```bash
-pip install stamox
+pip install -U stamox
+# or
+pip install git+[stamox](https://github.com/JiaYaobo/stamox.git)
 ```
 
 ## Documentation
@@ -68,8 +70,8 @@ dnorm(x)
 
 ```python
 import jax.random as jrandom
+from stamox import pipe_jit
 from stamox.basic import scale
-from stamox.core import pipe_jit
 from stamox.distribution import rnorm
 from stamox.regression import lm
 
@@ -102,7 +104,7 @@ lm(df, 'y~x1+x2+x3').params
 * Custom Functions Pipeable
 
 ```python
-from stamox.core import make_pipe, make_partial_pipe, Pipeable
+from stamox import make_pipe, make_partial_pipe, Pipeable
 import jax.numpy as jnp
 import jax.random as jrandom
 
@@ -127,7 +129,7 @@ print(h())
 You can use autograd features from `JAX` and `Equinox` with `Stamox` easily.
 
 ```python
-from stamox.core import make_pipe, make_partial_pipe, Pipeable
+from stamox import make_pipe, make_partial_pipe, Pipeable
 import jax.numpy as jnp
 from equinox import filter_jit, filter_vmap, filter_grad
 
@@ -144,7 +146,7 @@ f(y=3.)(jnp.array([1., 2., 3.]))
 Or vmap, pmap, jit features integrated with `Stamox`:
 
 ```python
-from stamox.core import pipe_vmap, pipe_jit
+from stamox import pipe_vmap, pipe_jit
 
 @pipe_vmap
 @pipe_jit
