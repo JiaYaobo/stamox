@@ -35,7 +35,7 @@ And here're few benchmarks:
 ```bash
 pip install -U stamox
 # or
-pip install git+[stamox](https://github.com/JiaYaobo/stamox.git)
+pip install git+https://github.com/JiaYaobo/stamox.git
 ```
 
 ## Documentation
