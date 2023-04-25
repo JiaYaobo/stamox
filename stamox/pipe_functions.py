@@ -1,4 +1,7 @@
+import jax.numpy as jnp
+
 from .anova import one_way
+from .basic import scale
 from .cluster import kmeans
 from .core import (
     make_partial_pipe,
@@ -150,6 +153,20 @@ runif = make_partial_pipe(runif, name="runif")
 rweibull = make_partial_pipe(rweibull, name="rweibull")
 predict = make_partial_pipe(predict, name="predict")
 summary = make_partial_pipe(summary, name="summary")
+mean = make_partial_pipe(jnp.mean, "mean")
+sd = make_partial_pipe(jnp.std, "sd")
+var = make_partial_pipe(jnp.var, "var")
+median = make_partial_pipe(jnp.median, "median")
+quantile = make_partial_pipe(jnp.quantile, "quantile")
+min = make_partial_pipe(jnp.min, "min")
+max = make_partial_pipe(jnp.max, "max")
+sum = make_partial_pipe(jnp.sum, "sum")
+prod = make_partial_pipe(jnp.prod, "prod")
+cumsum = make_partial_pipe(jnp.cumsum, "cumsum")
+cumprod = make_partial_pipe(jnp.cumprod, "cumprod")
+diff = make_partial_pipe(jnp.diff, "diff")
+scale = make_partial_pipe(scale, "scale")
+
 
 
 __all__ = [
@@ -227,4 +244,17 @@ __all__ = [
     "rweibull",
     "predict",
     "summary",
+    "mean",
+    "sd",
+    "var",
+    "median",
+    "quantile",
+    "min",
+    "max",
+    "sum",
+    "prod",
+    "cumsum",
+    "cumprod",
+    "diff",
+    "scale",
 ]

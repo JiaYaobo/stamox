@@ -24,7 +24,7 @@ def bootstrap_sample(
     Example:
         >>> import jax.numpy as jnp
         >>> import jax.random as jrandom
-        >>> from stamox.sample import bootstrap_sample
+        >>> from stamox.functions import bootstrap_sample
         >>> data = jnp.arange(10)
         >>> key = jrandom.PRNGKey(0)
         >>> bootstrap_sample(data, num_samples=3, key=key)

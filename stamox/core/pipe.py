@@ -224,7 +224,7 @@ def make_partial_pipe(
             if func.func is not None:
                 if func.pipe_type == "pmap" or func.pipe_type == "vmap":
                     raise ValueError(
-                        "You can not use pmap or vmap with make_partial_pipe, use make_pipe or pipe_* instead."
+                        "You can not use pipe_pmap or piep_vmap with make_partial_pipe, use make_pipe or pipe_* instead."
                     )
                 func = func.func
 

@@ -46,8 +46,10 @@ More comprehensive introduction and examples can be found in the [documentation]
 
 ### Similar but faster distribution functions to `R`
 
+You can simply import all functions from `stamox.functions`
+
 ```python
-from stamox.distribution import *
+from stamox.functions import dnorm, pnorm, qnorm, rnorm
 import jax.random as jrandom
 
 key = jrandom.PRNGKey(20010813)
@@ -55,9 +57,9 @@ key = jrandom.PRNGKey(20010813)
 # random
 x = rnorm(key, sample_shape=(1000, ))
 # cdf
-pnorm(x)
+prob = pnorm(x)
 # ppf
-qnorm(x)
+qntl = qnorm(prob)
 # pdf
 dnorm(x)
 ```
@@ -66,21 +68,19 @@ dnorm(x)
 
 `>>` is the pipe operator, which is the similar to `|>` in `F#` and `Elixir` or `%>%` in `R`.
 
-* Internal Functions Pipeable
+* You can simply import all pipeable functions from `pipe_functions`
 
 ```python
 import jax.random as jrandom
+import stamox.pipe_functions as PF
 from stamox import pipe_jit
-from stamox.basic import scale
-from stamox.distribution import rnorm
-from stamox.regression import lm
 
 key = jrandom.PRNGKey(20010813)
 
 @pipe_jit
 def f(x):
     return [3 * x[:, 0] + 2 * x[:, 1] - x[:, 2], x] # [y, X]
-pipe = rnorm(sample_shape=(1000, 3)) >> f >> lm
+pipe = PF.rnorm(sample_shape=(1000, 3)) >> f >> PF.lm
 state = pipe(key)
 print(state.params)
 ```
@@ -90,7 +90,7 @@ print(state.params)
 ```python
 import pandas as pd
 import numpy as np
-from stamox.regression import lm
+from stamox.functions import lm # or from stamox.pipe_functions import lm
 
 
 x = np.random.uniform(size=(1000, 3))
@@ -114,13 +114,14 @@ x = jnp.ones((1000, ))
 def f(x):
     return x ** 2
 
-# multiple input, add make partial pipe
+# multiple input, decorate with make partial pipe
 @make_partial_pipe
 def g(x, y):
     return x + y
 
-# Notice Only One Positional Argument Can Be Received Along the pipe
+# x -> f -> g(y=2.) -> f -> g(y=3.) -> f
 h = Pipeable(x) >> f >> g(y=2.) >> f >> g(y=3.) >> f
+# h is a Pipeable object, you can call it to get the result
 print(h())
 ```
 
@@ -129,8 +130,8 @@ print(h())
 You can use autograd features from `JAX` and `Equinox` with `Stamox` easily.
 
 ```python
-from stamox import make_pipe, make_partial_pipe, Pipeable
 import jax.numpy as jnp
+from stamox import make_partial_pipe
 from equinox import filter_jit, filter_vmap, filter_grad
 
 @make_partial_pipe
@@ -139,8 +140,10 @@ from equinox import filter_jit, filter_vmap, filter_grad
 @filter_grad
 def f(x, y):
     return y * x ** 3
-       
-f(y=3.)(jnp.array([1., 2., 3.]))
+
+# df/dx = 3y * x^2
+g = f(y=3.) # derive with respect to x given y=3
+g(jnp.array([1., 2., 3.]))
 ```
 
 Or vmap, pmap, jit features integrated with `Stamox`:
@@ -153,7 +156,8 @@ from stamox import pipe_vmap, pipe_jit
 def f(x):
     return x ** 2
 
-f(jnp.array([1., 2., 3.]))
+g = f >> f >> f
+print(g(jnp.array([1, 2, 3])))
 ```
 
 ## Acceleration Support

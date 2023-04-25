@@ -1,4 +1,19 @@
 from .anova import one_way
+from .basic import (
+    cumprod,
+    cumsum,
+    diff,
+    max,
+    mean,
+    median,
+    min,
+    prod,
+    quantile,
+    scale,
+    sd,
+    sum,
+    var,
+)
 from .cluster import kmeans
 from .core import (
     predict,
@@ -149,4 +164,17 @@ __all__ = [
     "rweibull",
     "predict",
     "summary",
+    "mean",
+    "sd",
+    "var",
+    "median",
+    "quantile",
+    "min",
+    "max",
+    "sum",
+    "prod",
+    "cumsum",
+    "cumprod",
+    "diff",
+    "scale",
 ]

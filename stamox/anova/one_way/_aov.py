@@ -99,6 +99,16 @@ def one_way(*samples, axis=0) -> OneWayAnovaTest:
 
     Returns:
         OneWayAnovaTest: The result of the one-way ANOVA test.
+
+    Example:
+        >>> import jax.numpy as jnp
+        >>> from stamox.functions import one_way
+        >>>  # 3 samples with 5 observations each
+        >>> a = jnp.array([1, 2, 3, 4, 5])
+        >>> b = jnp.array([2, 3, 4, 5, 6])
+        >>> c = jnp.array([3, 4, 5, 6, 7])
+        >>> one_way(a, b, c)
+
     """
     samples = [jnp.asarray(sample) for sample in samples]
     ngroups = len(samples)

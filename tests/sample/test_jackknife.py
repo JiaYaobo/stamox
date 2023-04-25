@@ -4,7 +4,7 @@ import numpy as np
 
 import stamox.pipe_functions as PF
 from stamox import Pipeable
-from stamox.basic import mean
+from stamox.functions import mean
 from stamox.sample import jackknife, jackknife_sample
 
 

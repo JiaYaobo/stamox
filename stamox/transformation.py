@@ -40,7 +40,7 @@ def z_fisher(rho: ArrayLike, dtype=jnp.float_) -> ArrayLike:
         The Fisher z-transformed array.
 
     Example:
-        >>> from stamox.transformation import z_fisher
+        >>> from stamox.functions import z_fisher
         >>> import jax.numpy as jnp
         >>> rho = jnp.array([0.1, 0.2, 0.3, 0.4, 0.5], dtype=jnp.float32)
         >>> z_fisher(rho)

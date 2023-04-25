@@ -4,7 +4,7 @@
 
 ```python
 import jax.numpy as jnp
-from stamox.basic import mean, var, std
+from stamox.functions import mean, var, std
 from stamox import Pipeable
 
 x = jnp.ones((3, 4))

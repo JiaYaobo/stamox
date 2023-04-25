@@ -2,7 +2,7 @@
 import numpy as np
 
 from stamox import Pipeable
-from stamox.basic import mean, median, scale, sd, var
+from stamox.pipe_functions import mean, median, scale, sd, var
 
 
 def test_mean():

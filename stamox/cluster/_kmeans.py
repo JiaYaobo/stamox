@@ -74,6 +74,7 @@ def kmeans(
 
     Example:
         >>> from jax import random
+        >>> from stamox.functions import kmeans
         >>> key = random.PRNGKey(0)
         >>> x = random.normal(key, shape=(100, 2))
         >>> state = kmeans(x, n_cluster=3, restarts=5, max_iters=50, key=key)

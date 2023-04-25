@@ -19,7 +19,7 @@ def jackknife_sample(data: ArrayLike) -> ArrayLike:
 
     Example:
         >>> import jax.numpy as jnp
-        >>> from stamox.sample import jackknife_sample
+        >>> from stamox.functions import jackknife_sample
         >>> data = jnp.arange(3)
         >>> jackknife_sample(data)
         Array([[1, 2],

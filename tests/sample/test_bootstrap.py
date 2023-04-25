@@ -5,7 +5,7 @@ import numpy as np
 import stamox.functions as F
 import stamox.pipe_functions as PF
 from stamox import Pipeable
-from stamox.basic import mean
+from stamox.functions import mean
 
 
 def test_bootstrap_sampler():
