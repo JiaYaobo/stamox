@@ -778,20 +778,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1116,78 +1102,6 @@
 
 
 
-<h5 id="stamox.basic.arccos" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">arccos</span></code>
-
-
-<a href="#stamox.basic.arccos" class="headerlink" title="Permanent link">¤</a></h5>
-
-    <div class="doc doc-contents ">
-
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-attribute">
-
-
-
-<h5 id="stamox.basic.arcsin" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">arcsin</span></code>
-
-
-<a href="#stamox.basic.arcsin" class="headerlink" title="Permanent link">¤</a></h5>
-
-    <div class="doc doc-contents ">
-
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-attribute">
-
-
-
-<h5 id="stamox.basic.corrcoef" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">corrcoef</span></code>
-
-
-<a href="#stamox.basic.corrcoef" class="headerlink" title="Permanent link">¤</a></h5>
-
-    <div class="doc doc-contents ">
-
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-attribute">
-
-
-
-<h5 id="stamox.basic.cov" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">cov</span></code>
-
-
-<a href="#stamox.basic.cov" class="headerlink" title="Permanent link">¤</a></h5>
-
-    <div class="doc doc-contents ">
-
-    </div>
-
-  </div>
-
-
-
-  <div class="doc doc-object doc-attribute">
-
-
-
 <h5 id="stamox.basic.cumprod" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">cumprod</span></code>
 
@@ -1407,7 +1321,7 @@
 
 
 <h5 id="stamox.basic.scale" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">scale</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
 
 
 <a href="#stamox.basic.scale" class="headerlink" title="Permanent link">¤</a></h5>
@@ -1438,6 +1352,12 @@
         <td><code>int</code></td>
         <td><p>Axis along which to calculate mean and standard deviation. Defaults to 0.</p></td>
         <td><code>0</code></td>
+      </tr>
+      <tr>
+        <td><code>dtype</code></td>
+        <td><code>jnp.dtype</code></td>
+        <td><p>The dtype of the output. Defaults to jnp.float_.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>

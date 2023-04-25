@@ -792,20 +792,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1122,7 +1108,7 @@
 
 
 <h4 id="stamox.correlation.cor" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">correlation</span><span class="o">.</span><span class="n">cor</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pearson&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">correlation</span><span class="o">.</span><span class="n">cor</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;pearson&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span></code>
 
 
 <a href="#stamox.correlation.cor" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1166,12 +1152,6 @@
         <td><p>Method used for calculating correlation. Defaults to "pearson".</p></td>
         <td><code>&#39;pearson&#39;</code></td>
       </tr>
-      <tr>
-        <td><code>dtype</code></td>
-        <td><code>jnp.float32</code></td>
-        <td><p>Data type of the output array. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
-      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -1206,7 +1186,7 @@
 </table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.correlation</span> <span class="kn">import</span> <span class="n">cor</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">cor</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">cor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -1225,7 +1205,7 @@
 
 
 <h4 id="stamox.correlation.pearsonr" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">correlation</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">correlation</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span></code>
 
 
 <a href="#stamox.correlation.pearsonr" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1263,12 +1243,6 @@
         <td><p>The axis along which the correlation coefficient should be computed.</p></td>
         <td><code>0</code></td>
       </tr>
-      <tr>
-        <td><code>dtype</code></td>
-        <td></td>
-        <td><p>The data type of the input arrays. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
-      </tr>
   </tbody>
 </table>
 <p><strong>Returns:</strong></p>
@@ -1288,7 +1262,7 @@
 </table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.correlation</span> <span class="kn">import</span> <span class="n">pearsonr</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">pearsonr</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">pearsonr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -1307,7 +1281,7 @@
 
 
 <h4 id="stamox.correlation.spearmanr" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">correlation</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">correlation</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span></code>
 
 
 <a href="#stamox.correlation.spearmanr" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1345,12 +1319,6 @@
         <td><p>The axis along which to calculate. Defaults to 0.</p></td>
         <td><code>0</code></td>
       </tr>
-      <tr>
-        <td><code>dtype</code></td>
-        <td><code>jnp.float32</code></td>
-        <td><p>The data type of the array. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
-      </tr>
   </tbody>
 </table>
 <p><strong>Exceptions:</strong></p>
@@ -1385,7 +1353,7 @@
 </table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.correlation</span> <span class="kn">import</span> <span class="n">spearmanr</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">spearmanr</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>

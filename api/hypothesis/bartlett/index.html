@@ -735,8 +735,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stamox.hypothesis.bartlett_test_fun" class="md-nav__link">
-    bartlett_test_fun()
+  <a href="#stamox.hypothesis.bartlett_test" class="md-nav__link">
+    bartlett_test()
   </a>
   
 </li>
@@ -779,20 +779,6 @@
     <li class="md-nav__item">
       <a href="../friedman/" class="md-nav__link">
         Friedman Test
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../shapiro/" class="md-nav__link">
-        Shapiro Test
       </a>
     </li>
   
@@ -1070,8 +1056,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stamox.hypothesis.bartlett_test_fun" class="md-nav__link">
-    bartlett_test_fun()
+  <a href="#stamox.hypothesis.bartlett_test" class="md-nav__link">
+    bartlett_test()
   </a>
   
 </li>
@@ -1107,11 +1093,11 @@
 
 
 
-<h4 id="stamox.hypothesis.bartlett_test_fun" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">hypothesis</span><span class="o">.</span><span class="n">bartlett_test_fun</span><span class="p">(</span><span class="o">*</span><span class="n">samples</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BartlettTest</span></code>
+<h4 id="stamox.hypothesis.bartlett_test" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">hypothesis</span><span class="o">.</span><span class="n">bartlett_test</span><span class="p">(</span><span class="o">*</span><span class="n">samples</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">BartlettTest</span></code>
 
 
-<a href="#stamox.hypothesis.bartlett_test_fun" class="headerlink" title="Permanent link">¤</a></h4>
+<a href="#stamox.hypothesis.bartlett_test" class="headerlink" title="Permanent link">¤</a></h4>
 
     <div class="doc doc-contents first">
 
@@ -1153,7 +1139,8 @@ a sample of scores. All samples must have the same length.</p></td>
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">bartlett_test</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">bartlett_test</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">bartlett_test</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
 <span class="n">BartlettTest</span><span class="p">(</span><span class="n">statistic</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">p_value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </code></pre></div>
 

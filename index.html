@@ -742,20 +742,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="api/hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1064,7 +1050,7 @@
 <span class="o">%</span><span class="n">timeit</span> <span class="n">scp_stats</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </code></pre></div>
 <h2 id="stamox">Stamox<a class="headerlink" href="#stamox" title="Permanent link">¤</a></h2>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.distribution</span> <span class="kn">import</span> <span class="n">pnorm</span><span class="p">,</span> <span class="n">rnorm</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">pnorm</span><span class="p">,</span> <span class="n">rnorm</span>
 <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jrandom</span>
 <span class="n">key</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">20010813</span><span class="p">)</span>
@@ -1079,32 +1065,40 @@
 <p>And the mean elapsed time barplot is as follows:</p>
 <p><img alt="benchmark" src="asset/benchmark2.png" /></p>
 <h1 id="pipe-link-with">Pipe, link with <code>&gt;&gt;</code><a class="headerlink" href="#pipe-link-with" title="Permanent link">¤</a></h1>
+<p><code>stamox</code> provide all its pipeable functions in module <code>pipe_functions</code></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.pipe_functions</span> <span class="kn">import</span> <span class="o">*</span>
+</code></pre></div>
+<p>and all normal functions in module <code>functions</code></p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="o">*</span>
+</code></pre></div>
 <h2 id="univariate-functions">Univariate Functions<a class="headerlink" href="#univariate-functions" title="Permanent link">¤</a></h2>
 <p>For univariate functions, <code>stamox</code> provides a decorator <code>make_pipe</code> to make it pipeable, for example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_pipe</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">make_pipe</span>
 
 <span class="nd">@make_pipe</span>
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
 
 <span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 2</span>
-<span class="p">(</span><span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">)(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 5</span>
+<span class="n">f3</span> <span class="o">=</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span>
+<span class="n">f3</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 5</span>
 </code></pre></div>
 <h2 id="multi-variables-functions">Multi-variables Functions<a class="headerlink" href="#multi-variables-functions" title="Permanent link">¤</a></h2>
 <p>For multi-variables functions, <code>stamox</code> provides a decorator <code>make_partial_pipe</code> to make it pipeable, for example:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
 
 <span class="nd">@make_partial_pipe</span>
 <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 
 <span class="c1"># Must use kwargs to define partial part</span>
-<span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="mf">1.</span><span class="p">)</span> <span class="c1"># 2.</span>
-<span class="n">h</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="p">(</span><span class="n">h</span> <span class="o">&gt;&gt;</span> <span class="n">h</span> <span class="o">&gt;&gt;</span> <span class="n">h</span><span class="p">)(</span><span class="mf">1.</span><span class="p">)</span> <span class="c1"># 4.</span>
+<span class="n">g_y_1</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">g_y_1</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span> <span class="c1"># 2.</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">g_y_1</span> <span class="o">&gt;&gt;</span> <span class="n">g_y_1</span> <span class="o">&gt;&gt;</span> <span class="n">g_y_1</span>
+<span class="n">h</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span> <span class="c1"># 4.</span>
 </code></pre></div>
-<p>And <code>make_partial_pipe</code> can be used to make a function pipeable with <code>make_pipe</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_pipe</span><span class="p">,</span> <span class="n">make_partial_pipe</span>
+<p>And <code>make_partial_pipe</code> can be used together with  <code>make_pipe</code> for different functions:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">make_pipe</span><span class="p">,</span> <span class="n">make_partial_pipe</span>
 
 <span class="nd">@make_pipe</span>
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -1118,10 +1112,10 @@
 <span class="n">h</span> <span class="o">=</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">h</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 4</span>
 </code></pre></div>
-<p>In fact, these functions decorated with <code>make_pipe</code> or <code>make_partial_pipe</code> doesn't really return a function class, instead, they will return a <code>Functional</code> class with <code>__call__</code> method, so it can be used as a function, and it can be used as a pipeable function. And <code>Functional</code> class has a <code>__rshift__</code> method, so it can be used as a pipeable function. </p>
-<p>When we define <code>h = f&gt;&gt;g</code>, then <code>h</code> is a <code>Pipe</code> class, which also has a <code>__call__</code> method, so it can be used as a function, and it can also be used as a pipeable function. And <code>Pipe</code> class has a <code>__rshift__</code> method, so it can be used as a pipeable function.</p>
+<p>In fact, these functions decorated with <code>make_pipe</code> or <code>make_partial_pipe</code> doesn't really return a function class, instead, they will return a <code>Functional</code> class with <code>__call__</code> method, so it can be used as a function And <code>Functional</code> class has a <code>__rshift__</code> method, so it can be used as a pipeable function. </p>
+<p>When we define <code>h = f&gt;&gt;g</code>, then <code>h</code> is a <code>Pipe</code> class, which also has a <code>__call__</code> method,and <code>Pipe</code> class has a <code>__rshift__</code> method, so it works like <code>Functional</code></p>
 <p>But next,  you may be confused with several conditions below:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">statox.core</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">statox</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
 
 <span class="nd">@make_partial_pipe</span>
 <span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -1133,21 +1127,23 @@
 <span class="n">g</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># Error!</span>
 </code></pre></div>
 <p>For first two are intended features for <code>stamox</code>,  and last two conditions are compatible with <code>functools.partial</code>, for <code>g(x=1, y=2)</code>, where we may expect a value <code>2</code>, actually it's still a fucntion until we exectue it, so <code>g(x=1, y=2)()</code> returns <code>2</code> , which is similar to <code>partial(g, x=1, y=1)()</code>, and for <code>g(x=1)(2)</code>, it's a error because python isn't smart enough to recogonize that " oh we have already get <code>x</code>, so <code>2</code> refers to <code>y</code>.", like <code>partial(g, x=1)(2)</code>, which results in the same error, so you will need to use <code>g(x=1, y=2)()</code> or <code>g(x=1)(y=1)</code> instead.</p>
-<p>So always recommend not to partial first arguments until we provide a more elegant partial wrapper :).</p>
+<p>So always recommend not to partial first arguments until we provide a more elegant partial wrapper :) (See <code>stamox.core.better_partial.py</code>).</p>
 <h1 id="compatibility-with-jax-and-equinox">Compatibility with <code>JAX</code> and <code>Equinox</code><a class="headerlink" href="#compatibility-with-jax-and-equinox" title="Permanent link">¤</a></h1>
 <p>Just compatible with <code>jit</code>, <code>vmap</code>, <code>grad</code>, <code>pmap</code> and so on, for example:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">make_pipe</span>
+<span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
 <span class="kn">from</span> <span class="nn">equinox</span> <span class="kn">import</span> <span class="n">filter_jit</span><span class="p">,</span> <span class="n">filter_vmap</span><span class="p">,</span> <span class="n">filter_grad</span>
 
 <span class="nd">@make_partial_pipe</span>
 <span class="nd">@filter_jit</span>
 <span class="nd">@filter_vmap</span>
-<span class="nd">@filter_grad</span> 
+<span class="nd">@filter_grad</span>
 <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">3</span>
 
-<span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">3.</span><span class="p">)(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">]))</span> <span class="c1"># [ 9. 36. 81.]</span>
+<span class="c1"># df/dx = 3y * x^2</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span> <span class="c1"># derive with respect to x given y=3</span>
+<span class="n">g</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">2.</span><span class="p">,</span> <span class="mf">3.</span><span class="p">]))</span> <span class="c1"># Array([ 9., 36., 81.])</span>
 </code></pre></div>
 <h2 id="next">Next<a class="headerlink" href="#next" title="Permanent link">¤</a></h2>
 <p>You've already know everything about <code>stamox</code>, since it's based on <code>JAX</code> and <code>Equinox</code>, I recommend you to get a knowledge of <code>JAX</code> and <code>Equinox</code> first to know more about <code>jit</code>, <code>vmap</code>, <code>grad</code> etc.</p>

@@ -795,20 +795,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../api/hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1127,8 +1113,8 @@
                 <h1 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">¤</a></h1>
 <h2 id="basic-fucntions">Basic Fucntions<a class="headerlink" href="#basic-fucntions" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">stamox.basic</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">std</span>
-<span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">Pipeable</span>
+<span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">std</span>
+<span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">Pipeable</span>
 
 <span class="n">x</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># 1.0</span>
@@ -1140,7 +1126,7 @@
 </code></pre></div>
 <h2 id="distributions">Distributions<a class="headerlink" href="#distributions" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jrandom</span>
-<span class="kn">from</span> <span class="nn">stamox.distribution</span> <span class="kn">import</span> <span class="n">pnorm</span><span class="p">,</span> <span class="n">rnorm</span><span class="p">,</span> <span class="n">qnorm</span><span class="p">,</span> <span class="n">dnorm</span>
+<span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">pnorm</span><span class="p">,</span> <span class="n">rnorm</span><span class="p">,</span> <span class="n">qnorm</span><span class="p">,</span> <span class="n">dnorm</span>
 
 <span class="n">key</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">20010813</span><span class="p">)</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">rnorm</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">100000</span><span class="p">))</span>
@@ -1150,7 +1136,7 @@
 </code></pre></div>
 <h2 id="linear-model">Linear Model<a class="headerlink" href="#linear-model" title="Permanent link">¤</a></h2>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="kn">from</span> <span class="nn">stamox.regression</span> <span class="kn">import</span> <span class="n">lm</span>
+<span class="kn">from</span> <span class="nn">stamox.pipe_functions</span> <span class="kn">import</span> <span class="n">lm</span>
 
 <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 <span class="n">y</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">7</span> <span class="o">*</span> <span class="n">X</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span>
@@ -1166,9 +1152,8 @@
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
 <span class="kn">import</span> <span class="nn">jax.random</span> <span class="k">as</span> <span class="nn">jrandom</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">stamox.cluster</span> <span class="kn">import</span> <span class="n">kmeans</span>
-<span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">Pipeable</span>
-<span class="kn">from</span> <span class="nn">stamox.distribution</span> <span class="kn">import</span> <span class="n">runif</span>
+<span class="kn">from</span> <span class="nn">stamox.pipe_functions</span> <span class="kn">import</span> <span class="n">kmeans</span><span class="p">,</span> <span class="n">runif</span>
+<span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">Pipeable</span>
 
 <span class="n">key</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">20010813</span><span class="p">)</span>
 <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span> <span class="o">=</span> <span class="n">jrandom</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>

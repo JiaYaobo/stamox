@@ -734,20 +734,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -960,8 +946,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stamox.sample.jackknife_sample_fun" class="md-nav__link">
-    jackknife_sample_fun()
+  <a href="#stamox.sample.jackknife_sample" class="md-nav__link">
+    jackknife_sample()
   </a>
   
 </li>
@@ -1070,8 +1056,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stamox.sample.jackknife_sample_fun" class="md-nav__link">
-    jackknife_sample_fun()
+  <a href="#stamox.sample.jackknife_sample" class="md-nav__link">
+    jackknife_sample()
   </a>
   
 </li>
@@ -1107,11 +1093,11 @@
 
 
 
-<h4 id="stamox.sample.jackknife_sample_fun" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">jackknife_sample_fun</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span></code>
+<h4 id="stamox.sample.jackknife_sample" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">jackknife_sample</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ArrayLike</span></code>
 
 
-<a href="#stamox.sample.jackknife_sample_fun" class="headerlink" title="Permanent link">¤</a></h4>
+<a href="#stamox.sample.jackknife_sample" class="headerlink" title="Permanent link">¤</a></h4>
 
     <div class="doc doc-contents first">
 
@@ -1153,7 +1139,7 @@
 </table>
 <p><strong>Examples:</strong></p>
     <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.sample</span> <span class="kn">import</span> <span class="n">jackknife_sample</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">jackknife_sample</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">jackknife_sample</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="n">Array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>

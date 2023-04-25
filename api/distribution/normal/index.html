@@ -799,20 +799,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1136,7 +1122,7 @@
 
 
 <h4 id="stamox.distribution.pnorm" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">pnorm</span><span class="p">(</span><span class="n">q</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">pnorm</span><span class="p">(</span><span class="n">q</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
 
 
 <a href="#stamox.distribution.pnorm" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1193,8 +1179,8 @@ Defaults to False.</p></td>
       <tr>
         <td><code>dtype</code></td>
         <td><code>jnp.dtype</code></td>
-        <td><p>The dtype of the output. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
+        <td><p>The dtype of the output. Defaults to jnp.float_.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>
@@ -1233,7 +1219,7 @@ Defaults to False.</p></td>
 
 
 <h4 id="stamox.distribution.qnorm" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">qnorm</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">qnorm</span><span class="p">(</span><span class="n">p</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
 
 
 <a href="#stamox.distribution.qnorm" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1286,8 +1272,8 @@ Defaults to False.</p></td>
       <tr>
         <td><code>dtype</code></td>
         <td><code>jnp.dtype</code></td>
-        <td><p>The dtype of the output. Default is <code>jnp.float32</code>.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
+        <td><p>The dtype of the output. Default is <code>jnp.float_</code>.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>
@@ -1325,7 +1311,7 @@ Defaults to False.</p></td>
 
 
 <h4 id="stamox.distribution.dnorm" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">dnorm</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">dnorm</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
 
 
 <a href="#stamox.distribution.dnorm" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1378,8 +1364,8 @@ Defaults to False.</p></td>
       <tr>
         <td><code>dtype</code></td>
         <td><code>jnp.dtype</code></td>
-        <td><p>The dtype of the output. Default is <code>jnp.float32</code>.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
+        <td><p>The dtype of the output. Default is <code>jnp.float_</code>.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>
@@ -1417,7 +1403,7 @@ Defaults to False.</p></td>
 
 
 <h4 id="stamox.distribution.rnorm" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">rnorm</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">PRNGKeyArray</span><span class="p">,</span> <span class="n">sample_shape</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span><span class="p">:</span> <span class="n">Bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">:</span> <span class="n">Bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">rnorm</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">PRNGKeyArray</span><span class="p">,</span> <span class="n">sample_shape</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">sd</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Float</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">lower_tail</span><span class="p">:</span> <span class="n">Bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">:</span> <span class="n">Bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;) -&gt; ArrayLike</span></code>
 
 
 <a href="#stamox.distribution.rnorm" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1476,8 +1462,8 @@ Defaults to False.</p></td>
       <tr>
         <td><code>dtype</code></td>
         <td></td>
-        <td><p>The dtype of the output. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
+        <td><p>The dtype of the output. Defaults to jnp.float_.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>
@@ -1497,9 +1483,7 @@ Defaults to False.</p></td>
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">random</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">key</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">key</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">rnorm</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">sample_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="n">Array</span><span class="p">([[</span> <span class="mf">0.18784384</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.2833426</span> <span class="p">],</span>
         <span class="p">[</span> <span class="mf">0.6494181</span> <span class="p">,</span>  <span class="mf">1.2490594</span> <span class="p">],</span>

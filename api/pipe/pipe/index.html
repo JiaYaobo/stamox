@@ -734,20 +734,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1108,7 +1094,7 @@
 
 
 <h4 id="stamox.core.pipe.make_pipe" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_pipe</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_pipe</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.pipe.make_pipe" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1164,7 +1150,8 @@
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nd">@make_pipe</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">make_pipe</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nd">@make_pipe</span>
 <span class="o">...</span> <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="o">...</span>     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">h</span> <span class="o">=</span> <span class="n">add</span> <span class="o">&gt;&gt;</span> <span class="n">add</span> <span class="o">&gt;&gt;</span> <span class="n">add</span>
@@ -1184,7 +1171,7 @@
 
 
 <h4 id="stamox.core.pipe.make_partial_pipe" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_partial_pipe</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_partial_pipe</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.pipe.make_partial_pipe" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1240,7 +1227,8 @@
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nd">@make_partial_pipe</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">make_partial_pipe</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nd">@make_partial_pipe</span>
 <span class="o">...</span> <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="o">...</span>     <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">h</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -1270,7 +1258,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../../hypothesis/shapiro/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Shapiro Test" rel="prev">
+        <a href="../../hypothesis/friedman/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Friedman Test" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1279,7 +1267,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Shapiro Test
+              Friedman Test
             </div>
           </div>
         </a>

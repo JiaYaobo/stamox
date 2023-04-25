@@ -734,20 +734,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1094,7 +1080,7 @@
 
 
 <h4 id="stamox.regression.lm" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">regression</span><span class="o">.</span><span class="n">lm</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">formula</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">subset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">NA_action</span> <span class="o">=</span> <span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;qr&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; OLSState</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">regression</span><span class="o">.</span><span class="n">lm</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">pandas</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span> <span class="n">formula</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">subset</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">NA_action</span> <span class="o">=</span> <span class="s1">&#39;drop&#39;</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;qr&#39;</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;) -&gt; OLSState</span></code>
 
 
 <a href="#stamox.regression.lm" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1153,8 +1139,8 @@
       <tr>
         <td><code>dtype</code></td>
         <td><code>jnp.float32</code></td>
-        <td><p>The data type to use for the linear model. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
+        <td><p>The data type to use for the linear model. Defaults to jnp.float_.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>
@@ -1174,7 +1160,7 @@
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.regression</span> <span class="kn">import</span> <span class="n">lm</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">lm</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>

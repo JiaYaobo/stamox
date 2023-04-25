@@ -785,20 +785,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1108,7 +1094,7 @@
 
 
 <h4 id="stamox.distribution.step_fun" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">step_fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ival</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">sorted</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">side</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;)</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">step_fun</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ival</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">sorted</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">side</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;)</span></code>
 
 
 <a href="#stamox.distribution.step_fun" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1161,8 +1147,8 @@
       <tr>
         <td><code>dtype</code></td>
         <td><code>jnp.dtype</code></td>
-        <td><p>The dtype of the output. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
+        <td><p>The dtype of the output. Defaults to jnp.float_.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>
@@ -1193,7 +1179,7 @@
 
 
 <h4 id="stamox.distribution.ecdf" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">ecdf</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">side</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="s1">&#39;&gt;) -&gt; Callable[..., ArrayLike]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">ecdf</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">side</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="o">&lt;</span><span class="k">class</span> <span class="err">&#39;</span><span class="nc">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="s1">&#39;&gt;) -&gt; Callable[..., ArrayLike]</span></code>
 
 
 <a href="#stamox.distribution.ecdf" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1228,8 +1214,8 @@
       <tr>
         <td><code>dtype</code></td>
         <td><code>jnp.dtype</code></td>
-        <td><p>The dtype of the output. Defaults to jnp.float32.</p></td>
-        <td><code>&lt;class &#39;jax.numpy.float32&#39;&gt;</code></td>
+        <td><p>The dtype of the output. Defaults to jnp.float_.</p></td>
+        <td><code>&lt;class &#39;jax.numpy.float64&#39;&gt;</code></td>
       </tr>
   </tbody>
 </table>

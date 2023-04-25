@@ -734,20 +734,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1108,7 +1094,7 @@
 
 
 <h4 id="stamox.core.jit.pipe_jit" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">pipe_jit</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">donate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">pipe_jit</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">donate</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.jit.pipe_jit" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1130,7 +1116,7 @@
   <tbody>
       <tr>
         <td><code>func</code></td>
-        <td><code>Callable[~P, ~T]</code></td>
+        <td><code>Callable[..., ~T]</code></td>
         <td><p>The function to create the functional from.</p></td>
         <td><code>None</code></td>
       </tr>
@@ -1158,13 +1144,13 @@
   </thead>
   <tbody>
     <tr>
-      <td><code>Callable[~P, ~T]</code></td>
+      <td><code>Callable[..., ~T]</code></td>
       <td><p>A callable that creates a functional from the given function.</p></td>
     </tr>
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">pipe_jit</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">pipe_jit</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">pipe_jit</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span>
@@ -1184,7 +1170,7 @@
 
 
 <h4 id="stamox.core.jit.partial_pipe_jit" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">partial_pipe_jit</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">partial_pipe_jit</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.jit.partial_pipe_jit" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1228,7 +1214,7 @@
   </thead>
   <tbody>
     <tr>
-      <td><code>Callable[~P, ~T]</code></td>
+      <td><code>Callable[..., ~T]</code></td>
       <td><p>a partial pipeable jitted functional from a given function.</p></td>
     </tr>
   </tbody>

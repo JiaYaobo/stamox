@@ -734,20 +734,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../hypothesis/shapiro/" class="md-nav__link">
-        Shapiro Test
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -1136,7 +1122,7 @@
 
 
 <h4 id="stamox.core.maps.pipe_vmap" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">pipe_vmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">:</span> <span class="n">Hashable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">pipe_vmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">:</span> <span class="n">Hashable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.maps.pipe_vmap" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1158,7 +1144,7 @@
   <tbody>
       <tr>
         <td><code>func</code></td>
-        <td><code>Callable[~P, ~T]</code></td>
+        <td><code>Callable[..., ~T]</code></td>
         <td><p>The function to be wrapped.</p></td>
         <td><code>None</code></td>
       </tr>
@@ -1182,7 +1168,7 @@
       </tr>
       <tr>
         <td><code>axis_size</code></td>
-        <td><code>int | None</code></td>
+        <td><code>int</code></td>
         <td><p>The size of the axis.</p></td>
         <td><code>None</code></td>
       </tr>
@@ -1204,13 +1190,13 @@
   </thead>
   <tbody>
     <tr>
-      <td><code>Callable[~P, ~T]</code></td>
+      <td><code>Callable[..., ~T]</code></td>
       <td><p>A callable that creates a functional from the given function.</p></td>
     </tr>
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">pipe_vmap</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">pipe_vmap</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">pipe_vmap</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span>
@@ -1230,7 +1216,7 @@
 
 
 <h4 id="stamox.core.maps.pipe_pmap" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">pipe_pmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">:</span> <span class="n">Hashable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">pipe_pmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">in_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">out_axes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis_name</span><span class="p">:</span> <span class="n">Hashable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">axis_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.maps.pipe_pmap" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1276,7 +1262,7 @@
       </tr>
       <tr>
         <td><code>axis_size</code></td>
-        <td><code>int | None</code></td>
+        <td><code>int </code></td>
         <td><p>The size of the axis.</p></td>
         <td><code>None</code></td>
       </tr>
@@ -1304,7 +1290,7 @@
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">pipe_pmap</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">pipe_pmap</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">pipe_pmap</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">f</span>
@@ -1324,7 +1310,7 @@
 
 
 <h4 id="stamox.core.maps.partial_pipe_vmap" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">partial_pipe_vmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">partial_pipe_vmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.maps.partial_pipe_vmap" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1374,7 +1360,7 @@
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">partial_pipe_vmap</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">partial_pipe_vmap</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">partial_pipe_vmap</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -1394,7 +1380,7 @@
 
 
 <h4 id="stamox.core.maps.partial_pipe_pmap" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">partial_pipe_pmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">~</span><span class="n">P</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">maps</span><span class="o">.</span><span class="n">partial_pipe_pmap</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">T</span><span class="p">]</span></code>
 
 
 <a href="#stamox.core.maps.partial_pipe_pmap" class="headerlink" title="Permanent link">¤</a></h4>
@@ -1444,7 +1430,7 @@
   </tbody>
 </table>
 <p><strong>Examples:</strong></p>
-    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.core</span> <span class="kn">import</span> <span class="n">partial_pipe_pmap</span>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox</span> <span class="kn">import</span> <span class="n">partial_pipe_pmap</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">f</span> <span class="o">=</span> <span class="n">partial_pipe_pmap</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">g</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="n">f</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
