@@ -20,6 +20,7 @@ from .core import (
     summary,
 )
 from .correlation import cor, pearsonr, spearmanr
+from .decomposition import princomp
 from .distribution import (
     dbeta,
     dbinom,
@@ -177,4 +178,5 @@ __all__ = [
     "cumprod",
     "diff",
     "scale",
+    "princomp",
 ]

@@ -10,6 +10,7 @@ from .core import (
     summary,
 )
 from .correlation import cor, pearsonr, spearmanr
+from .decomposition import princomp
 from .distribution import (
     dbeta,
     dbinom,
@@ -166,8 +167,7 @@ cumsum = make_partial_pipe(jnp.cumsum, "cumsum")
 cumprod = make_partial_pipe(jnp.cumprod, "cumprod")
 diff = make_partial_pipe(jnp.diff, "diff")
 scale = make_partial_pipe(scale, "scale")
-
-
+princomp = make_partial_pipe(princomp, "princomp")
 
 __all__ = [
     "one_way",
@@ -257,4 +257,5 @@ __all__ = [
     "cumprod",
     "diff",
     "scale",
+    "princomp",
 ]
