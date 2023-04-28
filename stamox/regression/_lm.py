@@ -230,7 +230,7 @@ def _fit_lm(X, y, method, X_names=None, y_names=None):
         D = D.at[:in_features, :in_features].set(jnp.diag(1 / S))
         X_pinv = Vt.T @ D.T @ U.T
     else:
-        raise NotImplementedError("Not Implemented")
+        raise NotImplementedError(f"Not Implemented method {method}")
     coefs = X_pinv @ y
     _coefs_std = jnp.sqrt(jnp.diag(X_pinv @ X_pinv.T)).reshape(-1, 1)
     _fitted_values = X @ coefs

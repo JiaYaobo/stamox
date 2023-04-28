@@ -69,7 +69,7 @@ def bootstrap(
     Example:
         >>> import jax.numpy as jnp
         >>> import jax.random as jrandom
-        >>> from stamox.sample import bootstrap
+        >>> from stamox.functions import bootstrap
         >>> data = jnp.arange(10)
         >>> bootstrap(data, jnp.mean, 3, key=key)
         Array([5.7000003, 3.9      , 4.6      ], dtype=float32)

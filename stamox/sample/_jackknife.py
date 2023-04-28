@@ -52,7 +52,7 @@ def jackknife(data: ArrayLike, call: Callable[..., ReturnValue]) -> PyTree:
 
     Example:
         >>> import jax.numpy as jnp
-        >>> from stamox.sample import jackknife
+        >>> from stamox.functions import jackknife
         >>> data = jnp.arange(3)
         >>> jackknife(data, lambda x: jnp.mean(x))
         Array([1.5, 1. , 0.5], dtype=float32)
