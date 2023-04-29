@@ -18,7 +18,7 @@
     
     
       
-        <title>Friedman Test - Stamox</title>
+        <title>PCA Method - Stamox</title>
       
     
     
@@ -77,7 +77,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#friedman-test" class="md-skip">
+        <a href="#pca-method" class="md-skip">
           Skip to content
         </a>
       
@@ -109,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Friedman Test
+              PCA Method
             
           </span>
         </div>
@@ -441,12 +441,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" checked>
       
       
       
@@ -467,11 +469,53 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../decomposition/pca/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          PCA Method
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         PCA Method
       </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stamox.decomposition.princomp" class="md-nav__link">
+    princomp()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -717,14 +761,12 @@
               
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_6" type="checkbox" id="__nav_3_6" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_6" type="checkbox" id="__nav_3_6" >
       
       
       
@@ -747,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../bartlett/" class="md-nav__link">
+      <a href="../../hypothesis/bartlett/" class="md-nav__link">
         Bartlett Test
       </a>
     </li>
@@ -761,7 +803,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../durbin_watson/" class="md-nav__link">
+      <a href="../../hypothesis/durbin_watson/" class="md-nav__link">
         Durbin-Watson Test
       </a>
     </li>
@@ -773,60 +815,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Friedman Test
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../hypothesis/friedman/" class="md-nav__link">
         Friedman Test
       </a>
-      
-        
-
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#stamox.hypothesis.friedman_test" class="md-nav__link">
-    friedman_test()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stamox.hypothesis.FriedmanTest" class="md-nav__link">
-    FriedmanTest
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1103,15 +1096,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stamox.hypothesis.friedman_test" class="md-nav__link">
-    friedman_test()
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stamox.hypothesis.FriedmanTest" class="md-nav__link">
-    FriedmanTest
+  <a href="#stamox.decomposition.princomp" class="md-nav__link">
+    princomp()
   </a>
   
 </li>
@@ -1128,27 +1114,27 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/jiayaobo/stamox/edit/master/docs/api/hypothesis/friedman.md" title="Edit this page" class="md-content__button md-icon">
+                  <a href="https://github.com/jiayaobo/stamox/edit/master/docs/api/decomposition/pca.md" title="Edit this page" class="md-content__button md-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
                   </a>
                 
                 
-                <h1 id="friedman-test">Friedman Test<a class="headerlink" href="#friedman-test" title="Permanent link">¤</a></h1>
+                <h1 id="pca-method">PCA Method<a class="headerlink" href="#pca-method" title="Permanent link">¤</a></h1>
 
 
   <div class="doc doc-object doc-function">
 
 
 
-<h4 id="stamox.hypothesis.friedman_test" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">hypothesis</span><span class="o">.</span><span class="n">friedman_test</span><span class="p">(</span><span class="o">*</span><span class="n">samples</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FriedmanTest</span></code>
+<h4 id="stamox.decomposition.princomp" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">stamox</span><span class="o">.</span><span class="n">decomposition</span><span class="o">.</span><span class="n">princomp</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">n_components</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PCAState</span></code>
 
 
-<a href="#stamox.hypothesis.friedman_test" class="headerlink" title="Permanent link">¤</a></h4>
+<a href="#stamox.decomposition.princomp" class="headerlink" title="Permanent link">¤</a></h4>
 
     <div class="doc doc-contents first">
 
-      <p>Computes the Friedman statistic for a set of samples.</p>
+      <p>Performs principal component analysis (PCA) on the given array.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -1162,11 +1148,16 @@
   </thead>
   <tbody>
       <tr>
-        <td><code>*samples</code></td>
-        <td><code>Sequence[ArrayLike]</code></td>
-        <td><p>A sequence of samples, each sample being a sequence of
-observations.</p></td>
-        <td><code>()</code></td>
+        <td><code>x</code></td>
+        <td><code>ArrayLike</code></td>
+        <td><p>The input array of shape (n_samples, n_features).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>n_components</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of components to keep.</p></td>
+        <td><em>required</em></td>
       </tr>
   </tbody>
 </table>
@@ -1180,64 +1171,20 @@ observations.</p></td>
   </thead>
   <tbody>
     <tr>
-      <td><code>FriedmanTest</code></td>
-      <td><p>The Friedman Test object.</p></td>
+      <td><code>PCAState</code></td>
+      <td><p>A namedtuple containing the results of the PCA.</p></td>
     </tr>
   </tbody>
 </table>
-    </div>
-
-  </div>
-
-<hr />
-
-
-  <div class="doc doc-object doc-class">
-
-
-
-<h4 id="stamox.hypothesis.FriedmanTest" class="doc doc-heading">
-        <code>
-stamox.hypothesis.FriedmanTest        </code>
-
-
-
-<a href="#stamox.hypothesis.FriedmanTest" class="headerlink" title="Permanent link">¤</a></h4>
-
-    <div class="doc doc-contents first">
-
-      <p>Class for performing Friedman Rank Sum Test.</p>
-<p>This class is a subclass of HypoTest and provides methods to perform the 
-Friedman Rank Sum Test.</p>
-
-<p><strong>Attributes:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>statistic</code></td>
-        <td><code>float</code></td>
-        <td><p>The test statistic.</p></td>
-      </tr>
-      <tr>
-        <td><code>parameters</code></td>
-        <td><code>tuple</code></td>
-        <td><p>Parameters of the distribution.</p></td>
-      </tr>
-      <tr>
-        <td><code>p_value</code></td>
-        <td><code>float</code></td>
-        <td><p>The p-value of the test.</p></td>
-      </tr>
-  </tbody>
-</table>
-
+<p><strong>Examples:</strong></p>
+    <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">import</span> <span class="nn">jax.numpy</span> <span class="k">as</span> <span class="nn">jnp</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">stamox.functions</span> <span class="kn">import</span> <span class="n">princomp</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">X</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">pca_state</span> <span class="o">=</span> <span class="n">princomp</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">pca_state</span><span class="o">.</span><span class="n">components</span>
+<span class="n">Array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.8384922</span><span class="p">,</span>  <span class="mf">0.5449136</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">0.5449136</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8384922</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+</code></pre></div>
 
     </div>
 
@@ -1261,7 +1208,7 @@ Friedman Rank Sum Test.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../durbin_watson/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Durbin-Watson Test" rel="prev">
+        <a href="../../correlation/correlations/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Correlations API" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1270,20 +1217,20 @@ Friedman Rank Sum Test.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Durbin-Watson Test
+              Correlations API
             </div>
           </div>
         </a>
       
       
         
-        <a href="../../pipe/pipe/" class="md-footer__link md-footer__link--next" aria-label="Next: Make A Function That Can Be Piped" rel="next">
+        <a href="../../distribution/beta/" class="md-footer__link md-footer__link--next" aria-label="Next: Beta Distribution" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Make A Function That Can Be Piped
+              Beta Distribution
             </div>
           </div>
           <div class="md-footer__button md-icon">
