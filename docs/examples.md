@@ -34,7 +34,8 @@ pdf = dnorm(q)
 
 ```python
 import jax.numpy as jnp
-from stamox.pipe_functions import lm
+from stamox import Pipeable
+from stamox.pipe_functions import lm, summary
 
 X = np.random.uniform(size=(1000, 3))
 y = 3 * X[:, 0] + 2 * X[:, 1] - 7 * X[:, 2] + 1.0
@@ -45,6 +46,8 @@ data = pd.DataFrame(
 res = lm(data, "y ~ x1 + x2 + x3")
 # or
 res  = (Pipeable(data) >> lm("y ~ x1 + x2 + x3"))()
+
+summary(res)
 ```
 
 ## KMeans Cluster

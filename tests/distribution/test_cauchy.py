@@ -2,9 +2,6 @@
 import jax.numpy as jnp
 import jax.random as jrand
 import numpy as np
-from absl.testing import absltest
-from jax import config
-from jax._src import test_util as jtest
 from scipy.stats import cauchy
 
 import stamox.pipe_functions as PF
