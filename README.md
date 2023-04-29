@@ -85,22 +85,6 @@ state = pipe(key)
 print(state.params)
 ```
 
-### Linear Regression with Formula
-
-```python
-import pandas as pd
-import numpy as np
-from stamox.functions import lm # or from stamox.pipe_functions import lm
-
-
-x = np.random.uniform(size=(1000, 3))
-y = 2 * x[:,0] + 3 * x[:,1] + 4 * x[:,2] + np.random.normal(size=1000)
-df = pd.DataFrame(x, columns=['x1', 'x2', 'x3'])
-df['y'] = y
-
-lm(df, 'y~x1+x2+x3').params
-```
-
 * Custom Functions Pipeable
 
 ```python
@@ -158,6 +142,22 @@ def f(x):
 
 g = f >> f >> f
 print(g(jnp.array([1, 2, 3])))
+```
+
+### Linear Regression with Formula
+
+```python
+import pandas as pd
+import numpy as np
+from stamox.functions import lm # or from stamox.pipe_functions import lm
+
+
+x = np.random.uniform(size=(1000, 3))
+y = 2 * x[:,0] + 3 * x[:,1] + 4 * x[:,2] + np.random.normal(size=1000)
+df = pd.DataFrame(x, columns=['x1', 'x2', 'x3'])
+df['y'] = y
+
+lm(df, 'y~x1+x2+x3').params
 ```
 
 ## Acceleration Support
