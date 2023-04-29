@@ -13,6 +13,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -54,12 +55,11 @@ def plaplace(
 
     Example:
         >>> plaplace(1.0, 1.0, 1.0)
-        Array([0.5], dtype=float32, weak_type=True)
+        Array(0.5, dtype=float32, weak_type=True)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q)
-    p = filter_vmap(_plaplace)(q, loc, scale)
+    p = svmap_(_plaplace, q, loc, scale)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -90,12 +90,11 @@ def dlaplace(
 
     Example:
         >>> dlaplace(1.0, 1.0, 1.0)
-        Array([0.], dtype=float32, weak_type=True)
+        Array(0., dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x)
-    grads = filter_vmap(_dlaplace)(x, loc, scale)
+    grads = svmap_(_dlaplace, x, loc, scale)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -137,12 +136,11 @@ def qlaplace(
 
     Example:
         >>> qlaplace(0.5, 1.0, 1.0)
-        Array([1.], dtype=float32, weak_type=True)
+        Array(1., dtype=float32, weak_type=True)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    return filter_vmap(_qlaplace)(p, loc, scale)
+    return svmap_(_qlaplace, p, loc, scale)
 
 
 @filter_jit
@@ -190,8 +188,5 @@ def rlaplace(
 
     """
     rvs = _rlaplace(key, loc, scale, sample_shape, dtype=dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs

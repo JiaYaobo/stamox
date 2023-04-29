@@ -1,7 +1,7 @@
 from typing import Optional
 
 import jax.numpy as jnp
-from equinox import filter_jit, filter_vmap
+from equinox import filter_jit
 from jax import pure_callback, ShapeDtypeStruct
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Bool
@@ -13,6 +13,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -52,9 +53,8 @@ def pbinom(
         >>> pbinom(q, size, prob)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, 0, size)
-    p = filter_vmap(_pbinom)(q, size, prob)
+    p = svmap_(_pbinom, q, size, prob)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -95,8 +95,7 @@ def dbinom(
         >>> dbinom(q, size, prob)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
-    d = filter_vmap(_dbinom)(q, size, prob)
+    d = svmap_(_dbinom, q, size, prob)
     d = _post_process(d, lower_tail, log_prob)
     return d
 
@@ -139,9 +138,8 @@ def qbinom(
     if dtype is None:
         dtype = jnp.int_
     p = jnp.asarray(p, dtype=jnp.float_)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    q = filter_vmap(_qbinom)(p, size, prob, dtype)
+    q = _qbinom(p, size, prob, dtype)
     return q
 
 

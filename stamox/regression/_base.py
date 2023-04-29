@@ -50,7 +50,7 @@ class RegState(StateFunc):
 
     @property
     def coefs(self):
-        return self._coefs
+        return self._coefs.ravel()
 
     @property
     def coefs_X(self):

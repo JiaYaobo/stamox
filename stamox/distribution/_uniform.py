@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import jax.numpy as jnp
 import jax.random as jrand
-from equinox import filter_grad, filter_jit, filter_vmap
+from equinox import filter_grad, filter_jit
 from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Bool, Float
@@ -11,6 +11,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -50,11 +51,10 @@ def punif(
 
     Example:
         >>> punif(0.5)
-        Array([0.5], dtype=float32, weak_type=True)
+        Array(0.5, dtype=float32, weak_type=True)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
-    p = filter_vmap(_punif)(q, mini, maxi)
+    p = svmap_(_punif, q, mini, maxi)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -85,15 +85,11 @@ def dunif(
 
     Example:
         >>> dunif(0.5)
-        Array([1.], dtype=float32, weak_type=True)
+        Array(1., dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
-    p = filter_vmap(_dunif)(x, mini, maxi)
-    if not lower_tail:
-        p = 1 - p
-    if log_prob:
-        p = jnp.log(p)
+    p = svmap_(_dunif, x, mini, maxi)
+    p = _post_process(p, lower_tail, log_prob)
     return p
 
 
@@ -132,12 +128,11 @@ def qunif(
 
     Example:
         >>> qunif(0.5)
-        Array([0.5], dtype=float32, weak_type=True)
+        Array(0.5, dtype=float32, weak_type=True)
     """
     p = jnp.asarray(p, dtype=dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    q = filter_vmap(_qunif)(p, mini, maxi)
+    q = svmap_(_qunif, p, mini, maxi)
     return q
 
 

@@ -13,6 +13,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -52,12 +53,11 @@ def pcauchy(
 
     Example:
         >>> pcauchy(1.0, loc=0.0, scale=1.0, lower_tail=True, log_prob=False)
-        Array([0.75], dtype=float32, weak_type=True)
+        Array(0.75, dtype=float32, weak_type=True)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q)
-    p = filter_vmap(_pcauchy)(q, loc, scale)
+    p = svmap_(_pcauchy, q, loc, scale)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -91,9 +91,8 @@ def dcauchy(
         Array([0.15915494], dtype=float32, weak_type=True)
     """
     x, dtype = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x)
-    grads = filter_vmap(_dcauchy)(x, loc, scale)
+    grads = svmap_(_dcauchy, x, loc, scale)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -136,9 +135,8 @@ def qcauchy(
         Array([1.], dtype=float32, weak_type=True)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_probability(q, lower_tail, log_prob)
-    return filter_vmap(_qcauchy)(q, loc, scale)
+    return svmap_(_qcauchy, q, loc, scale)
 
 
 @filter_jit

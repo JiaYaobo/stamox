@@ -45,7 +45,7 @@ class FriedmanTest(HypoTest):
         return f"{self.name}(statistic={self.statistic}, parameters={self.parameters}, p_value={self.p_value})"
 
 
-def friedman_test(*samples: Sequence[ArrayLike]) -> FriedmanTest:
+def friedman_test(*samples: Sequence[ArrayLike], axis=0) -> FriedmanTest:
     """Computes the Friedman statistic for a set of samples.
 
     Args:
@@ -57,11 +57,11 @@ def friedman_test(*samples: Sequence[ArrayLike]) -> FriedmanTest:
     """
     ImportWarning("This function is not yet functioned with ties. Use with caution.")
     samples = jnp.vstack(samples).T
-    return _friedman(samples)
+    return _friedman(samples, axis)
 
 
 @filter_jit
-def _friedman(samples):
+def _friedman(samples, axis):
     """Computes the Friedman statistic for a set of samples.
 
     Args:
@@ -72,11 +72,12 @@ def _friedman(samples):
         The computed Friedman statistic.
     """
     n_blocks, k_treatments = samples.shape
-    ranks = vmap(lambda x: rankdata(x))(samples)
-    avg_ranks = jnp.mean(ranks, axis=0)
+    ranks = vmap(lambda x: rankdata(x), in_axes=(axis, ))(samples)
+    avg_ranks = jnp.mean(ranks, axis=axis)
     Q = 12.0 * n_blocks / (k_treatments * (k_treatments + 1)) * jnp.sum(
-        avg_ranks**2, axis=0, keepdims=True
+        avg_ranks**2, axis=axis, keepdims=True
     ) - 3 * n_blocks * (k_treatments + 1)
+    Q = Q.squeeze()
     param = k_treatments - 1
     pval = pchisq(Q, param, lower_tail=False)
     return FriedmanTest(statistic=Q, parameters=param, p_value=pval)

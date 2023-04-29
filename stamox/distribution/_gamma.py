@@ -3,7 +3,7 @@ from typing import Optional, Union
 import jax.numpy as jnp
 import jax.random as jrand
 import tensorflow_probability.substrates.jax.math as tfp_math
-from equinox import filter_grad, filter_jit, filter_vmap
+from equinox import filter_grad, filter_jit
 from jax import lax
 from jax._src.random import KeyArray, Shape
 from jax.scipy.special import gammainc
@@ -14,6 +14,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -47,12 +48,11 @@ def pgamma(
 
     Example:
         >>> pgamma(1.0, 0.5, 0.5)
-        Array([0.6826893], dtype=float32, weak_type=True)
+        Array(0.6826893, dtype=float32, weak_type=True)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, 0.0, jnp.inf)
-    p = filter_vmap(_pgamma)(q, shape, rate)
+    p = svmap_(_pgamma, q, shape, rate)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -89,12 +89,11 @@ def dgamma(
 
     Example:
         >>> dgamma(1.0, 0.5, 0.5)
-        Array([0.24197064], dtype=float32, weak_type=True)
+        Array(0.24197064, dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x, 0.0, jnp.inf)
-    grads = filter_vmap(_dgamma)(x, shape, rate)
+    grads = svmap_(_dgamma, x, shape, rate)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -137,9 +136,8 @@ def qgamma(
         Array([0.45493677], dtype=float32)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    x = filter_vmap(_qgamma)(p, shape, rate)
+    x = svmap_(_qgamma, p, shape, rate)
     return x
 
 
@@ -171,10 +169,7 @@ def rgamma(
         Array(0.3384059, dtype=float32)
     """
     rvs = _rgamma(key, shape, rate, sample_shape, dtype=dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs
 
 

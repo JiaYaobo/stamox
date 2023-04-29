@@ -12,6 +12,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -47,12 +48,11 @@ def ppareto(
 
     Example:
         >>> ppareto(0.2, 0.1, 2.0)
-        Array([0.75], dtype=float32, weak_type=True)
+        Array(0.75, dtype=float32, weak_type=True)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
-    q = filter_vmap(_check_clip_distribution_domain)(q, scale)
-    p = filter_vmap(_ppareto)(q, scale, alpha)
+    q = svmap_(_check_clip_distribution_domain, q, scale)
+    p = svmap_(_ppareto, q, scale, alpha)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -86,8 +86,7 @@ def dpareto(
         Array([2.4999998], dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
-    grads = filter_vmap(_dpareto)(x, scale, alpha)
+    grads = svmap_(_dpareto, x, scale, alpha)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -127,9 +126,8 @@ def qpareto(
         Array([0.1118034], dtype=float32, weak_type=True)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    return filter_vmap(_qpareto)(p, scale, alpha)
+    return svmap_(_qpareto, p, scale, alpha)
 
 
 @filter_jit

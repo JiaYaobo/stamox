@@ -14,6 +14,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -57,15 +58,14 @@ def pnorm(
 
     Examples:
         >>> pnorm(2.0)
-        Array([0.97724986], dtype=float32)
+        Array(0.97724986, dtype=float32)
 
         >>> pnorm([1.5, 2.0, 2.5], mean=2.0, sd=0.5, lower_tail=False)
         Array([0.8413447 , 0.5       , 0.15865529], dtype=float32)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q)
-    p = filter_vmap(_pnorm)(q, mean, sd)
+    p = svmap_(_pnorm, q, mean, sd)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -102,9 +102,8 @@ def dnorm(
         Array([0.35206532, 0.24197075, 0.12951761], dtype=float32)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x)
-    grads = filter_vmap(_dnorm)(x, mean, sd)
+    grads = svmap_(_dnorm, x, mean, sd)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -151,9 +150,8 @@ def qnorm(
         Array([1.6510204, 4.3489795], dtype=float32)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    x = filter_vmap(_qnorm)(p, mean, sd)
+    x = svmap_(_qnorm, p, mean, sd)
     return x
 
 
@@ -199,10 +197,5 @@ def rnorm(
 
     """
     rvs = _rnorm(key, mean, sd, sample_shape, dtype=dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-
-    if log_prob:
-        rvs = jnp.log(rvs)
-
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs

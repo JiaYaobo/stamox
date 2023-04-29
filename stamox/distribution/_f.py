@@ -12,6 +12,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -49,12 +50,11 @@ def pF(
 
     Example:
         >>> pF(1.0, 1.0, 1.0)
-        Array([0.5000001], dtype=float32, weak_type=True)
+        Array(0.5000001, dtype=float32, weak_type=True)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, 0)
-    p = filter_vmap(_pf)(q, dfn, dfd)
+    p = svmap_(_pf, q, dfn, dfd)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -85,12 +85,11 @@ def dF(
 
     Example:
         >>> dF(1.0, 1.0, 1.0)
-        Array([0.1591549], dtype=float32, weak_type=True)
+        Array(0.1591549, dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x, 0)
-    grads = filter_vmap(_df)(x, dfn, dfd)
+    grads = svmap_(_df, x, dfn, dfd)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -132,9 +131,8 @@ def qF(
         Array([0.99999714], dtype=float32)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    return filter_vmap(_qf)(p, dfn, dfd)
+    return svmap_(_qf, p, dfn, dfd)
 
 
 @filter_jit

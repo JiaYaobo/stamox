@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import jax.numpy as jnp
 import jax.random as jrand
-from equinox import filter_jit, filter_vmap
+from equinox import filter_jit
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float, Int
 
@@ -12,6 +12,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -36,12 +37,11 @@ def dchisq(
 
     Example:
         >>> dchisq(2.0, 3)
-        Array([0.20755368], dtype=float32, weak_type=True)
+        Array(0.20755368, dtype=float32, weak_type=True)
     """
     x, dtype = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x, 0.0, jnp.inf)
-    grads = filter_vmap(_dgamma)(x, df / 2, 1 / 2)
+    grads = svmap_(_dgamma, x, df / 2, 1 / 2)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -67,12 +67,11 @@ def pchisq(
 
     Example:
         >>> pchisq(2.0, 3)
-        Array([0.42759317], dtype=float32, weak_type=True)
+        Array(0.42759317, dtype=float32, weak_type=True)
     """
     q = jnp.asarray(q, dtype=dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, 0.0, jnp.inf)
-    p = filter_vmap(_pgamma)(q, df / 2, 1 / 2)
+    p = svmap_(_pgamma, q, df / 2, 1 / 2)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -98,12 +97,11 @@ def qchisq(
 
     Example:
         >>> qchisq(0.95, 10)
-        Array([18.307034], dtype=float32)
+        Array(18.307034, dtype=float32)
     """
     p = jnp.asarray(p, dtype=dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    q = filter_vmap(_qgamma)(p, df / 2, 1 / 2)
+    q = svmap_(_qgamma, p, df / 2, 1 / 2)
     return q
 
 

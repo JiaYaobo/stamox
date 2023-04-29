@@ -44,39 +44,7 @@ class OneWayAnovaTest(HypoTest):
         self.ms_within = ms_within
 
     def _summary(self):
-        template = """
-                    ------------------------------
-                    One-Way ANOVA Test Report
-                    ------------------------------
-
-                    Summary Statistics:
-                    Number of samples analyzed: {}
-
-                    Hypothesis Test:
-                    Null Hypothesis (H0): "Groups are equal."
-                    Alternative Hypothesis (H1): "Groups are not equal."
-
-                    ANOVA Table:
-                     Source    DF     SS         MS         F        P-value 
-                    ---------------------------------------------------------
-                     Between  {}     {:.3f}     {:.3f}     {:.3f}   {:.3f}   
-                     Within   {}     {:.3f}     {:.3f}                       
-                     Total    {}     {:.3f}                                    
-                    """
-
-        return template.format(
-            self.df_tol + 1,
-            self.df_between,
-            self.ss_between,
-            self.ms_between,
-            self.statistic,
-            self.p_value,
-            self.df_within,
-            self.ss_within,
-            self.ms_within,
-            self.df_tol,
-            self.ss_total,
-        )
+        raise NotImplementedError
 
 
 @partial(jit, static_argnames=("axis"))
@@ -152,10 +120,11 @@ def _one_way(samples, ngroups, axis=0):
 
     # F-ratio
     f = msb / msw
+    f = f.squeeze(axis=axis)
     prob = 1 - pF(f, dfbn, dfwn)
     return OneWayAnovaTest(
-        statistic=f[0],
-        p_value=prob[0],
+        statistic=f,
+        p_value=prob,
         df_between=dfbn,
         df_within=dfwn,
         df_total=N - 1,

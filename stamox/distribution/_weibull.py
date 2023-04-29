@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import jax.numpy as jnp
 import jax.random as jrand
-from equinox import filter_grad, filter_jit, filter_vmap
+from equinox import filter_grad, filter_jit
 from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float
@@ -12,6 +12,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -53,9 +54,8 @@ def pweibull(
         >>> pweibull(1.0, concentration=1.0, scale=1.0)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, lower=0.0)
-    p = filter_vmap(_pweibull)(q, concentration, scale)
+    p = svmap_(_pweibull, q, concentration, scale)
     p = _post_process(p, lower_tail=lower_tail, log_prob=log_prob)
     return p
 
@@ -84,9 +84,8 @@ def dweibull(
         >>> dweibull(0.5, 1.0, 1.0)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x, lower=0.0)
-    grads = filter_vmap(_dweibull)(x, concentration, scale)
+    grads = svmap_(_dweibull, x, concentration, scale)
     grads = _post_process(grads, lower_tail=lower_tail, log_prob=log_prob)
     return grads
 
@@ -133,9 +132,8 @@ def qweibull(
         >>> qweibull(0.5, 1.0, 1.0)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    q = filter_vmap(_qweibull)(p, concentration, scale)
+    q = svmap_(_qweibull, p, concentration, scale)
     return q
 
 

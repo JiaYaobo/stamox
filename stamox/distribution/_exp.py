@@ -12,6 +12,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -41,12 +42,11 @@ def pexp(
 
     Example:
         >>> pexp(1.0, 0.5)
-        Array([0.39346933], dtype=float32, weak_type=True)
+        Array(0.39346933, dtype=float32, weak_type=True)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, 0)
-    p = filter_vmap(_pexp)(q, rate)
+    p = svmap_(_pexp, q, rate)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -82,9 +82,8 @@ def qexp(
         Array([0.6931472], dtype=float32, weak_type=True)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    x = filter_vmap(_qexp)(p, rate)
+    x = svmap_(_qexp, p, rate)
     return x
 
 
@@ -115,9 +114,8 @@ def dexp(
         Array([0.30326533], dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x, 0)
-    grads = filter_vmap(_dexp)(x, rate)
+    grads = svmap_(_dexp, x, rate)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -163,8 +161,5 @@ def rexp(
                [-0.69314718, -0.69314718, -0.69314718]], dtype=float32)
     """
     rvs = _rexp(key, rate, sample_shape, dtype)
-    if not lower_tail:
-        rvs = 1 - rvs
-    if log_prob:
-        rvs = jnp.log(rvs)
+    rvs = _post_process(rvs, lower_tail, log_prob)
     return rvs
