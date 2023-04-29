@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import jax.numpy as jnp
 import jax.random as jrand
-from equinox import filter_jit, filter_vmap
+from equinox import filter_jit
 from jax import pure_callback, ShapeDtypeStruct
 from jax._src.random import Shape
 from jax.random import KeyArray
