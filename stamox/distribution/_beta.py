@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 import jax.numpy as jnp
 import jax.random as jrand
-from equinox import filter_grad, filter_jit, filter_vmap
+from equinox import filter_grad, filter_jit
 from jax import lax
 from jax._src.random import KeyArray, Shape
 from jaxtyping import ArrayLike, Float
@@ -13,6 +13,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -55,9 +56,8 @@ def pbeta(
         Array([0.05230004, 0.68749976, 0.9963    ], dtype=float32)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, 0.0, 1.0)
-    p = filter_vmap(_pbeta)(q, a, b)
+    p = svmap_(_pbeta, q, a, b)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -88,12 +88,11 @@ def dbeta(
 
     Example:
         >>> dbeta(0.5, 2, 3, lower_tail=True, log_prob=False)
-        Array([1.4999996], dtype=float32, weak_type=True)
+        Array(1.4999996, dtype=float32, weak_type=True)
     """
     x, dtype = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x, 0.0, 1.0)
-    d = filter_vmap(_dbeta)(x, a, b)
+    d = svmap_(_dbeta, x, a, b)
     d = _post_process(d, lower_tail, log_prob)
     return d
 
@@ -130,12 +129,11 @@ def qbeta(
 
     Example:
         >>> qbeta(0.5, 2, 3)
-        Array([0.38572744], dtype=float32)
+        Array(0.38572744, dtype=float32)
     """
     p, dtype = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail=lower_tail, log_prob=log_prob)
-    x = filter_vmap(_qbeta)(p, a, b)
+    x = svmap_(_qbeta, p, a, b)
     return x
 
 

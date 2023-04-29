@@ -3,6 +3,7 @@ from typing import List, Tuple, Union
 import equinox as eqx
 import jax.numpy as jnp
 import numpy as np
+from jax import vmap
 from jaxtyping import ArrayLike
 from pandas import DataFrame
 
@@ -52,7 +53,11 @@ class OLSState(RegState):
             dtype=dtype,
             name=name,
         )
+        if X_names is None:
+            X_names = ["Intercept"] + [f"X{i}" for i in range(in_features)]
         self._X_names = X_names
+        if y_names is None:
+            y_names = [f"y{i}" for i in range(out_features)]
         self._y_names = y_names
         self._SSE = SSE
         self._SSR = SSR
@@ -80,19 +85,19 @@ class OLSState(RegState):
         return self._SST
 
     @property
-    def F_value(self):
+    def f_value(self):
         return (self.SSR / self._df_model) / (self.SSE / self._df_resid)
 
     @property
-    def F_pvalue(self):
-        return 1 - pF(self.F_value, self._df_model, self._df_resid, dtype=self.dtype)
+    def f_pvalue(self):
+        return 1 - pF(self.f_value, self._df_model, self._df_resid, dtype=self.dtype)
 
     @property
-    def R2(self):
+    def r2(self):
         return self.SSR / self.SST
 
     @property
-    def R2_adj(self):
+    def r2_adj(self):
         return 1 - (self.SSE / self._df_resid) / (self.SST / (self._n_obs - 1))
 
     @property
@@ -100,15 +105,15 @@ class OLSState(RegState):
         return self._coef_std
 
     @property
-    def StdErr(self):
-        return self.coef_std * self.resid_stderr
+    def std_err(self):
+        return jnp.dot(self.coef_std, self.resid_stderr).ravel()
 
     @property
     def t_values(self):
-        return jnp.divide(self.coefs, self.StdErr)
+        return jnp.divide(self.coefs.ravel(), self.std_err.ravel())
 
     @property
-    def t_pvalues(self):
+    def p_values(self):
         return (
             pt(
                 jnp.abs(self.t_values),
@@ -122,6 +127,64 @@ class OLSState(RegState):
     @property
     def resid_stderr(self):
         return jnp.sqrt(self.SSE / self.df_resid)
+
+    @property
+    def confint(self):
+        rec = jnp.array([-1, 1]) * pt(0.975, self.df_resid, dtype=self.dtype)
+        return vmap(lambda c, ci, z: c + ci * z, in_axes=(0, 0, None))(
+            self.coefs,
+            self.std_err,
+            rec,
+        )
+
+    def _summary(self):
+        summary_header = """
+        Linear Regression Model Summary
+        --------------------------------------------
+
+        R-squared:          {r_sq:.4f}
+        Adjusted R-squared: {adj_r_sq:.4f}
+        F-statistic:        {f_value:.4f} on {df_model} and {df_resid} DF, p-value: {f_pvalue:.4f}
+        SSE :               {SSE:.4f}
+        SSR :               {SSR:.4f}
+        Coefficients:
+        {:<14} {:>10} {:>10} {:>10} {:>10} {:>10} {:>10}
+        """.format(
+            "",
+            "Estimate",
+            "Std.Error",
+            "t-value",
+            "p-value",
+            "0.025",
+            "0.975",
+            r_sq=self.r2,
+            adj_r_sq=self.r2_adj,
+            f_value=self.f_value,
+            df_model=self.df_model,
+            df_resid=self.df_resid,
+            f_pvalue=self.f_pvalue,
+            SSE=self.SSE,
+            SSR=self.SSR,
+        )  # noqa: E501
+        print(summary_header)
+        new_line = "        " + "-" * 80
+        print(new_line)
+        for i, name in enumerate(self.X_names):
+            p_value_formatted = (
+                f"{self.p_values[i]:.4f}"
+                if self.p_values[i] >= 0.001
+                else f"{self.p_values[i]:.1e}"
+            )
+            summary_row = "        {:<14} {:>10.4f} {:>10.4f} {:>10.4f} {:>10} {:>10.4f} {:>10.4f}".format(
+                name,
+                self.coefs[i],
+                self.std_err[i],
+                self.t_values[i],
+                p_value_formatted,
+                self.confint[i, 0],
+                self.confint[i, 1],
+            )
+            print(summary_row)
 
 
 def lm(
@@ -142,7 +205,7 @@ def lm(
         weights (array-like, optional): An array of weights to apply to the data. Defaults to None.
         NA_action (str, optional): The action to take when encountering missing values. Defaults to "drop".
         method (str, optional): The method to use for fitting the linear model. Defaults to "qr".
-        dtype (jnp.float32, optional): The data type to use for the linear model. Defaults to jnp.float_.
+        dtype (jnp.float——, optional): The data type to use for the linear model. Defaults to jnp.float_.
 
     Returns:
         OLSState: The state of the fitted linear model.

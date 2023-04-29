@@ -1,6 +1,7 @@
 import functools
 
 import jax.numpy as jnp
+from equinox import filter_vmap
 from jax import jit, lax
 
 
@@ -9,9 +10,7 @@ nan = jnp.nan
 
 
 @functools.partial(jit, static_argnums=(1, 2))
-def _check_clip_probability(
-    p: jnp.ndarray, lower_tail=True, log_prob=False
-) -> jnp.ndarray:
+def _check_clip_probability(p, lower_tail=True, log_prob=False):
     if not lower_tail:
         p = 1 - p
     if log_prob:
@@ -20,9 +19,7 @@ def _check_clip_probability(
 
 
 @functools.partial(jit, static_argnums=(1, 2))
-def _check_clip_distribution_domain(
-    x: jnp.ndarray, lower=-inf, upper=inf
-) -> jnp.ndarray:
+def _check_clip_distribution_domain(x, lower=-inf, upper=inf):
     return jnp.clip(x, lower, upper)
 
 
@@ -46,12 +43,27 @@ def _promote_dtype_to_integer(x, dtype):
         return jnp.asarray(x, dtype=dtype), dtype
 
 
+@functools.partial(jit, static_argnums=(1, 2))
 def _post_process(p, lower_tail=True, log_prob=False):
     if not lower_tail:
         p = 1 - p
     if log_prob:
         p = jnp.log(p)
     return p
+
+
+def _check_all_scalar(*args):
+    for arg in args:
+        if not jnp.shape(arg) == ():
+            return False
+    return True
+
+
+def svmap_(f, *args):
+    if _check_all_scalar(*args):
+        return f(*args)
+    else:
+        return filter_vmap(f)(*args)
 
 
 __all__ = [  # noqa: F405
@@ -62,4 +74,6 @@ __all__ = [  # noqa: F405
     "_promote_dtype_to_floating",
     "_promote_dtype_to_integer",
     "_post_process",
+    "_check_all_scalar",
+    "svmap_",
 ]

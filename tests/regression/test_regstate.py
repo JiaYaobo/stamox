@@ -13,7 +13,7 @@ def test_regstate_init():
     regstate = RegState(in_features=3, out_features=1)
     np.testing.assert_equal(regstate.in_features, 3)
     np.testing.assert_equal(regstate.out_features, 1)
-    np.testing.assert_equal(regstate.coefs.shape, (3, 1))
+    np.testing.assert_equal(regstate.coefs.shape, (3, ))
     np.testing.assert_equal(regstate.intercept.shape, (1, 1))
     np.testing.assert_equal(regstate.params.shape, (3, 1))
 
@@ -46,18 +46,18 @@ def test_olsstate_err_t():
     res = lm(data, "y ~ x1 + x2 + x3", dtype=jnp.float64)
     res_smf = smf.ols("y ~ x1 + x2 + x3", data=data).fit()
     np.testing.assert_allclose(
-        res.coefs.reshape(-1), res_smf.params.values.reshape(-1), atol=1e-5
+        res.coefs, res_smf.params.values, atol=1e-5
     )
-    np.testing.assert_allclose(res.F_value, res_smf.fvalue, atol=1e-5)
+    np.testing.assert_allclose(res.f_value, res_smf.fvalue, atol=1e-5)
     np.testing.assert_allclose(
-        res.StdErr.reshape(-1), res_smf.bse.values.reshape(-1), atol=1e-5
+        res.std_err, res_smf.bse.values, atol=1e-5
     )
     np.testing.assert_allclose(
-        res.t_values.reshape(-1), res_smf.tvalues.values.reshape(-1), atol=1e-5
+        res.t_values, res_smf.tvalues.values, atol=1e-5
     )
-    np.testing.assert_allclose(res.R2, res_smf.rsquared, atol=1e-5)
-    np.testing.assert_allclose(res.R2_adj, res_smf.rsquared_adj, atol=1e-5)
-    np.testing.assert_allclose(res.t_pvalues.reshape(-1), res_smf.pvalues, atol=1e-5)
+    np.testing.assert_allclose(res.r2, res_smf.rsquared, atol=1e-5)
+    np.testing.assert_allclose(res.r2_adj, res_smf.rsquared_adj, atol=1e-5)
+    np.testing.assert_allclose(res.p_values, res_smf.pvalues, atol=1e-5)
 
 
 def test_pipe_olsstate():

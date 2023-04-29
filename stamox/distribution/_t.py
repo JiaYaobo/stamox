@@ -13,6 +13,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -61,11 +62,10 @@ def pt(
 
     Example:
         >>> pt(1.0, 1.0)
-        Array([0.74999994], dtype=float32, weak_type=True)
+        Array(0.74999994, dtype=float32, weak_type=True)
     """
     q, _ = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
-    p = filter_vmap(_pt)(q, df, loc, scale)
+    p = svmap_(_pt, q, df, loc, scale)
     p = _post_process(p, lower_tail, log_prob)
     return p
 
@@ -99,11 +99,10 @@ def dt(
 
     Example:
         >>> dt(1.0, 1.0)
-        Array([0.1591549], dtype=float32, weak_type=True)
+        Array(0.1591549, dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
-    grads = filter_vmap(_dt)(x, df, loc, scale)
+    grads = svmap_(_dt, x, df, loc, scale)
     grads = _post_process(grads, lower_tail, log_prob)
     return grads
 
@@ -150,12 +149,11 @@ def qt(
 
     Example:
         >>> qt(0.5, 1.0)
-        Array([0.], dtype=float32, weak_type=True)
+        Array(0., dtype=float32, weak_type=True)
     """
     p, _ = _promote_dtype_to_floating(p, dtype)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail=lower_tail, log_prob=log_prob)
-    q = filter_vmap(_qt)(p, df, loc, scale)
+    q = svmap_(_qt, p, df, loc, scale)
     return q
 
 

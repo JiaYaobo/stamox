@@ -73,4 +73,5 @@ def _durbin_watson(resids, axis=0):
     dw = jnp.sum(diff_resids**2, axis=axis, keepdims=True) / jnp.sum(
         resids**2, axis=axis, keepdims=True
     )
+    dw = dw.squeeze()
     return DurbinWatsonTest(statistic=dw)

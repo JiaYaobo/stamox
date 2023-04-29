@@ -48,7 +48,7 @@ class BartlettTest(HypoTest):
         return self.parameters
 
 
-def bartlett_test(*samples: Sequence[ArrayLike]) -> BartlettTest:
+def bartlett_test(*samples: Sequence[ArrayLike], axis=0) -> BartlettTest:
     """Calculates the Bartlett test statistic for multiple samples.
 
     Args:
@@ -64,23 +64,24 @@ def bartlett_test(*samples: Sequence[ArrayLike]) -> BartlettTest:
         BartlettTest(statistic=0.0, parameters=1, p_value=1.0)
     """
     samples = jnp.vstack(samples)
-    return _bartlett(samples)
+    return _bartlett(samples, axis)
 
 
 @filter_jit
-def _bartlett(samples):
+def _bartlett(samples, axis):
     k = samples.shape[0]
-    Ni = jnp.asarray(vmap(jnp.size, in_axes=(0,))(samples), dtype=samples.dtype)
-    ssq = vmap(partial(jnp.var, ddof=1), in_axes=(0,))(samples)
-    Ntot = jnp.sum(Ni, axis=0)
-    spsq = jnp.sum((Ni - 1) * ssq, axis=0) / (1.0 * (Ntot - k))
+    Ni = jnp.asarray(vmap(jnp.size, in_axes=(axis,))(samples), dtype=samples.dtype)
+    ssq = vmap(partial(jnp.var, ddof=1), in_axes=(axis,))(samples)
+    Ntot = jnp.sum(Ni, axis=axis)
+    spsq = jnp.sum((Ni - 1) * ssq, axis=axis) / (1.0 * (Ntot - k))
     numer = (Ntot * 1.0 - k) * jnp.log(spsq) - jnp.sum(
-        (Ni - 1.0) * jnp.log(ssq), axis=0
+        (Ni - 1.0) * jnp.log(ssq), axis=axis
     )
     denom = 1.0 + 1.0 / (3 * (k - 1)) * (
-        (jnp.sum(1.0 / (Ni - 1.0), axis=0)) - 1.0 / (Ntot - k)
+        (jnp.sum(1.0 / (Ni - 1.0), axis=axis)) - 1.0 / (Ntot - k)
     )
     stats = numer / denom
     param = k - 1
-    pval = pchisq(stats, param, lower_tail=False).squeeze()
+    stats = stats.squeeze()
+    pval = pchisq(stats, param, lower_tail=False)
     return BartlettTest(statistic=stats, parameters=param, p_value=pval)

@@ -15,6 +15,7 @@ from ._utils import (
     _check_clip_probability,
     _post_process,
     _promote_dtype_to_floating,
+    svmap_,
 )
 
 
@@ -47,9 +48,8 @@ def ppoisson(
         >>> ppoisson(1.0, rate=1.0)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
-    q = jnp.atleast_1d(q)
     q = _check_clip_distribution_domain(q, lower=0.0)
-    p = filter_vmap(_ppoisson)(q, rate)
+    p = svmap_(_ppoisson, q, rate)
     p = _post_process(p, lower_tail=lower_tail, log_prob=log_prob)
     return p
 
@@ -85,9 +85,8 @@ def dpoisson(
         >>> dpoisson(1.0, rate=1.0)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
-    x = jnp.atleast_1d(x)
     x = _check_clip_distribution_domain(x, lower=0.0)
-    grads = filter_vmap(_dpoisson)(x, rate)
+    grads = svmap_(_dpoisson, x, rate)
     grads = _post_process(grads, lower_tail=lower_tail, log_prob=log_prob)
     return grads
 
@@ -163,7 +162,6 @@ def qpoisson(
         >>> qpoisson(0.5, rate=1.0)
     """
     p, _ = _promote_dtype_to_floating(p, None)
-    p = jnp.atleast_1d(p)
     p = _check_clip_probability(p, lower_tail, log_prob)
-    q = filter_vmap(_qpoisson)(p, rate, dtype)
+    q = svmap_(_qpoisson, p, rate, dtype)
     return q
