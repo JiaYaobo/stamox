@@ -61,7 +61,7 @@ prob = pnorm(x)
 # ppf
 qntl = qnorm(prob)
 # pdf
-dnorm(x)
+dense = dnorm(x)
 ```
 
 ### Fearless Pipeable
