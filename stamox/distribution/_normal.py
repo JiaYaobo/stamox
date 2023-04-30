@@ -12,6 +12,7 @@ from jaxtyping import ArrayLike, Bool, Float
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -103,9 +104,13 @@ def dnorm(
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = _check_clip_distribution_domain(x)
+    shape, fshape = _flatten_shapes(x, mean, sd)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    mean = jnp.broadcast_to(mean, shape).reshape(fshape)
+    sd = jnp.broadcast_to(sd, shape).reshape(fshape)
     grads = svmap_(_dnorm, x, mean, sd)
     grads = _post_process(grads, lower_tail, log_prob)
-    return grads
+    return grads.reshape(shape)
 
 
 @filter_jit

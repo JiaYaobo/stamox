@@ -11,6 +11,7 @@ from tensorflow_probability.substrates.jax.math import special as tfp_special
 
 from ._utils import (
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -102,9 +103,14 @@ def dt(
         Array(0.1591549, dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
+    shape, fshape = _flatten_shapes(x, df, loc, scale)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    df = jnp.broadcast_to(df, shape).reshape(fshape)
+    loc = jnp.broadcast_to(loc, shape).reshape(fshape)
+    scale = jnp.broadcast_to(scale, shape).reshape(fshape)
     grads = svmap_(_dt, x, df, loc, scale)
     grads = _post_process(grads, lower_tail, log_prob)
-    return grads
+    return grads.reshape(shape)
 
 
 @filter_jit

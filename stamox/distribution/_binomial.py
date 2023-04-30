@@ -11,6 +11,7 @@ from tensorflow_probability.substrates.jax.distributions import Binomial as tfp_
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -95,9 +96,13 @@ def dbinom(
         >>> dbinom(q, size, prob)
     """
     q, dtype = _promote_dtype_to_floating(q, dtype)
+    shape, fshape = _flatten_shapes(q, size, prob)
+    q = jnp.broadcast_to(q, shape).reshape(fshape)
+    size = jnp.broadcast_to(size, shape).reshape(fshape)
+    prob = jnp.broadcast_to(prob, shape).reshape(fshape)
     d = svmap_(_dbinom, q, size, prob)
     d = _post_process(d, lower_tail, log_prob)
-    return d
+    return d.reshape(shape)
 
 
 @filter_jit

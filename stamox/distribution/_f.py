@@ -10,6 +10,7 @@ from ..math.special import fdtr, fdtri
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -89,9 +90,12 @@ def dF(
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = _check_clip_distribution_domain(x, 0)
+    shape, fshape = _flatten_shapes(x, dfn, dfd)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    dfn = jnp.broadcast_to(dfn, shape).reshape(fshape)
     grads = svmap_(_df, x, dfn, dfd)
     grads = _post_process(grads, lower_tail, log_prob)
-    return grads
+    return grads.reshape(shape)
 
 
 @filter_jit

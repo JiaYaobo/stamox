@@ -13,6 +13,7 @@ from scipy.stats import poisson
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -86,9 +87,12 @@ def dpoisson(
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = _check_clip_distribution_domain(x, lower=0.0)
+    shape, fshape = _flatten_shapes(x, rate)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    rate = jnp.broadcast_to(rate, shape).reshape(fshape)
     grads = svmap_(_dpoisson, x, rate)
     grads = _post_process(grads, lower_tail=lower_tail, log_prob=log_prob)
-    return grads
+    return grads.reshape(shape)
 
 
 @filter_jit

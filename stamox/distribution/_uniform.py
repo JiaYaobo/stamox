@@ -9,6 +9,7 @@ from jaxtyping import ArrayLike, Bool, Float
 
 from ._utils import (
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -88,9 +89,13 @@ def dunif(
         Array(1., dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
+    shape, fshape = _flatten_shapes(x, mini, maxi)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    mini = jnp.broadcast_to(mini, shape).reshape(fshape)
+    maxi = jnp.broadcast_to(maxi, shape).reshape(fshape)
     p = svmap_(_dunif, x, mini, maxi)
     p = _post_process(p, lower_tail, log_prob)
-    return p
+    return p.reshape(shape)
 
 
 @filter_jit

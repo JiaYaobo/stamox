@@ -11,6 +11,7 @@ from jaxtyping import ArrayLike, Bool, Float
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -94,9 +95,13 @@ def dlaplace(
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = _check_clip_distribution_domain(x)
+    shape, fshape = _flatten_shapes(x, loc, scale)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    loc = jnp.broadcast_to(loc, shape).reshape(fshape)
+    scale = jnp.broadcast_to(scale, shape).reshape(fshape)
     grads = svmap_(_dlaplace, x, loc, scale)
     grads = _post_process(grads, lower_tail, log_prob)
-    return grads
+    return grads.reshape(shape)
 
 
 @filter_jit

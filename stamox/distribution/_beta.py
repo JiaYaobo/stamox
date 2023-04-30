@@ -11,6 +11,7 @@ from tensorflow_probability.substrates.jax.math import special as tfp_special
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -92,9 +93,13 @@ def dbeta(
     """
     x, dtype = _promote_dtype_to_floating(x, dtype)
     x = _check_clip_distribution_domain(x, 0.0, 1.0)
+    shape, fshape = _flatten_shapes(x, a, b)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    a = jnp.broadcast_to(a, shape).reshape(fshape)
+    b = jnp.broadcast_to(b, shape).reshape(fshape)
     d = svmap_(_dbeta, x, a, b)
     d = _post_process(d, lower_tail, log_prob)
-    return d
+    return d.reshape(shape)
 
 
 @filter_jit

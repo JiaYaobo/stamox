@@ -1,7 +1,8 @@
 import functools
 
 import jax.numpy as jnp
-from equinox import filter_grad, filter_vmap
+import numpy as np
+from equinox import filter_vmap
 from jax import jit, lax
 
 
@@ -64,11 +65,11 @@ def svmap_(f, *args):
         return f(*args)
     else:
         return filter_vmap(f)(*args)
-def dsvmap(f, *args):
-    if _check_all_scalar(*args):
-        return f(*args)
-    else:
-        return filter_vmap(f)(*args)
+    
+def _flatten_shapes(*args):
+    shape = jnp.broadcast_shapes(*[jnp.shape(arg) for arg in args])
+    ravel_shape = (np.prod(shape),)
+    return shape, ravel_shape
 
 
 __all__ = [  # noqa: F405
@@ -81,4 +82,5 @@ __all__ = [  # noqa: F405
     "_post_process",
     "_check_all_scalar",
     "svmap_",
+    "_flatten_shapes",
 ]

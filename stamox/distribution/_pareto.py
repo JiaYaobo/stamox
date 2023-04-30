@@ -10,6 +10,7 @@ from jaxtyping import ArrayLike, Bool, Float
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -86,9 +87,13 @@ def dpareto(
         Array([2.4999998], dtype=float32, weak_type=True)
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
+    shape, fshape = _flatten_shapes(x, scale, alpha)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    scale = jnp.broadcast_to(scale, shape).reshape(fshape)
+    alpha = jnp.broadcast_to(alpha, shape).reshape(fshape)
     grads = svmap_(_dpareto, x, scale, alpha)
     grads = _post_process(grads, lower_tail, log_prob)
-    return grads
+    return grads.reshape(shape)
 
 
 @filter_jit

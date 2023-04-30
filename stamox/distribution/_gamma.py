@@ -12,6 +12,7 @@ from jaxtyping import ArrayLike, Float
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -93,9 +94,13 @@ def dgamma(
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = _check_clip_distribution_domain(x, 0.0, jnp.inf)
+    shape_, fshape = _flatten_shapes(x, shape, rate)
+    x = jnp.broadcast_to(x, shape_).reshape(fshape)
+    shape = jnp.broadcast_to(shape, shape_).reshape(fshape)
+    rate = jnp.broadcast_to(rate, shape_).reshape(fshape)
     grads = svmap_(_dgamma, x, shape, rate)
     grads = _post_process(grads, lower_tail, log_prob)
-    return grads
+    return grads.reshape(shape_)
 
 
 @filter_jit

@@ -10,6 +10,7 @@ from jaxtyping import ArrayLike, Float
 from ._utils import (
     _check_clip_distribution_domain,
     _check_clip_probability,
+    _flatten_shapes,
     _post_process,
     _promote_dtype_to_floating,
     svmap_,
@@ -85,9 +86,13 @@ def dweibull(
     """
     x, _ = _promote_dtype_to_floating(x, dtype)
     x = _check_clip_distribution_domain(x, lower=0.0)
+    shape, fshape = _flatten_shapes(x, concentration, scale)
+    x = jnp.broadcast_to(x, shape).reshape(fshape)
+    concentration = jnp.broadcast_to(concentration, shape).reshape(fshape)
+    scale = jnp.broadcast_to(scale, shape).reshape(fshape)
     grads = svmap_(_dweibull, x, concentration, scale)
     grads = _post_process(grads, lower_tail=lower_tail, log_prob=log_prob)
-    return grads
+    return grads.reshape(shape)
 
 
 @filter_jit
