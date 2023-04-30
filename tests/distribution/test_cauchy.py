@@ -35,7 +35,7 @@ def test_qcauchy():
 
 
 def test_dcauchy():
-    x = np.random.uniform(0, 1, 10000)
+    x = np.random.uniform(0, 1, (10000,2 ,2))
     loc = 0.0
     scale = 1.0
     grads = dcauchy(x, loc, scale, dtype=jnp.float64)

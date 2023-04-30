@@ -22,7 +22,7 @@ INSTALL_REQUIRES = [
     "equinox>=0.10.1",
     "jaxopt>=0.6",
     "pandas>=1.5.3",
-    "patsy>=0.5.3",
+    "patsy>=0.5.2",
     "tensorflow-probability>=0.19.0",
     "scipy",
 ]

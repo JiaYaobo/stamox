@@ -39,7 +39,7 @@ def test_qbeta():
 
 
 def test_dbeta():
-    x = jrand.uniform(key, (1000,))
+    x = jrand.uniform(key, (1000, 2, 2))
     grads = dbeta(x, 2, 2)
     true_grads = beta.pdf(x, 2, 2)
     np.testing.assert_allclose(grads, true_grads, atol=1e-6)
