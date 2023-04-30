@@ -4,13 +4,13 @@
 
 ```python
 import jax.numpy as jnp
-from stamox.functions import mean, var, std
+from stamox.pipe_functions import mean, var, sd
 from stamox import Pipeable
 
 x = jnp.ones((3, 4))
 mean(x) # 1.0
 var(x) # 0.0
-std(x) # 0.0
+sd(x) # 0.0
 # Pipeable
 f = Pipeable(x) >> mean(axis=0) >> var
 f() # 0.0

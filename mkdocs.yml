@@ -25,7 +25,7 @@ markdown_extensions:
         base_path: docs
     - admonition
     - toc:
-        permalink: "¤"  # Adds a clickable permalink to each section heading
+        permalink: "Φ"  # Adds a clickable permalink to each section heading
         toc_depth: 4
 
 plugins:
@@ -51,6 +51,7 @@ plugins:
                     show_source: false 
                     members_order: source 
                     heading_level: 4
+    - print-site
 
 site_name: Stamox
 site_description: The documentation for the Stamox software library.
