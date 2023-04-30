@@ -1,7 +1,7 @@
 import functools
 
 import jax.numpy as jnp
-from equinox import filter_vmap
+from equinox import filter_grad, filter_vmap
 from jax import jit, lax
 
 
@@ -60,6 +60,11 @@ def _check_all_scalar(*args):
 
 
 def svmap_(f, *args):
+    if _check_all_scalar(*args):
+        return f(*args)
+    else:
+        return filter_vmap(f)(*args)
+def dsvmap(f, *args):
     if _check_all_scalar(*args):
         return f(*args)
     else:

@@ -24,7 +24,7 @@ import jax.random as jrandom
 from stamox.functions import pnorm, rnorm, qnorm, dnorm
 
 key = jrandom.PRNGKey(20010813)
-x = rnorm(key, sample_shape=(8, 100000))
+x = rnorm(key, sample_shape=(100000, ))
 cdf = pnorm(x)
 q = qnorm(cdf)
 pdf = dnorm(q)
@@ -44,8 +44,6 @@ data = pd.DataFrame(
     columns=["x1", "x2", "x3", "y"],
 )
 res = lm(data, "y ~ x1 + x2 + x3")
-# or
-res  = (Pipeable(data) >> lm("y ~ x1 + x2 + x3"))()
 
 summary(res)
 ```
@@ -63,7 +61,6 @@ key = jrandom.PRNGKey(20010813)
 k1, k2 = jrandom.split(key)
 data = runif(k1, sample_shape=(1000, 3))
 res = kmeans(data, 3, key=k2)
-# or
-res = (Pipeable(data) >> kmeans(n_cluster=3, key=k2))()
+res.centers
 ```
 
