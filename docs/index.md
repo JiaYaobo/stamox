@@ -171,6 +171,48 @@ You've already know everything about `stamox`, since it's based on `JAX` and `Eq
 
 For more apis, you can refer to `Api` section.
 
+## Contributing
+
+Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given.
+
+1. Fork the `stamox` repository by clicking the Fork button on the repository page. This creates a copy of the `stamox` repository in your own account.
+2. Install Python >= 3.8 locally in order to run tests.
+3. pip installing your fork from source. This allows you to modify the code and immediately test it out:
+```bash
+git clone https://github.com/JiaYaobo/stamox.git
+cd stamox
+```
+4. Add the `stamox` repo as an upstream remote, so you can use it to sync your changes.
+```bash
+git remote add upstream https://github.com/JiaYaobo/stamox.git
+```
+5. Create a branch for local development:
+```bash
+git checkout -b name-of-your-bugfix-or-feature
+```
+6. Install requirements for tests
+```bash
+pip install -r tests/requirements.txt
+```
+7. Make sure the tests pass by running the following command from the top of the repository:
+```bash
+pytest tests/
+```
+8. Commit your changes and push your branch to GitHub:
+```bash
+git add .
+git commit -m "Your detailed description of your changes."
+```
+Then sync your code with the main repo:
+```bash
+git fetch upstream
+git rebase upstream/main
+```
+Finally, push your changes to your fork:
+```bash
+git push --set-upstream origin name-of-your-bugfix-or-feature
+```
+
 ## See More
 
 [JAX](https://github.com/google/jax)
