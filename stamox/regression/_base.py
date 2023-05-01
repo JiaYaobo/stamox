@@ -98,6 +98,6 @@ class RegState(StateFunc):
         return self._transform(X)
 
     def _summary(self):
-        return "Not Implement Yet"
+        return "Should be Implemented"
 
 
