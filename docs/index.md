@@ -212,6 +212,7 @@ Finally, push your changes to your fork:
 ```bash
 git push --set-upstream origin name-of-your-bugfix-or-feature
 ```
+9. Submit a pull request through the GitHub website.
 
 ## See More
 
