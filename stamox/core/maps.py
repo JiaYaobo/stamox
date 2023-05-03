@@ -1,10 +1,39 @@
+import dataclasses
 from functools import wraps
-from typing import Callable, Hashable, TypeVar
+from typing import Any, Callable, Hashable, Optional, TypeVar
 
+import jax.numpy as jnp
+import numpy as np
 from equinox import filter_pmap, filter_vmap
-from equinox.vmap_pmap import if_array
 
 from .base import Functional
+
+
+def is_array(element: Any) -> bool:
+    """Returns `True` if `element` is a JAX array or NumPy array."""
+    return isinstance(element, (np.ndarray, np.generic, jnp.ndarray))
+
+
+@dataclasses.dataclass(frozen=True)  # not a pytree
+class if_array:
+    """Returns a callable that returns the specified integer if evaluated on an array.
+    Otherwise, it returns `None`.
+
+    !!! Example
+
+        ```python
+        fn = if_array(1)
+        # Evaluate on an array, return the integer.
+        fn(jax.numpy.array([0, 1, 2]))  # 1
+        # Evaluate on not-an-array, return None.
+        fn(True)  # None
+        ```
+    """
+
+    axis: int
+
+    def __call__(self, x: Any) -> Optional[int]:
+        return self.axis if is_array(x) else None
 
 
 T = TypeVar("T")
