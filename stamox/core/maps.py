@@ -61,7 +61,7 @@ def pipe_vmap(
             axis_name=axis_name,
             axis_size=axis_size,
         )
-        return Functional(name=name, fn=fn, pipe_type='vmap')
+        return Functional(name=name, fn=fn, pipe_type="vmap")
 
     return wrap if func is None else wrap(func)
 
@@ -69,8 +69,8 @@ def pipe_vmap(
 def pipe_pmap(
     func: Callable[..., T] = None,
     *,
-    in_axes=0,
-    out_axes=0,
+    in_axes=if_array(0),
+    out_axes=if_array(0),
     axis_name: Hashable = None,
     axis_size: int = None,
     name: str = None
@@ -120,4 +120,3 @@ def pipe_pmap(
         return Functional(name=name, fn=fn, pipe_type="pmap")
 
     return wrap if func is None else wrap(func)
-
