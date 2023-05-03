@@ -42,7 +42,7 @@ class Functional(eqx.Module):
         return self._fn
 
     @property
-    def piep_type(self):
+    def pipe_type(self):
         """Get the type of the function."""
         return self._pipe_type
 

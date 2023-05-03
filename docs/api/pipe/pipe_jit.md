@@ -2,6 +2,3 @@
 
 ::: stamox.core.jit.pipe_jit
 
----
-
-::: stamox.core.jit.partial_pipe_jit

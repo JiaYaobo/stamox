@@ -5,11 +5,3 @@
 ---
 
 ::: stamox.core.maps.pipe_pmap
-
----
-
-::: stamox.core.maps.partial_pipe_vmap
-
----
-
-::: stamox.core.maps.partial_pipe_pmap

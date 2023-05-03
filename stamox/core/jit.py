@@ -1,4 +1,4 @@
-from functools import partial, wraps
+from functools import wraps
 from typing import Callable, TypeVar
 
 from equinox import filter_jit
@@ -42,57 +42,6 @@ def pipe_jit(
     def wrap(func: Callable[..., T]) -> Callable:
         fn = filter_jit(func, donate=donate)
 
-        return Functional(name=name, fn=fn)
-
-    return wrap if func is None else wrap(func)
-
-
-def partial_pipe_jit(
-    func: Callable[..., T] = None, *, name: str = None
-) -> Callable[..., T]:
-    """Creates a partial pipeable jitted functional from a given function.
-
-    Args:
-        func (Callable[P, T]): _description_
-        name (str, optional): _description_. Defaults to None.
-
-    Returns:
-        a partial pipeable jitted functional from a given function.
-
-    Example:
-        >>> from stamox.core import partial_pipe_jit
-        >>> f = lambda x, y: x + y
-        >>> f = partial_pipe_jit(f)
-        >>> g = f(y=1) >> f(y=2) >> f(y=3)
-        >>> g(1)
-        7
-    """
-    if name is None and func is not None:
-        if hasattr(func, "name"):
-            name = func.name
-        elif hasattr(func, "__name__"):
-            name = func.__name__
-        else:
-            name = "none"
-
-    @wraps(func)
-    def wrap(func: Callable[..., T]) -> Callable:
-        if isinstance(func, Functional):
-            if func.func is not None:
-                if func.pipe_type == "pmap" or func.pipe_type == "vmap":
-                    raise ValueError(
-                        "You can not use pmap or vmap with partial_pipe_*, use make_pipe or pipe_* instead."
-                    )
-                func = func.func
-
-        @wraps(func)
-        def partial_fn(*args, donate: str = "none", **kwargs):
-            fn = filter_jit(func, donate=donate)
-            fn = partial(fn, **kwargs)
-            if len(args) != 0:
-                return fn(*args, **kwargs)
-            return Functional(name=name, fn=fn, pipe_type="jit")
-
-        return partial_fn
+        return Functional(name=name, fn=fn, pipe_type="jit")
 
     return wrap if func is None else wrap(func)

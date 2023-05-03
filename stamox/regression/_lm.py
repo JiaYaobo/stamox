@@ -189,7 +189,7 @@ class OLSState(RegState):
 
 def lm(
     data: Union[List, Tuple, DataFrame, ArrayLike],
-    formula=None,
+    formula: str = None,
     subset=None,
     weights=None,
     NA_action="drop",
@@ -199,13 +199,13 @@ def lm(
     """Fits a linear model using the given data and parameters.
 
     Args:
-        data (Union[List, Tuple, DataFrame, ArrayLike]): The data to fit the linear model with.
+        data (Union[List, Tuple, DataFrame, ArrayLike]): The data to fit the linear model, if not Dataframe, must be [y, X].
         formula (str, optional): A formula for the linear model. Defaults to None.
         subset (list, optional): A list of indices to use as a subset of the data. Defaults to None.
         weights (array-like, optional): An array of weights to apply to the data. Defaults to None.
         NA_action (str, optional): The action to take when encountering missing values. Defaults to "drop".
         method (str, optional): The method to use for fitting the linear model. Defaults to "qr".
-        dtype (jnp.float——, optional): The data type to use for the linear model. Defaults to jnp.float_.
+        dtype (jnp.float_, optional): The data type to use for the linear model. Defaults to jnp.float_.
 
     Returns:
         OLSState: The state of the fitted linear model.
@@ -253,6 +253,8 @@ def lm(
         X_names = None
         y_names = None
     else:
+        if not isinstance(data, DataFrame):
+            raise ValueError("data must be a DataFrame when formula is not None")
         matrices = get_design_matrices(data, formula, NA_action=NA_action, dtype=dtype)
         y = matrices.y
         X = matrices.X

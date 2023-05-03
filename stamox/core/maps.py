@@ -1,7 +1,8 @@
-from functools import partial, wraps
+from functools import wraps
 from typing import Callable, Hashable, TypeVar
 
 from equinox import filter_pmap, filter_vmap
+from equinox.vmap_pmap import if_array
 
 from .base import Functional
 
@@ -12,8 +13,8 @@ T = TypeVar("T")
 def pipe_vmap(
     func: Callable[..., T] = None,
     *,
-    in_axes=0,
-    out_axes=0,
+    in_axes=if_array(0),
+    out_axes=if_array(0),
     axis_name: Hashable = None,
     axis_size: int = None,
     name: str = None
@@ -60,69 +61,7 @@ def pipe_vmap(
             axis_name=axis_name,
             axis_size=axis_size,
         )
-        return Functional(name=name, fn=fn)
-
-    return wrap if func is None else wrap(func)
-
-
-def partial_pipe_vmap(
-    func: Callable[..., T] = None, *, name: str = None
-) -> Callable[..., T]:
-    """Partially apply a function to a vmap.
-
-    Args:
-        func (Callable[P, T]): The function to partially apply.
-        name (str, optional): The name of the function. Defaults to None.
-
-    Returns:
-        Callable[P, T]: A partially applied function.
-
-    Example:
-        >>> from stamox import partial_pipe_vmap
-        >>> f = lambda x, y: x + y
-        >>> f = partial_pipe_vmap(f)
-        >>> g = f(y=1) >> f(y=2) >> f(y=3)
-        >>> g(jnp.array([1, 2, 3]))
-        Array([7, 8, 9], dtype=int32)
-    """
-    if name is None and func is not None:
-        if hasattr(func, "name"):
-            name = func.name
-        else:
-            name = func.__name__
-
-    @wraps(func)
-    def wrap(func: Callable[..., T]) -> Callable:
-        if isinstance(func, Functional):
-            if func.func is not None:
-                if func.pipe_type == "pmap" or func.pipe_type == "vmap":
-                    raise ValueError(
-                        "You can not use pipe_pmap or pipe_vmap with partial_pipe_*, use make_pipe or pipe_* instead."
-                    )
-                func = func.func
-
-        @wraps(func)
-        def partial_fn(
-            *args,
-            in_axes=0,
-            out_axes=0,
-            axis_name: Hashable = None,
-            axis_size: int = None,
-            **kwargs
-        ):
-            fn = partial(func, **kwargs)
-            fn = filter_vmap(
-                fn,
-                in_axes=in_axes,
-                out_axes=out_axes,
-                axis_name=axis_name,
-                axis_size=axis_size,
-            )
-            if len(args) != 0:
-                return fn(*args)
-            return Functional(name=name, fn=fn, pipe_type="vmap")
-
-        return partial_fn
+        return Functional(name=name, fn=fn, pipe_type='vmap')
 
     return wrap if func is None else wrap(func)
 
@@ -169,10 +108,6 @@ def pipe_pmap(
     def wrap(func: Callable[..., T]) -> Callable:
         if isinstance(func, Functional):
             if func.func is not None:
-                if func.pipe_type == "pmap" or func.pipe_type == "vmap":
-                    raise ValueError(
-                        "You can not use pipe_pmap or pipe_vmap with partial_pipe_*, use make_pipe or pipe_* instead."
-                    )
                 func = func.func
         fn = filter_pmap(
             func,
@@ -186,62 +121,3 @@ def pipe_pmap(
 
     return wrap if func is None else wrap(func)
 
-
-def partial_pipe_pmap(
-    func: Callable[..., T] = None, *, name: str = None
-) -> Callable[..., T]:
-    """Partially apply a function to a pipe.
-
-    Args:
-        func (Callable[P, T]): The function to partially apply.
-        name (str, optional): The name of the function. Defaults to None.
-
-    Returns:
-        Callable[P, T]: A partially applied function.
-
-    Example:
-        >>> from stamox import partial_pipe_pmap
-        >>> f = lambda x, y: x + y
-        >>> f = partial_pipe_pmap(f)
-        >>> g = f(y=1) >> f(y=2) >> f(y=3)
-        >>> g(jnp.array([1, 2, 3]))
-        Array([7, 8, 9], dtype=int32)
-    """
-    if name is None and func is not None:
-        if hasattr(func, "name"):
-            name = func.name
-        elif hasattr(func, "__name__"):
-            name = func.__name__
-        else:
-            name = "none"
-
-    @wraps(func)
-    def wrap(func: Callable[..., T]) -> Callable:
-        if isinstance(func, Functional):
-            if func.func is not None:
-                func = func.func
-
-        @wraps(func)
-        def partial_fn(
-            *args,
-            in_axes=0,
-            out_axes=0,
-            axis_name: Hashable = None,
-            axis_size: int = None,
-            **kwargs
-        ):
-            fn = partial(func, **kwargs)
-            fn = filter_pmap(
-                fn,
-                in_axes=in_axes,
-                out_axes=out_axes,
-                axis_name=axis_name,
-                axis_size=axis_size,
-            )
-            if len(args) != 0:
-                return fn(*args, **kwargs)
-            return Functional(name=name, fn=fn, pipe_type="pmap")
-
-        return partial_fn
-
-    return wrap if func is None else wrap(func)

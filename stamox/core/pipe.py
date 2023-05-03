@@ -1,4 +1,4 @@
-from functools import partial, wraps
+from functools import wraps
 from typing import (
     Any,
     Callable,
@@ -12,6 +12,7 @@ from typing import (
 import equinox as eqx
 
 from .base import Functional
+from .better_partial import better_partial
 
 
 T = TypeVar("T")
@@ -220,19 +221,18 @@ def make_partial_pipe(
 
     @wraps(func)
     def wrap(func: Callable[..., T]) -> Callable:
+        use_argsonly = False
         if isinstance(func, Functional):
             if func.func is not None:
-                if func.pipe_type == "pmap" or func.pipe_type == "vmap":
-                    raise ValueError(
-                        "You can not use pipe_pmap or piep_vmap with make_partial_pipe, use make_pipe or pipe_* instead."
-                    )
+                if func.pipe_type == "vmap" or func.pipe_type == "pmap":
+                    use_argsonly = True
                 func = func.func
 
         @wraps(func)
         def partial_fn(*args, **kwargs):
             if len(args) != 0:
                 return func(*args, **kwargs)
-            fn = partial(func, **kwargs)
+            fn = better_partial(func, **kwargs, use_argsonly=use_argsonly)
             return Functional(name=name, fn=fn)
 
         return partial_fn

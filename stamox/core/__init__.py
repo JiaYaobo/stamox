@@ -4,8 +4,8 @@ from .base import (
     StateFunc,
 )
 from .better_partial import better_partial
-from .jit import partial_pipe_jit, pipe_jit
-from .maps import partial_pipe_pmap, partial_pipe_vmap, pipe_pmap, pipe_vmap
+from .jit import pipe_jit
+from .maps import pipe_pmap, pipe_vmap
 from .pipe import (
     make_partial_pipe,
     make_pipe,
@@ -19,9 +19,6 @@ __all__ = [
     "Functional",
     "make_partial_pipe",
     "make_pipe",
-    "partial_pipe_jit",
-    "partial_pipe_pmap",
-    "partial_pipe_vmap",
     "Pipe",
     "Pipeable",
     "pipe_jit",
