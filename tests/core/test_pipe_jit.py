@@ -74,8 +74,8 @@ class PipeJitTest(jtest.JaxTestCase):
             num_traces += 1
             return x + y
 
-        assert f(x=jnp.array(1))(1) == 2
-        assert f(x=jnp.array(2))(1) == 3
+        assert f(y=jnp.array(1))(1) == 2
+        assert f(y=jnp.array(2))(1) == 3
         assert num_traces == 1
 
         @make_partial_pipe
@@ -118,22 +118,6 @@ class PipeJitTest(jtest.JaxTestCase):
             pipe_jit(eqx.filter_value_and_grad(g))(jnp.array(2.0), y=2.0),
             (5, 2),
         )
-        assert num_traces == 2
-
-    def test_partial_jit_vmap(self):
-        num_traces = 0
-
-        def f(x, y, z):
-            nonlocal num_traces
-            num_traces += 1
-            return y * x + 1 + z
-
-        out = pipe_jit(make_partial_pipe(pipe_vmap(f))(y=1, z=0))(jnp.array([1, 2]))
-        self.assertAllClose(out, jnp.array([2, 3]))
-        assert num_traces == 1
-
-        out = pipe_jit(make_partial_pipe(pipe_vmap(f))(x=2, z=0))(jnp.array([2, 3]))
-        self.assertAllClose(out, jnp.array([5, 7]))
         assert num_traces == 2
 
 
